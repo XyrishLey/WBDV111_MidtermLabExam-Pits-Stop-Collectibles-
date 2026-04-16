@@ -302,4 +302,18 @@ footer {
         width: 100%;
         max-width: 200px;
     }
+        .nav-button {
+        padding: 8px 12px;
+        font-size: 0.7rem;
+    }
+
+    .hero-inner h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero {
+        padding-top: 40px;
+    }
+
 }
+
