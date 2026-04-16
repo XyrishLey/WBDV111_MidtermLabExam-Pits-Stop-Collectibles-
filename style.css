@@ -309,7 +309,7 @@ footer {
 
     .hero {
         height: auto;
-        padding: 60px 15px 80px;
+        padding: 80px 15px 120px; 
         text-align: center;
     }
 
@@ -321,15 +321,22 @@ footer {
         font-size: 1.6rem;
         line-height: 1.2;
         word-break: break-word;
+        margin-bottom: 10px;
     }
 
     .hero-inner p {
         font-size: 0.85rem;
+        margin-bottom: 8px;
     }
 
     .cta-button {
         font-size: 0.9rem;
         padding: 10px 20px;
+        margin-bottom: 20px;
+    }
+
+    footer {
+        padding: 25px 15px;
     }
 
 }
