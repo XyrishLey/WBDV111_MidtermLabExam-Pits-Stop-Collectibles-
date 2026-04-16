@@ -233,3 +233,43 @@ header {
     font-size: 1.1rem;
     line-height: 1.5;
 }
+
+.footer {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    border-top: 2px solid #e60000;
+}
+
+.footer-container {
+    max-width: 800px;
+    margin: auto;
+}
+
+.footer h3 {
+    font-family: 'Orbitron', sans-serif;
+    margin-bottom: 10px;
+}
+
+.footer p {
+    margin: 5px 0;
+}
+
+.footer a {
+    color: #ff4d4d;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.footer a:hover {
+    color: white;
+}
+
+.footer .copyright {
+    margin-top: 15px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
