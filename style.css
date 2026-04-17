@@ -359,4 +359,25 @@ footer {
         line-height: 1.2;
     }
 
+    @media (max-width: 768px) {
+
+    .social-box img {
+        width: 65px;
+        height: 65px;
+    }
+
+    .social-container {
+        gap: 20px;
+    }
+
+    .about-description {
+        max-width: 90%;
+        padding: 12px;
+        font-size: 0.8rem;
+    }
+
+    .about-description p {
+        margin-bottom: 6px;
+    }
+
 }
