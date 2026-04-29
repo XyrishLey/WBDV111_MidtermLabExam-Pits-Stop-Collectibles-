@@ -308,9 +308,9 @@ footer {
     .nav-menu {
         position: fixed;
         top: 0;
-        right: -260px;
-        width: 260px;
-        height: 100%;
+        right: -300px;
+        width: 300px;
+        height: 100vh;
         background: #111;
         flex-direction: column;
         padding-top: 80px;
@@ -340,10 +340,10 @@ footer {
 
     .nav-menu .nav-button {
     display: block;
-    width: 100%;
-    text-align: left;
+    width: 90%;
+    text-align: center;
     padding: 14px 16px;
-    margin: 8px 0;
+    margin: 10px auto;
     border-radius: 10px;
     background: #222;
     font-size: 0.9rem;
