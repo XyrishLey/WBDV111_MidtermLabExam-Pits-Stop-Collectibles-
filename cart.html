@@ -153,14 +153,12 @@
             <a href="hotwheels.html" class="keep-shopping">← Keep Shopping</a>
         </div>
 
-        <div id="cart-items-list">
-            <!-- Items load here -->
-        </div>
+        <div id="cart-items-list"></div>
 
         <div class="cart-summary">
             <span class="nudge-text" id="nudge-msg">Items in your cart are selling fast! Add more to your collection?</span>
             <div class="total-row">Total: ₱<span id="cart-total">0</span></div>
-            <button class="checkout-btn" onclick="window.location.href='checkout.html'">Secure Checkout</button>
+            <button class="checkout-btn" onclick="checkAuthAndCheckout()">Secure Checkout</button>
         </div>
     </div>
 
@@ -206,6 +204,23 @@
             cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
             displayCart();
+        }
+
+        function checkAuthAndCheckout() {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            if (loggedIn === "true") {
+                window.location.href = 'checkout.html';
+            } else {
+                alert("Please login or create an account first to proceed with your order.");
+                window.location.href = 'login.html';
+            }
         }
 
         displayCart();

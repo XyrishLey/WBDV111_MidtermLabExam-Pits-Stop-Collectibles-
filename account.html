@@ -1,37 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Account</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | Pits Stop Collectibles</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .account-container {
+            max-width: 800px;
+            margin: 120px auto;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            color: white;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .account-header {
+            text-align: center;
+            border-bottom: 2px solid #e60000;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .account-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #e60000;
+            margin: 0;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #e60000;
+        }
+
+        .info-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: #e60000;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .info-card p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            margin: 0;
+            color: #fff;
+        }
+
+        .full-row {
+            grid-column: span 2;
+        }
+
+        .account-actions {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn-action {
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            text-decoration: none;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .btn-home {
+            background: transparent;
+            border: 1px solid #e60000;
+            color: #e60000;
+        }
+
+        .btn-home:hover {
+            background: #e60000;
+            color: white;
+        }
+
+        .btn-logout {
+            background: #e60000;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background: #ff1a1a;
+        }
+
+        @media (max-width: 768px) {
+            .profile-grid { grid-template-columns: 1fr; }
+            .full-row { grid-column: span 1; }
+            .account-container { margin: 80px 15px; padding: 20px; }
+        }
+    </style>
 </head>
 <body>
+    <div class="account-container">
+        <div class="account-header">
+            <h1>RACER PROFILE</h1>
+        </div>
 
-<div class="account-box">
-<h1>My Account</h1>
+        <div class="profile-grid" id="accountDetails">
+            
+        </div>
 
-<p id="info"></p>
+        <div class="account-actions">
+            <a href="index.html" class="btn-action btn-home">Back to Shop</a>
+            <button onclick="logoutUser()" class="btn-action btn-logout">Logout</button>
+        </div>
+    </div>
 
-</div>
+    <script>
+        function loadAccount() {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const loggedIn = localStorage.getItem("loggedIn");
+            const container = document.getElementById("accountDetails");
 
-<script>
-const user = JSON.parse(localStorage.getItem("user"));
+            if (!user || loggedIn !== "true") {
+                window.location.replace("login.html");
+                return;
+            }
 
-if (!user) {
-    window.location.href = "login.html";
-}
+            container.innerHTML = `
+                <div class="info-card">
+                    <h3>Full Name</h3>
+                    <p>${user.fullname}</p>
+                </div>
+                <div class="info-card">
+                    <h3>Username</h3>
+                    <p>${user.username}</p>
+                </div>
+                <div class="info-card">
+                    <h3>Contact Number</h3>
+                    <p>${user.contact}</p>
+                </div>
+                <div class="info-card">
+                    <h3>Region</h3>
+                    <p>${user.region}</p>
+                </div>
+                <div class="info-card">
+                    <h3>Province</h3>
+                    <p>${user.province}</p>
+                </div>
+                <div class="info-card">
+                    <h3>City / Municipality</h3>
+                    <p>${user.city}</p>
+                </div>
+                <div class="info-card">
+                    <h3>Barangay</h3>
+                    <p>${user.barangay}</p>
+                </div>
+                <div class="info-card">
+                    <h3>Zip Code</h3>
+                    <p>${user.zipcode}</p>
+                </div>
+                <div class="info-card full-row">
+                    <h3>Detailed Address</h3>
+                    <p>${user.address}</p>
+                </div>
+            `;
+        }
 
-document.getElementById("info").innerHTML = `
-<b>Full Name:</b> ${user.fullname}<br>
-<b>Username:</b> ${user.username}<br>
-<b>Country:</b> ${user.country}<br>
-<b>Province:</b> ${user.province}<br>
-<b>City:</b> ${user.city}<br>
-<b>Address:</b> ${user.address}<br>
-<b>Zip Code:</b> ${user.zipcode}<br>
-<b>Contact:</b> ${user.contact}
-`;
-</script>
+        function logoutUser() {
+            localStorage.removeItem("loggedIn");
+            localStorage.removeItem("user");
+            window.location.replace("index.html");
+        }
 
+        loadAccount();
+    </script>
 </body>
 </html>

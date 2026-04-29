@@ -1,36 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Login</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Pits Stop Collectibles</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            color: white;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .login-container h1 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 30px;
+            color: #e60000;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: #222;
+            color: white;
+            outline: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: #e60000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #ff1a1a;
+        }
+
+        .signup-link {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            font-family: 'Inter', sans-serif;
+            color: #ccc;
+        }
+
+        .signup-link a {
+            color: #e60000;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+    <div class="login-container">
+        <h1>LOGIN</h1>
+        <form id="loginForm">
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="login-btn">ENTER PIT STOP</button>
+        </form>
 
-<div class="auth-container">
-<h1>Login</h1>
+        <div class="signup-link">
+            <p>Don't have an account yet?</p>
+            <a href="signup.html">CREATE ACCOUNT</a>
+        </div>
+    </div>
 
-<input type="text" id="username" placeholder="Username">
-<input type="password" id="password" placeholder="Password">
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const user = JSON.parse(localStorage.getItem('user'));
+            const userIn = document.getElementById('username').value;
+            const passIn = document.getElementById('password').value;
 
-<button onclick="login()">Login</button>
-</div>
-
-<script>
-function login() {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    if (user && user.username === username && user.password === password) {
-        localStorage.setItem("loggedIn", "true");
-        window.location.href = "index.html";
-    } else {
-        alert("Invalid credentials");
-    }
-}
-</script>
-
+            if (user && user.username === userIn && user.password === passIn) {
+                localStorage.setItem('loggedIn', 'true');
+                window.location.href = 'index.html';
+            } else {
+                alert("Invalid username or password. If you haven't joined yet, click Create Account below!");
+            }
+        });
+    </script>
 </body>
 </html>

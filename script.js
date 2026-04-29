@@ -26,30 +26,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function loadUser() {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const loggedIn = localStorage.getItem("loggedIn");
-        const authSection = document.getElementById("authSection");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const loggedIn = localStorage.getItem("loggedIn");
+    const authSection = document.getElementById("authSection");
 
-        if (!authSection) return;
+    if (!authSection) return;
 
-        if (user && loggedIn === "true") {
-            authSection.innerHTML = `
-                <span class="nav-button">Hi, ${user.fullname || user.username}</span>
-                <a href="account.html" class="nav-button">View Account</a>
-                <a href="#" id="logoutBtn" class="nav-button">Logout</a>
-            `;
-
-            document.getElementById("logoutBtn").addEventListener("click", function(e) {
-                e.preventDefault();
-                logout();
-            });
-        } else {
-            authSection.innerHTML = `
-                <a href="login.html" class="nav-button">Login</a>
-                <a href="signup.html" class="nav-button">Sign Up</a>
-            `;
-        }
+    if (user && loggedIn === "true") {
+        authSection.innerHTML = `
+            <li class="nav-item"><span class="nav-button" style="color: #e60000;">Hi, ${user.username}</span></li>
+            <li class="nav-item"><a href="account.html" class="nav-button">View Account</a></li>
+            <li class="nav-item"><a href="#" onclick="logout()" class="nav-button">Logout</a></li>
+        `;
+    } else {
+        authSection.innerHTML = `
+            <li class="nav-item"><a href="login.html" class="nav-button">Login</a></li>
+            <li class="nav-item"><a href="signup.html" class="nav-button">Sign Up</a></li>
+        `;
     }
+}
 
     function logout() {
         localStorage.removeItem('user');
@@ -120,3 +115,46 @@ function loadSuggestions() {
         `;
     });
 }
+
+function toggleMenu() {
+    document.querySelector('.nav-menu').classList.toggle('active');
+}
+
+function executeSearch() {
+    const query = document.getElementById('site-search').value;
+    if (query) {
+        window.location.href = `hotwheels.html?search=${encodeURIComponent(query)}`;
+    }
+}
+
+function loadUser() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const loggedIn = localStorage.getItem("loggedIn");
+    const authSection = document.getElementById("authSection");
+
+    if (!authSection) return;
+
+    // We inject these as <li> items so they appear inside the slide-out menu
+    if (user && loggedIn === "true") {
+        authSection.innerHTML = `
+            <li class="nav-item"><hr style="border: 0.5px solid #333; margin: 10px 0;"></li>
+            <li class="nav-item"><span class="nav-button" style="color: #e60000; font-weight: bold;">HI, ${user.username.toUpperCase()}</span></li>
+            <li class="nav-item"><a href="account.html" class="nav-button">VIEW ACCOUNT</a></li>
+            <li class="nav-item"><a href="#" onclick="logout()" class="nav-button">LOGOUT</a></li>
+        `;
+    } else {
+        authSection.innerHTML = `
+            <li class="nav-item"><hr style="border: 0.5px solid #333; margin: 10px 0;"></li>
+            <li class="nav-item"><a href="login.html" class="nav-button">LOGIN</a></li>
+            <li class="nav-item"><a href="signup.html" class="nav-button">SIGN UP</a></li>
+        `;
+    }
+}
+
+function logout() {
+    localStorage.removeItem("loggedIn");
+    localStorage.removeItem("user");
+    window.location.href = "index.html";
+}
+
+document.addEventListener('DOMContentLoaded', loadUser);

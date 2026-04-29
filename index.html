@@ -14,9 +14,7 @@
         <a href="index.html" class="nav-logo">
             <h2 class="logo-text">Pits Stop Collectibles</h2>
         </a>
-
         <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-
         <ul class="nav-menu">
             <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
             <li class="nav-item dropdown">
@@ -28,15 +26,10 @@
                 </ul>
             </li>
             <li class="nav-item"><a href="aboutUs.html" class="nav-button">About Us</a></li>
-            <li class="nav-item">
-                <a href="cart.html" class="nav-button">
-            🛒 Cart <span id="cart-count" style="background: #e60000; color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; margin-left: 5px; display: none;">0</span>
-        </a>
-            <li class="nav-item">
-                <a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button">Contact Us</a>
-            </li>
+            <li class="nav-item"><a href="cart.html" class="nav-button">🛒 Cart <span id="cart-count">0</span></a></li>
+            <li class="nav-item"><a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button">Contact Us</a></li>
+            <div id="authSection"></div>
         </ul>
-        <div id="authSection"></div>
     </nav>
 </header>
 
@@ -74,22 +67,22 @@
 
         if (user && loggedIn === "true") {
             authSection.innerHTML = `
-                <span class="nav-button" style="color: #e60000;">Hi, ${user.fullname || user.username}</span>
-                <a href="account.html" class="nav-button">View Account</a>
-                <a href="#" onclick="logout()" class="nav-button">Logout</a>
+                <li class="nav-item"><span class="nav-button" style="color: #e60000; font-weight: bold;">Hi, ${user.username}</span></li>
+                <li class="nav-item"><a href="account.html" class="nav-button">View Account</a></li>
+                <li class="nav-item"><a href="#" onclick="logout()" class="nav-button">Logout</a></li>
             `;
         } else {
             authSection.innerHTML = `
-                <a href="login.html" class="nav-button">Login</a>
-                <a href="signup.html" class="nav-button">Sign Up</a>
+                <li class="nav-item"><a href="login.html" class="nav-button">Login</a></li>
+                <li class="nav-item"><a href="signup.html" class="nav-button">Sign Up</a></li>
             `;
         }
     }
 
     function logout() {
         localStorage.removeItem("loggedIn");
-        localStorage.removeItem("user"); // Clear user data too
-        window.location.href = "index.html"; // Refresh to the home page
+        localStorage.removeItem("user");
+        window.location.href = "index.html";
     }
 
     loadUser();
