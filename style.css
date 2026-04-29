@@ -293,7 +293,7 @@ footer {
         font-size: 2rem;
         color: white;
         position: absolute;
-        left: 15px;
+        right: 15px;
         top: 10px;
         cursor: pointer;
         z-index: 1001;
@@ -320,6 +320,10 @@ footer {
         width: 90%;
         margin: 10px auto;
         text-align: center;
+    }
+
+    .nav-bar {
+        position: relative;
     }
 
     .hero-inner h1 {
