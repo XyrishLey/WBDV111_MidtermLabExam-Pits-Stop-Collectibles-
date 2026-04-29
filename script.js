@@ -79,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <b>Contact:</b> ${user.contact}
             `;
         } else {
-            window.location.href = "login.html";
         }
     }
     loadUser();
