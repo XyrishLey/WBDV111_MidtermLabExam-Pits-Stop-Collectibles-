@@ -327,6 +327,26 @@ footer {
         position: relative;
     }
 
+    .nav-menu .nav-item {
+    width: 100%;
+    padding: 0 15px;
+    }
+
+    .nav-menu .nav-button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 14px 16px;
+    margin: 8px 0;
+    border-radius: 10px;
+    background: #222;
+    font-size: 0.9rem;
+    }
+
+    .nav-menu .nav-button:hover {
+    background: #e60000;
+    }
+
     .hero-inner h1 {
         font-size: 1.6rem;
     }
