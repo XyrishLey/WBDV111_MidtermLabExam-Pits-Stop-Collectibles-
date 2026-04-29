@@ -294,66 +294,43 @@ footer {
 
 @media (max-width: 768px) {
 
-    .menu-toggle {
-        display: block;
-        font-size: 2rem;
-        color: white;
-        position: absolute;
-        right: 15px;
-        top: 10px;
-        cursor: pointer;
-        z-index: 1001;
-    }
-
-    .nav-menu {
-        position: fixed;
-        top: 0;
-        right: -200px;
-        width: 260px;
-        height: 100vh;
-        background: #111;
-        flex-direction: column;
-        padding-top: 80px;
-        transition: 0.3s ease;
-        z-index: 1000;
-        box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-        overflow-y: auto;
-    }
-
-    .nav-menu.active {
-        right: 0;
-    }
-
-    .nav-button {
-        width: 90%;
-        margin: 10px auto;
+    /* NAV BAR */
+    .nav-bar {
+        flex-wrap: wrap;
+        justify-content: center;
         text-align: center;
     }
 
-    .nav-bar {
-        position: relative;
+    /* MENU */
+    .nav-menu {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 10px;
     }
 
-    .nav-menu .nav-item {
-    width: 100%;
-    padding: 0 15px;
+    .nav-item {
+        flex: 1 1 auto;
     }
 
-    .nav-menu .nav-button {
-    display: block;
-    width: 90%;
-    text-align: center;
-    padding: 14px 16px;
-    margin: 10px auto;
-    border-radius: 10px;
-    background: #222;
-    font-size: 0.9rem;
+    /* BUTTON */
+    .nav-button {
+        display: block;
+        width: 100%;
+        padding: 8px 10px;
+        font-size: clamp(0.6rem, 2.5vw, 0.8rem);
+        text-align: center;
+        background: #222;
+        border-radius: 8px;
     }
 
-    .nav-menu .nav-button:hover {
-    background: #e60000;
+    .nav-button:hover {
+        background: #e60000;
     }
 
+    /* HERO */
     .hero-inner h1 {
         font-size: 1.6rem;
     }
@@ -362,6 +339,7 @@ footer {
         font-size: 0.85rem;
     }
 
+    /* PRODUCTS */
     .products {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
@@ -370,10 +348,23 @@ footer {
     .product-card img {
         height: 150px;
     }
+    
 }
 
 @media (max-width: 480px) {
+
+    .nav-menu {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-button {
+        width: 90%;
+        font-size: 0.7rem;
+    }
+
     .products {
         grid-template-columns: 1fr;
     }
+
 }
