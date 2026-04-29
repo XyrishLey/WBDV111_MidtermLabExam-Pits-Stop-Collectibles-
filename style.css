@@ -288,78 +288,80 @@ footer {
 
 @media (max-width: 768px) {
 
-    .nav-bar {
-        flex-direction: column;
-        align-items: flex-start;
+    .menu-toggle {
+        display: block;
+        position: absolute;
+        left: 20px;
+        top: 15px;
+        font-size: 1.8rem;
+        color: white;
+        cursor: pointer;
+        z-index: 1000;
     }
 
-    .logo-text {
-        font-size: 1rem;
+    .nav-bar {
+        position: relative;
+        justify-content: center;
     }
 
     .nav-menu {
-        flex-direction: row;
-        overflow-x: auto;
-        white-space: nowrap;
-        width: 100%;
-        gap: 8px;
-        margin-top: 10px;
-        padding-bottom: 5px;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 250px;
+        height: 100%;
+        background: rgba(0,0,0,0.95);
+        flex-direction: column;
+        padding-top: 70px;
+        transition: 0.3s;
     }
 
-    .nav-menu::-webkit-scrollbar {
-        display: none;
+    .nav-menu.active {
+        left: 0;
     }
 
     .nav-button {
-        flex: 0 0 auto;
-        font-size: 0.7rem;
-        padding: 8px 12px;
-    }
-
-    .hero {
-        height: auto;
-        padding: 80px 15px 120px; 
+        width: 90%;
+        margin: 10px auto;
         text-align: center;
     }
 
-    .hero-inner {
-        padding: 0 10px;
+    .hero {
+        padding: 100px 15px;
+        text-align: center;
     }
 
     .hero-inner h1 {
         font-size: 1.6rem;
-        line-height: 1.2;
-        word-break: break-word;
-        margin-bottom: 10px;
     }
 
     .hero-inner p {
         font-size: 0.85rem;
-        margin-bottom: 8px;
     }
 
     .cta-button {
         font-size: 0.9rem;
         padding: 10px 20px;
-        margin-bottom: 20px;
     }
 
-    footer {
-        padding: 25px 15px;
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 12px;
     }
 
-     .hero {
-        min-height: 100vh;
-        padding: 100px 15px 120px;
+    .product-card img {
+        height: 150px;
     }
 
-    .hero-inner h1 {
-        font-size: 1.6rem;
-        line-height: 1.2;
+    .product-card h3 {
+        font-size: 0.8rem;
     }
 
-    @media (max-width: 768px) {
+    .buy-btn {
+        font-size: 0.75rem;
+        padding: 6px;
+    }
 
     .social-box img {
         width: 65px;
@@ -376,51 +378,7 @@ footer {
         font-size: 0.8rem;
     }
 
-    .about-description p {
-        margin-bottom: 6px;
+    footer {
+        padding: 25px 15px;
     }
-        
-@media (max-width: 768px) {
-
-    .products {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        padding: 12px;
-    }
-
-    .product-card {
-        padding: 10px;
-        border-radius: 10px;
-    }
-
-    .product-card img {
-        height: 150px;
-    }
-
-    .product-card h3 {
-        font-size: 0.8rem;
-        line-height: 1.2;
-    }
-
-    .product-card p {
-        font-size: 0.85rem;
-    }
-
-    .buy-btn {
-        font-size: 0.75rem;
-        padding: 6px;
-    }
-
-}
-
-@media (max-width: 480px) {
-
-    .products {
-        grid-template-columns: 1fr;
-    }
-
-    .product-card img {
-        height: 140px;
-    }
-
 }
