@@ -290,30 +290,26 @@ footer {
 
     .menu-toggle {
         display: block;
-        position: absolute;
-        left: 20px;
-        top: 15px;
-        font-size: 1.8rem;
+        font-size: 2rem;
         color: white;
+        position: absolute;
+        left: 15px;
+        top: 10px;
         cursor: pointer;
-        z-index: 1000;
-    }
-
-    .nav-bar {
-        position: relative;
-        justify-content: center;
+        z-index: 1001;
     }
 
     .nav-menu {
         position: fixed;
         top: 0;
-        left: -100%;
-        width: 250px;
+        left: -260px;
+        width: 260px;
         height: 100%;
-        background: rgba(0,0,0,0.95);
+        background: #111;
         flex-direction: column;
-        padding-top: 70px;
-        transition: 0.3s;
+        padding-top: 80px;
+        transition: 0.3s ease;
+        z-index: 1000;
     }
 
     .nav-menu.active {
@@ -326,11 +322,6 @@ footer {
         text-align: center;
     }
 
-    .hero {
-        padding: 100px 15px;
-        text-align: center;
-    }
-
     .hero-inner h1 {
         font-size: 1.6rem;
     }
@@ -339,46 +330,18 @@ footer {
         font-size: 0.85rem;
     }
 
-    .cta-button {
-        font-size: 0.9rem;
-        padding: 10px 20px;
-    }
-
     .products {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
-        padding: 12px;
     }
 
     .product-card img {
         height: 150px;
     }
+}
 
-    .product-card h3 {
-        font-size: 0.8rem;
-    }
-
-    .buy-btn {
-        font-size: 0.75rem;
-        padding: 6px;
-    }
-
-    .social-box img {
-        width: 65px;
-        height: 65px;
-    }
-
-    .social-container {
-        gap: 20px;
-    }
-
-    .about-description {
-        max-width: 90%;
-        padding: 12px;
-        font-size: 0.8rem;
-    }
-
-    footer {
-        padding: 25px 15px;
+@media (max-width: 480px) {
+    .products {
+        grid-template-columns: 1fr;
     }
 }
