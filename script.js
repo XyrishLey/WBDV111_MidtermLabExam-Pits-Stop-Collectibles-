@@ -1,3 +1,7 @@
+function toggleMenu() {
+    document.querySelector(".nav-menu").classList.toggle("active");
+}
+
 const sortSelect = document.getElementById("sort");
 const container = document.querySelector(".products");
 
