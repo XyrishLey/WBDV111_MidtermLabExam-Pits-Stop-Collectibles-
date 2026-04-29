@@ -1,5 +1,5 @@
 # Pits-Stops-Collectibles-Website
-Pit Stops Collectibles is a web-based platform for a toy collectibles reselling business that specializes in diecast cars such as Hot Wheels, Matchbox, and Tomica. The website provides users with an easy way to explore products and connect through social media.
+Pit Stops Collectibles is a web-based platform for a toy collectibles reselling business that specializes in diecast cars such as Hot Wheels, Matchbox, and Hotwheels Premium. The website provides users with an easy way to explore products and connect through social media.
 
 The business officially launched in October 2025, aiming to serve collectors with rare and special diecast items.
 
