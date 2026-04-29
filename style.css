@@ -302,7 +302,7 @@ footer {
     .nav-menu {
         position: fixed;
         top: 0;
-        left: -260px;
+        right: -260px;
         width: 260px;
         height: 100%;
         background: #111;
@@ -310,10 +310,11 @@ footer {
         padding-top: 80px;
         transition: 0.3s ease;
         z-index: 1000;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.5);
     }
 
     .nav-menu.active {
-        left: 0;
+        right: 0;
     }
 
     .nav-button {
