@@ -13,7 +13,7 @@ The project highlights a clean UI design with a modern glassmorphism style and s
 ### Products Featured
 • Hot Wheels <br>
 • Matchbox <br>
-• Tomica
+• Hot Wheels Premium
 
 ### Features
 • Fully Responsive Design <br>
