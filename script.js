@@ -92,7 +92,6 @@ function handleSearch(event) {
 function executeSearch() {
     const query = document.getElementById('site-search').value.toLowerCase();
     if (query) {
-        // This will redirect to your shop page with the search term
         window.location.href = `hotwheels.html?search=${query}`;
     }
 }
