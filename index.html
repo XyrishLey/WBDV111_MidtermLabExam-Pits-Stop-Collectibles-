@@ -1,16 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-    function checkAuth() {
-        const user = localStorage.getItem('user');
-        if (!user) {
-            window.location.replace("login.html");
-        }
-    }
-    window.addEventListener('pageshow', function(event) {
-    });
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | Pits Stop Collectibles</title>
@@ -21,7 +11,7 @@
 <body>
     <header>
     <nav class="nav-bar"> 
-        <a href="home.html" class="nav-logo">
+        <a href="index.html" class="nav-logo">
             <h2 class="logo-text">Pits Stop Collectibles</h2>
         </a>
 
@@ -84,7 +74,7 @@
 
         if (user && loggedIn === "true") {
             authSection.innerHTML = `
-                <span class="nav-button">Hi, ${user.fullname || user.username}</span>
+                <span class="nav-button" style="color: #e60000;">Hi, ${user.fullname || user.username}</span>
                 <a href="account.html" class="nav-button">View Account</a>
                 <a href="#" onclick="logout()" class="nav-button">Logout</a>
             `;
@@ -98,7 +88,8 @@
 
     function logout() {
         localStorage.removeItem("loggedIn");
-        location.reload();
+        localStorage.removeItem("user"); // Clear user data too
+        window.location.href = "index.html"; // Refresh to the home page
     }
 
     loadUser();
