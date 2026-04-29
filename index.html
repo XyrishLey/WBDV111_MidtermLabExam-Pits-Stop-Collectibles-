@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+    function checkAuth() {
+        const user = localStorage.getItem('user');
+        if (!user) {
+            window.location.replace("login.html");
+        }
+    }
+    window.addEventListener('pageshow', function(event) {
+        checkAuth();
+    });
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | Pits Stop Collectibles</title>
@@ -10,52 +21,88 @@
 </head>
 <body>
     <header>
-        <nav class="nav-bar"> 
-            <a href="home.html" class="nav-logo">
-                <h2 class="logo-text">Pits Stop Collectibles</h2>
-            </a>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="index" class="nav-button">Home</a></li>
-                <li class="nav-item"><a href="hotwheels" class="nav-button">Hotwheels</a></li>
-                <li class="nav-item"><a href="premium" class="nav-button">Hotwheels Premium</a></li>
-                <li class="nav-item"><a href="matchbox" class="nav-button">Matchbox</a></li>
-                <li class="nav-item"><a href="aboutUs" class="nav-button">About Us</a></li>
-                <li class="nav-item">
-                    <a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button">Contact Us</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <div class="hero-inner">
-            <h1>Pits Stop Collectibles</h1>
-            <p>Not your ordinary pit stop 😉🏁</p>
-            <p class="subtext">Collect • Display • Repeat</p>
-            <a href="hotwheels.html" class="cta-button">Shop now</a>
-        </div>
-    </section>
-    
- <footer class="footer">
-    <div class="footer-container">
-        <h3>Pits Stop Collectibles</h3>
-        <p>📍 Cainta, Rizal</p>
-        <p>🛒Your one stop shop!</p>
-
-        <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank">
-            Visit our Facebook
+    <nav class="nav-bar"> 
+        <a href="home.html" class="nav-logo">
+            <h2 class="logo-text">Pits Stop Collectibles</h2>
         </a>
 
-        <p class="copyright">© 2025 All Rights Reserved</p>
-    </div>
-</footer>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
-<script>
-function toggleMenu() {
-    document.querySelector('.nav-menu').classList.toggle('active');
-}
-</script>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-button">Brands ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                    <li><a href="premium.html" class="nav-button">Hotwheels Premium</a></li>
+                    <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                </ul>
+            </li>
+            <li class="nav-item"><a href="aboutUs.html" class="nav-button">About Us</a></li>
+            <li class="nav-item">
+                <a href="cart.html" class="nav-button">
+            🛒 Cart <span id="cart-count" style="background: #e60000; color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; margin-left: 5px; display: none;">0</span>
+        </a>
+            <li class="nav-item">
+                <a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button">Contact Us</a>
+            </li>
+        </ul>
+        <div id="authSection"></div>
+    </nav>
+</header>
+
+    <section class="hero">
+    <div class="hero-inner">
+        <h1>PITS STOP <br> COLLECTIBLES</h1>
+        <p>Not your ordinary pit stop 🤩🏁<br>Collect • Display • Repeat</p>
+        <a href="hotwheels.html" class="cta-button">SHOP NOW</a>
+    </div>
+</section>
     
+    <footer class="footer">
+        <div class="footer-container">
+            <h3>Pits Stop Collectibles</h3>
+            <p>📍 Cainta, Rizal</p>
+            <p>🛒Your one stop shop!</p>
+            <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank">
+                Visit our Facebook
+            </a>
+            <p class="copyright">© 2025 All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+    function toggleMenu() {
+        document.querySelector('.nav-menu').classList.toggle('active');
+    }
+
+    function loadUser() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const loggedIn = localStorage.getItem("loggedIn");
+        const authSection = document.getElementById("authSection");
+
+        if (!authSection) return;
+
+        if (user && loggedIn === "true") {
+            authSection.innerHTML = `
+                <span class="nav-button">Hi, ${user.fullname || user.username}</span>
+                <a href="account.html" class="nav-button">View Account</a>
+                <a href="#" onclick="logout()" class="nav-button">Logout</a>
+            `;
+        } else {
+            authSection.innerHTML = `
+                <a href="login.html" class="nav-button">Login</a>
+                <a href="signup.html" class="nav-button">Sign Up</a>
+            `;
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem("loggedIn");
+        location.reload();
+    }
+
+    loadUser();
+    </script>
 </body>
 </html>

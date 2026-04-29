@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="auth-container">
+<h1>Create Account</h1>
+
+<input type="text" id="fullname" placeholder="Full Name">
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="password" placeholder="Password" oninput="checkStrength()">
+
+<p id="strengthText"></p>
+
+<select id="country" onchange="updateRegions()">
+    <option value="">Select Country</option>
+    <option value="Philippines">Philippines</option>
+</select>
+
+<select id="province" onchange="updateCities()">
+    <option value="">Select Region</option>
+</select>
+
+<select id="city">
+    <option value="">Select City</option>
+</select>
+
+<input type="text" id="address" placeholder="Address">
+<input type="text" id="zipcode" placeholder="Zip Code">
+<input type="text" id="contact" placeholder="Contact Number">
+
+<button onclick="signup()">Create Account</button>
+</div>
+
+<script>
+function validateName(name) {
+    return /^[A-Za-z\s]+$/.test(name);
+}
+
+// PASSWORD STRENGTH
+function checkStrength() {
+    const pw = document.getElementById("password").value;
+    let strength = "Weak";
+
+    if (pw.length >= 8 && /[A-Z]/.test(pw) && /[0-9]/.test(pw) && /[^A-Za-z0-9]/.test(pw)) {
+        strength = "Strong";
+    } else if (pw.length >= 6 && (/[A-Z]/.test(pw) || /[0-9]/.test(pw))) {
+        strength = "Moderate";
+    }
+
+    document.getElementById("strengthText").innerText = "Strength: " + strength;
+}
+
+// LOCATION DATA
+const data = {
+    "Philippines": {
+        "Region IV-A (CALABARZON)": ["Cainta", "Antipolo", "Taytay", "Binangonan", "Angono"],
+        "NCR (Metro Manila)": ["Quezon City", "Manila", "Makati", "Pasig", "Taguig"]
+    }
+};
+
+// UPDATE REGIONS
+function updateRegions() {
+    const country = document.getElementById("country").value;
+    const province = document.getElementById("province");
+    const city = document.getElementById("city");
+
+    province.innerHTML = '<option value="">Select Region</option>';
+    city.innerHTML = '<option value="">Select City</option>';
+
+    if (data[country]) {
+        Object.keys(data[country]).forEach(region => {
+            let option = document.createElement("option");
+            option.value = region;
+            option.textContent = region;
+            province.appendChild(option);
+        });
+    }
+}
+
+// UPDATE CITIES
+function updateCities() {
+    const country = document.getElementById("country").value;
+    const region = document.getElementById("province").value;
+    const city = document.getElementById("city");
+
+    city.innerHTML = '<option value="">Select City</option>';
+
+    if (data[country] && data[country][region]) {
+        data[country][region].forEach(c => {
+            let option = document.createElement("option");
+            option.value = c;
+            option.textContent = c;
+            city.appendChild(option);
+        });
+    }
+}
+
+// SIGNUP
+function signup() {
+    const fullname = document.getElementById("fullname").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const country = document.getElementById("country").value;
+    const region = document.getElementById("province").value;
+    const city = document.getElementById("city").value;
+    const address = document.getElementById("address").value;
+    const zipcode = document.getElementById("zipcode").value;
+    const contact = document.getElementById("contact").value;
+
+    if (!validateName(fullname)) {
+        alert("Full name must only contain letters");
+        return;
+    }
+
+    const user = {
+        fullname,
+        username,
+        password,
+        country,
+        region,
+        city,
+        address,
+        zipcode,
+        contact
+    };
+
+    localStorage.setItem("user", JSON.stringify(user));
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>

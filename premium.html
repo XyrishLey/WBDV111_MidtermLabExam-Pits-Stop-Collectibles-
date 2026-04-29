@@ -11,15 +11,31 @@
 <body>
     <header>
         <nav class="nav-bar">
-            <a href="home.html" class="nav-logo">
+            <a href="index.html" class="nav-logo">
                 <h2 class="logo-text">Pits Stops Collectibles</h2>
             </a>
+
+                <div class="search-container">
+                    <input type="text" id="site-search" placeholder="Search for cars..." onkeyup="handleSearch(event)">
+                        <button onclick="executeSearch()">🔍</button>
+                            </div>
+
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
             <ul class="nav-menu">
                 <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
-                <li class="nav-item"><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
-                <li class="nav-item"><a href="premium.html" class="nav-button">Hotwheels Premium</a></li>
-                <li class="nav-item"><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-button">Brands ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Hotwheels Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
                 <li class="nav-item"><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li class="nav-item">
+        <a href="cart.html" class="nav-button">
+            🛒 Cart <span id="cart-count" style="background: #e60000; color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; margin-left: 5px; display: none;">0</span>
+        </a>
                 <li class="nav-item">
                     <a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button">Contact Us</a>
                 </li>
@@ -37,14 +53,27 @@
     </div>
 
     <section class="products">
-        <div class="product-card" data-price="3,200">
+        <div class="product-card" data-price="3200">
             <img src="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS%20PREMIUM/2016%20GRAN%20TURISMO%20SET%203200.jpg">
-            <h3>2016 Hot Wheels Entertainment  - Gran Turismo (COMPLETE SET)</h3>
+            <h3>2016 Hot Wheels Entertainment - Gran Turismo (SET)</h3>
             <p>₱3,200</p>
             <a href="https://www.facebook.com/photo?fbid=122164518854739687&set=pcb.122164518950739687" class="buy-btn" target="_blank">Buy Now</a>
         </div>
-        </section>
+    </section>
 
     <script src="script.js"></script>
+    <script>
+        function toggleMenu() {
+            const menu = document.querySelector('.nav-menu');
+            menu.classList.toggle('active');
+        }
+        document.addEventListener('click', (e) => {
+            const menu = document.querySelector('.nav-menu');
+            const toggle = document.querySelector('.menu-toggle');
+            if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+                menu.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>

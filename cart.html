@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | Pits Stop Collectibles</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .cart-container {
+            max-width: 1000px;
+            margin: 120px auto;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 20px;
+            color: white;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e60000;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .cart-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .keep-shopping {
+            color: #ccc;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .keep-shopping:hover {
+            color: #e60000;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #222;
+        }
+
+        .item-details {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .cart-item img {
+            width: 120px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #444;
+        }
+
+        .item-info h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0 0 5px 0;
+            font-size: 1.2rem;
+        }
+
+        .item-info p {
+            color: #e60000;
+            font-weight: bold;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .remove-btn {
+            background: none;
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #ff4d4d;
+            color: white;
+        }
+
+        .cart-summary {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            text-align: right;
+        }
+
+        .total-row {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .nudge-text {
+            color: #888;
+            font-style: italic;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 18px;
+            background: #e60000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .checkout-btn:hover {
+            background: #ff1a1a;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .cart-container { margin: 80px 15px; padding: 20px; }
+            .cart-item { flex-direction: column; text-align: center; gap: 15px; }
+            .item-details { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <div class="cart-header">
+            <h1>YOUR CART</h1>
+            <a href="hotwheels.html" class="keep-shopping">← Keep Shopping</a>
+        </div>
+
+        <div id="cart-items-list">
+            <!-- Items load here -->
+        </div>
+
+        <div class="cart-summary">
+            <span class="nudge-text" id="nudge-msg">Items in your cart are selling fast! Add more to your collection?</span>
+            <div class="total-row">Total: ₱<span id="cart-total">0</span></div>
+            <button class="checkout-btn" onclick="window.location.href='checkout.html'">Secure Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        function displayCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const list = document.getElementById('cart-items-list');
+            const nudge = document.getElementById('nudge-msg');
+            let total = 0;
+            
+            if (cart.length === 0) {
+                list.innerHTML = `<p style="text-align:center; padding: 40px; color: #666;">Your cart is empty. Time to hunt some treasure!</p>`;
+                document.getElementById('cart-total').innerText = "0";
+                return;
+            }
+
+            if (cart.length === 1) {
+                nudge.innerText = "Only 1 item? Your shelf looks a bit lonely! Why not add another?";
+            } else {
+                nudge.innerText = "Great collection started! Ready to finalize your order?";
+            }
+
+            list.innerHTML = '';
+            cart.forEach((item, index) => {
+                total += parseInt(item.price);
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <div class="item-details">
+                            <img src="${item.img}" alt="${item.name}">
+                            <div class="item-info">
+                                <h4>${item.name}</h4>
+                                <p>₱${item.price}</p>
+                            </div>
+                        </div>
+                        <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+                    </div>`;
+            });
+            document.getElementById('cart-total').innerText = total;
+        }
+
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('cart'));
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        displayCart();
+    </script>
+</body>
+</html>

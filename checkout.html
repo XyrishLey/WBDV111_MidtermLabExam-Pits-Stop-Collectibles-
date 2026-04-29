@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Pits Stop Collectibles</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #0a0a0a !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .checkout-box {
+            max-width: 450px;
+            width: 90%;
+            padding: 40px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            color: white;
+            border: 1px solid #333;
+            /* The Red Glow */
+            box-shadow: 0 0 25px rgba(230, 0, 0, 0.5);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .checkout-box h2 {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .info-group {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .info-group label {
+            display: block;
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: #e60000;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .info-group p {
+            font-size: 1.1rem;
+            margin: 0;
+            color: #eee;
+        }
+
+        .order-summary {
+            background: rgba(230, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(230, 0, 0, 0.3);
+        }
+
+        .order-summary h3 {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 15px;
+            background: #e60000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .place-order-btn:hover {
+            background: #ff1a1a;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-box">
+        <h2>Shipping Details</h2>
+        
+        <div class="info-group">
+            <label>Full Name</label>
+            <p id="check-name">Loading...</p>
+        </div>
+
+        <div class="info-group">
+            <label>Delivery Address</label>
+            <p id="check-address">Loading...</p>
+        </div>
+
+        <div class="info-group">
+            <label>Contact Number</label>
+            <p id="check-phone">Loading...</p>
+        </div>
+
+        <div class="info-group">
+            <label>Zip Code</label>
+            <p id="check-zip">Loading...</p>
+        </div>
+
+        <div class="order-summary">
+            <h3>Total: ₱<span id="final-price">0</span></h3>
+        </div>
+
+        <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            if(user) {
+                document.getElementById('check-name').innerText = user.fullname || user.username;
+                document.getElementById('check-address').innerText = user.address || "No address saved";
+                document.getElementById('check-phone').innerText = user.phone || "No phone saved";
+                document.getElementById('check-zip').innerText = user.zip || "N/A";
+            }
+
+            let total = 0;
+            cart.forEach(item => total += parseInt(item.price));
+            document.getElementById('final-price').innerText = total;
+        };
+
+       function placeOrder() {
+    localStorage.removeItem('cart'); 
+    window.location.href = 'success.html';
+}
+    </script>
+</body>
+</html> 
