@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-
     window.toggleMenu = function () {
         document.querySelector(".nav-menu")?.classList.toggle("active");
     };
 
-    
     const sortSelect = document.getElementById("sort");
     const container = document.querySelector(".products");
 
@@ -27,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    
     function loadUser() {
         const user = JSON.parse(localStorage.getItem("user"));
         const loggedIn = localStorage.getItem("loggedIn");
@@ -46,7 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.preventDefault();
                 logout();
             });
-
         } else {
             authSection.innerHTML = `
                 <a href="login.html" class="nav-button">Login</a>
@@ -56,9 +52,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function logout() {
-    localStorage.removeItem('user');
-    window.location.replace("login.html");
-}
+        localStorage.removeItem('user');
+        localStorage.removeItem('loggedIn');
+        window.location.replace("index.html");
+    }
 
     function loadAccount() {
         const user = JSON.parse(localStorage.getItem("user"));
@@ -78,11 +75,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 <b>Zip Code:</b> ${user.zipcode}<br>
                 <b>Contact:</b> ${user.contact}
             `;
-        } else {
         }
     }
+
     loadUser();
     loadAccount();
+    if (document.getElementById('suggestion-box')) {
+        loadSuggestions();
+    }
 });
 
 function handleSearch(event) {
@@ -90,40 +90,33 @@ function handleSearch(event) {
 }
 
 function executeSearch() {
-    const query = document.getElementById('site-search').value.toLowerCase();
+    const searchInput = document.getElementById('site-search');
+    if (!searchInput) return;
+    
+    const query = searchInput.value.toLowerCase().trim();
     if (query) {
-        window.location.href = `hotwheels.html?search=${query}`;
+        window.location.href = `hotwheels.html?search=${encodeURIComponent(query)}`;
     }
 }
 
 function loadSuggestions() {
     const cars = [
-        { name: "Toyota Supra", price: "250", img: "https://example.com/supra.jpg" },
-        { name: "Mazda RX-7", price: "230", img: "https://example.com/rx7.jpg" },
-        { name: "Honda Civic Type R", price: "210", img: "https://example.com/civic.jpg" }
+        { name: "Toyota Supra", price: "250", img: "https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/skyline%202.jpg" },
+        { name: "Mazda RX-7", price: "230", img: "https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/ford%20gt.jpg" },
+        { name: "Honda Civic Type R", price: "210", img: "https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/2018%20type%20r.jpg" }
     ];
 
     const box = document.getElementById('suggestion-box');
     if (!box) return;
 
+    box.innerHTML = "";
     cars.forEach(car => {
         box.innerHTML += `
-            <a href="product-details.html?name=${car.name}&price=${car.price}&img=${car.img}" class="suggest-card">
+            <a href="product-details.html?name=${encodeURIComponent(car.name)}&price=${car.price}&img=${encodeURIComponent(car.img)}" class="suggest-card">
                 <img src="${car.img}">
                 <h5>${car.name}</h5>
                 <p style="color:#e60000">₱${car.price}</p>
             </a>
         `;
     });
-}
-
-function executeSearch() {
-    const query = document.getElementById('site-search').value.toLowerCase().trim();
-    if (query) {
-        window.location.href = `hotwheels.html?search=${encodeURIComponent(query)}`;
-    }
-}
-
-function handleSearch(event) {
-    if (event.key === "Enter") executeSearch();
 }
