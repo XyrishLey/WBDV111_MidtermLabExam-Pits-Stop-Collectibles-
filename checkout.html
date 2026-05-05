@@ -25,7 +25,6 @@
             border-radius: 15px;
             color: white;
             border: 1px solid #333;
-            /* The Red Glow */
             box-shadow: 0 0 25px rgba(230, 0, 0, 0.5);
             font-family: 'Inter', sans-serif;
         }
@@ -129,25 +128,39 @@
 
     <script>
         window.onload = function() {
-            const user = JSON.parse(localStorage.getItem('user'));
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            
-            if(user) {
-                document.getElementById('check-name').innerText = user.fullname || user.username;
-                document.getElementById('check-address').innerText = user.address || "No address saved";
-                document.getElementById('check-phone').innerText = user.phone || "No phone saved";
-                document.getElementById('check-zip').innerText = user.zip || "N/A";
-            }
+    const user = JSON.parse(localStorage.getItem('user'));
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        window.location.href = 'hotwheels.html';
+        return;
+    }
 
-            let total = 0;
-            cart.forEach(item => total += parseInt(item.price));
-            document.getElementById('final-price').innerText = total;
-        };
+    if(user) {
+        document.getElementById('check-name').innerText = user.fullname || user.username || "Guest Buyer";
+        document.getElementById('check-address').innerText = user.address || "N/A";
+        
+        // Revised phone logic to check multiple possible keys
+        document.getElementById('check-phone').innerText = user.phone || user.contact || user.number || user.phone_number || "N/A";
+        
+        document.getElementById('check-zip').innerText = user.zip || user.zipcode || user.postalCode || "N/A";
+    } else {
+        window.location.href = 'login.html';
+    }
 
-       function placeOrder() {
+    let total = 0;
+    cart.forEach(item => {
+        let price = String(item.price).replace(/[^0-9]/g, '');
+        total += parseInt(price) || 0;
+    });
+    document.getElementById('final-price').innerText = total.toLocaleString();
+};
+
+function placeOrder() {
     localStorage.removeItem('cart'); 
     window.location.href = 'success.html';
 }
     </script>
 </body>
-</html> 
+</html>
