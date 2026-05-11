@@ -10,7 +10,7 @@
         h1, h2 { font-family: 'Orbitron', sans-serif; color: #e60000; text-align: center; }
         h2 { text-align: left; font-size: 1.1rem; margin-top: 40px; border-left: 5px solid #e60000; padding-left: 15px; text-transform: uppercase; }
         
-        .admin-container { max-width: 1100px; margin: 0 auto; background: rgba(20, 20, 20, 0.9); padding: 30px; border-radius: 15px; border: 1px solid #e60000; }
+        .admin-container { max-width: 1100px; margin: 0 auto; background: rgba(20, 20, 20, 0.9); padding: 30px; border-radius: 15px; border: 1px solid #e60000;  }
         
         table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #111; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; font-size: 0.85rem; }
@@ -57,7 +57,36 @@
             </div>
         </div>
 
-        <h2>Order Requests (Verification Needed)</h2>
+        <h2>Inventory Management</h2>
+        <div style="background: #111; padding: 20px; border-radius: 10px; border: 1px solid #333; margin-bottom: 30px;">
+            <h3 style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">ADD / UPDATE PRODUCT</h3>
+            <input type="text" id="prodName" placeholder="Product Name" style="width:20%; padding:8px; margin-right:5px; background:#222; color:white; border:1px solid #444;">
+            <input type="number" id="prodPrice" placeholder="Price" style="width:10%; padding:8px; margin-right:5px; background:#222; color:white; border:1px solid #444;">
+            <input type="number" id="prodQty" placeholder="Qty" style="width:10%; padding:8px; margin-right:5px; background:#222; color:white; border:1px solid #444;">
+            <select id="prodCategory" style="padding:8px; margin-right:5px; background:#222; color:white; border:1px solid #444;">
+                <option value="hotwheels">Hotwheels</option>
+                <option value="premium">Hotwheels Premium</option>
+                <option value="matchbox">Matchbox</option>
+            </select>
+            <input type="text" id="prodImg" placeholder="Image URL" style="width:20%; padding:8px; margin-right:5px; background:#222; color:white; border:1px solid #444;">
+            <button class="btn approve-btn" onclick="addProduct()">Add/Update Product</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Category</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryTableBody"></tbody>
+        </table>
+
+        <h2>Order Requests</h2>
         <table>
             <thead>
                 <tr>
@@ -72,7 +101,7 @@
             <tbody id="orderTableBody"></tbody>
         </table>
 
-        <h2>Customer Inbox (Inquiries)</h2>
+        <h2>Customer Inbox</h2>
         <table>
             <thead>
                 <tr>
@@ -101,7 +130,6 @@
     </div>
 
     <script>
-        // 1. SECURITY & AUTH
         function checkAuth() {
             if (localStorage.getItem('isAdmin') !== 'true') {
                 window.location.replace('index.html');
@@ -113,15 +141,10 @@
             window.location.replace('index.html');
         }
 
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-                checkAuth();
-            }
-        });
-
         window.onload = function() {
             checkAuth();
             loadDashboard();
+            loadInventory();
         };
 
         function loadDashboard() {
@@ -130,107 +153,121 @@
             loadInbox();
         }
 
-        // 2. DATA LOADING FUNCTIONS
+        function loadInventory() {
+        const products = JSON.parse(localStorage.getItem('allProducts')) || [];
+        const tableBody = document.getElementById('inventoryTableBody');
+        tableBody.innerHTML = "";
+
+        products.forEach((p, index) => {
+            tableBody.innerHTML += `
+                <tr>
+                    <td><img src="${p.image}" width="40" style="border-radius:4px;"></td>
+                    <td>${p.name}</td>
+                    <td>₱${p.price}</td>
+                    <td>
+                        <input type="number" id="updateQty-${index}" value="${p.quantity}" style="width:50px; background:#222; color:white; border:1px solid #444; padding:5px;">
+                    </td>
+                    <td>${p.category}</td>
+                    <td>
+                        <button class="btn approve-btn" onclick="updateStock(${index})">Update</button>
+                        <button class="btn delete-btn" onclick="deleteProduct(${index})">Remove</button>
+                    </td>
+                </tr>`;
+        });
+    }
+
+        function updateStock(index) {
+        let products = JSON.parse(localStorage.getItem('allProducts')) || [];
+        const newQty = parseInt(document.getElementById(`updateQty-${index}`).value);
+        
+        if (isNaN(newQty)) return alert("Please enter a valid number");
+
+        // Logic: If it was out of stock (0) and we are adding items, notify the waitlist
+        if (products[index].quantity <= 0 && newQty > 0) {
+            sendRestockNotification(products[index].name);
+        }
+
+        products[index].quantity = newQty;
+        localStorage.setItem('allProducts', JSON.stringify(products));
+        alert("Stock updated successfully!");
+        loadInventory();
+    }   
+
+        function addProduct() {
+            const name = document.getElementById('prodName').value;
+            const price = document.getElementById('prodPrice').value;
+            const category = document.getElementById('prodCategory').value;
+            const img = document.getElementById('prodImg').value;
+            const qty = parseInt(document.getElementById('prodQty').value) || 0;
+
+            if(!name || !price || !img) return alert("Fill all fields!");
+
+            let products = JSON.parse(localStorage.getItem('allProducts')) || [];
+            const existingIndex = products.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
+
+            if(existingIndex !== -1) {
+                if(products[existingIndex].quantity <= 0 && qty > 0) sendRestockNotification(name);
+                products[existingIndex].quantity = qty;
+                products[existingIndex].price = price;
+            } else {
+                products.push({ id: Date.now(), name, price, category, image: img, quantity: qty });
+            }
+
+            localStorage.setItem('allProducts', JSON.stringify(products));
+            location.reload();
+        }
+
+        function sendRestockNotification(prodName) {
+            let waitlist = JSON.parse(localStorage.getItem('restockWaitlist')) || [];
+            let notifications = JSON.parse(localStorage.getItem('userNotifications')) || [];
+            const interested = waitlist.filter(w => w.productName === prodName);
+            interested.forEach(user => {
+                notifications.push({ id: Date.now()+Math.random(), username: user.username, title: "RESTOCK!", message: `${prodName} is back!`, date: new Date().toLocaleString(), isRead: false });
+            });
+            localStorage.setItem('restockWaitlist', JSON.stringify(waitlist.filter(w => w.productName !== prodName)));
+            localStorage.setItem('userNotifications', JSON.stringify(notifications));
+        }
+
+        function deleteProduct(index) {
+            let products = JSON.parse(localStorage.getItem('allProducts'));
+            products.splice(index, 1);
+            localStorage.setItem('allProducts', JSON.stringify(products));
+            loadInventory();
+        }
+
         function loadUsers() {
             const users = JSON.parse(localStorage.getItem('allUsers')) || [];
-            const singleUser = JSON.parse(localStorage.getItem('user')); 
             const tableBody = document.getElementById('userTableBody');
-            const userCountDisplay = document.getElementById('userCount');
             tableBody.innerHTML = "";
-
-            let allRegistered = [...users];
-            if (singleUser && !allRegistered.find(u => u.username === singleUser.username)) {
-                allRegistered.push(singleUser);
-            }
-
-            if (allRegistered.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No users found.</td></tr>';
-            } else {
-                allRegistered.forEach((u) => {
-                    tableBody.innerHTML += `
-                        <tr>
-                            <td>${u.fullname || 'N/A'}</td>
-                            <td>${u.username}</td>
-                            <td>${u.contact || 'N/A'}</td>
-                            <td><button class="btn delete-btn" onclick="deleteUser('${u.username}')">Delete</button></td>
-                        </tr>`;
-                });
-            }
-            userCountDisplay.innerText = allRegistered.length;
+            users.forEach((u) => {
+                tableBody.innerHTML += `<tr><td>${u.fullname || 'N/A'}</td><td>${u.username}</td><td>${u.contact || 'N/A'}</td><td><button class="btn delete-btn" onclick="deleteUser('${u.username}')">Delete</button></td></tr>`;
+            });
+            document.getElementById('userCount').innerText = users.length;
         }
 
         function loadOrders() {
             const orders = JSON.parse(localStorage.getItem('allOrders')) || [];
             const tableBody = document.getElementById('orderTableBody');
-            const pendingDisplay = document.getElementById('pendingCount');
-            const salesDisplay = document.getElementById('totalSales');
+            let pendingCount = 0; let totalSales = 0;
             tableBody.innerHTML = "";
-            
-            let pendingCount = 0;
-            let totalSales = 0;
-
-            if (orders.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No orders yet.</td></tr>';
-            } else {
-                orders.forEach((order, index) => {
-                    if (order.status === "Pending") pendingCount++;
-                    if (order.status === "Completed") {
-                        totalSales += parseInt(order.total.toString().replace(/,/g, ''));
-                    }
-                    tableBody.innerHTML += `
-                        <tr>
-                            <td>${order.orderID}</td>
-                            <td>${order.user}</td>
-                            <td>₱${order.total}</td>
-                            <td>${order.date}</td>
-                            <td><span class="status-badge ${order.status === 'Pending' ? 'status-pending' : 'status-completed'}">${order.status}</span></td>
-                            <td>
-                                ${order.status === 'Pending' ? `<button class="btn approve-btn" onclick="approveOrder(${index})">Approve</button>` : ''}
-                                <button class="btn delete-btn" onclick="deleteOrder(${index})">Remove</button>
-                            </td>
-                        </tr>`;
-                });
-            }
-            pendingDisplay.innerText = pendingCount;
-            salesDisplay.innerText = "₱" + totalSales.toLocaleString();
+            orders.forEach((order, index) => {
+                if (order.status === "Pending") pendingCount++;
+                if (order.status === "Completed") totalSales += parseInt(order.total.toString().replace(/,/g, ''));
+                tableBody.innerHTML += `<tr><td>${order.orderID}</td><td>${order.user}</td><td>₱${order.total}</td><td>${order.date}</td><td><span class="status-badge ${order.status === 'Pending' ? 'status-pending' : 'status-completed'}">${order.status}</span></td><td>${order.status === 'Pending' ? `<button class="btn approve-btn" onclick="approveOrder(${index})">Approve</button>` : ''}<button class="btn delete-btn" onclick="deleteOrder(${index})">Remove</button></td></tr>`;
+            });
+            document.getElementById('pendingCount').innerText = pendingCount;
+            document.getElementById('totalSales').innerText = "₱" + totalSales.toLocaleString();
         }
 
         function loadInbox() {
-    const inbox = JSON.parse(localStorage.getItem('adminInbox')) || [];
-    const tableBody = document.getElementById('inboxTableBody');
-    tableBody.innerHTML = "";
+            const inbox = JSON.parse(localStorage.getItem('adminInbox')) || [];
+            const tableBody = document.getElementById('inboxTableBody');
+            tableBody.innerHTML = "";
+            inbox.forEach((msg, index) => {
+                tableBody.innerHTML += `<tr><td>${msg.date}</td><td>${msg.sender}</td><td>${msg.subject}</td><td>${msg.message}</td><td><button class="btn delete-btn" onclick="deleteMessage(${index})">Clear</button></td></tr>`;
+            });
+        }
 
-    if (inbox.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No messages.</td></tr>';
-    } else {
-        inbox.forEach((msg, index) => {
-            tableBody.innerHTML += `
-                <tr>
-                    <td>${msg.date}</td>
-                    <td><strong>${msg.sender}</strong> (${msg.username})</td>
-                    <td>${msg.subject}</td>
-                    <td>${msg.message} ${msg.reply ? `<br><i style="color:#00ff00;">Replied: ${msg.reply}</i>` : ''}</td>
-                    <td>
-                        <button class="btn approve-btn" onclick="replyMessage(${index})">Reply</button>
-                        <button class="btn delete-btn" onclick="deleteMessage(${index})">Clear</button>
-                    </td>
-                </tr>`;
-        });
-    }
-}
-
-function replyMessage(index) {
-    const inbox = JSON.parse(localStorage.getItem('adminInbox'));
-    const replyText = prompt("Enter your reply for " + inbox[index].sender + ":");
-    
-    if (replyText) {
-        inbox[index].reply = replyText; // Dagdag reply field
-        localStorage.setItem('adminInbox', JSON.stringify(inbox));
-        alert("Reply sent!");
-        loadInbox();
-    }
-}
-        // 3. ACTION FUNCTIONS
         function approveOrder(index) {
             let orders = JSON.parse(localStorage.getItem('allOrders'));
             orders[index].status = "Completed";
@@ -239,12 +276,10 @@ function replyMessage(index) {
         }
 
         function deleteOrder(index) {
-            if (confirm("Delete this order?")) {
-                let orders = JSON.parse(localStorage.getItem('allOrders'));
-                orders.splice(index, 1);
-                localStorage.setItem('allOrders', JSON.stringify(orders));
-                loadOrders();
-            }
+            let orders = JSON.parse(localStorage.getItem('allOrders'));
+            orders.splice(index, 1);
+            localStorage.setItem('allOrders', JSON.stringify(orders));
+            loadOrders();
         }
 
         function deleteMessage(index) {
@@ -252,20 +287,6 @@ function replyMessage(index) {
             inbox.splice(index, 1);
             localStorage.setItem('adminInbox', JSON.stringify(inbox));
             loadInbox();
-        }
-
-        function deleteUser(username) {
-            if (confirm("Delete this user?")) {
-                let users = JSON.parse(localStorage.getItem('allUsers')) || [];
-                users = users.filter(u => u.username !== username);
-                localStorage.setItem('allUsers', JSON.stringify(users));
-                
-                let singleUser = JSON.parse(localStorage.getItem('user'));
-                if(singleUser && singleUser.username === username) {
-                    localStorage.removeItem('user');
-                }
-                loadUsers();
-            }
         }
     </script>
 </body>

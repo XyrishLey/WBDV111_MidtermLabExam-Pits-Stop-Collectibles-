@@ -28,7 +28,7 @@
                 <li class="nav-item"><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
                 <li class="nav-item"><a href="cart.html" class="nav-button">🛒 Cart</a></li>
                 <li class="nav-item"><a href="contactUs.html" class="nav-button">Contact</a></li>
-                <span id="authSection" style="display: flex; align-items: center;"></span>
+                <div id="authSection"></div>
             </ul>
         </nav>
     </header>
@@ -66,7 +66,7 @@
         if (!authSection) return;
 
         if (loggedIn === "true" && currentUser) {
-            // Kapag logged in, lalabas ang Hi [Name], Inbox, at Logout
+            // Wrapped everything in <li> tags to match your menu structure
             authSection.innerHTML = `
                 <li class="nav-item"><span class="nav-button" style="color: #e60000; font-weight: bold;">Hi, ${currentUser.username}</span></li>
                 <li class="nav-item"><a href="inbox.html" class="nav-button" style="color: #00ff00;">📩 Inbox</a></li>
@@ -74,7 +74,6 @@
                 <li class="nav-item"><a href="#" onclick="logout()" class="nav-button">Logout</a></li>
             `;
         } else {
-            // Kapag hindi logged in
             authSection.innerHTML = `
                 <li class="nav-item"><a href="login.html" class="nav-button">Login</a></li>
                 <li class="nav-item"><a href="signup.html" class="nav-button">Sign Up</a></li>
@@ -86,7 +85,7 @@
         if(confirm("Are you sure you want to log out?")) {
             localStorage.removeItem("loggedIn");
             localStorage.removeItem("currentUser");
-            localStorage.removeItem("isAdmin"); // Linisin na rin ang admin state
+            localStorage.removeItem("isAdmin");
             window.location.reload();
         }
     }

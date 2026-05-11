@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Notifications | Pit Stops</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #000; color: white; padding: 20px; }
+        .notif-container { max-width: 600px; margin: 0 auto; }
+        .notif-card { background: #111; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #444; position: relative; }
+        .unread { border-left-color: #e60000; background: #1a1a1a; }
+        .notif-card h4 { font-family: 'Orbitron'; margin: 0; color: #e60000; font-size: 0.9rem; }
+        .notif-card p { font-size: 0.85rem; color: #ccc; }
+        .notif-card small { color: #666; font-size: 0.7rem; }
+        .read-btn { background: none; border: 1px solid #444; color: #888; padding: 5px 10px; border-radius: 4px; cursor: pointer; float: right; }
+    </style>
+</head>
+<body>
+    <div class="notif-container">
+        <h1 style="font-family: 'Orbitron';">NOTIFICATIONS</h1>
+        <div id="notif-list"></div>
+    </div>
+
+    <script>
+        function loadNotifs() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const allNotifs = JSON.parse(localStorage.getItem('userNotifications')) || [];
+            const list = document.getElementById('notif-list');
+            list.innerHTML = "";
+
+            const myNotifs = allNotifs.filter(n => n.username === user.username);
+
+            if(myNotifs.length === 0) {
+                list.innerHTML = "<p>No notifications yet.</p>";
+                return;
+            }
+
+            myNotifs.reverse().forEach(n => {
+                list.innerHTML += `
+                    <div class="notif-card ${n.isRead ? '' : 'unread'}">
+                        ${!n.isRead ? `<button class="read-btn" onclick="markAsRead(${n.id})">Mark as Read</button>` : ''}
+                        <h4>${n.title}</h4>
+                        <p>${n.message}</p>
+                        <small>${n.date}</small>
+                    </div>
+                `;
+            });
+        }
+
+        function markAsRead(id) {
+            let allNotifs = JSON.parse(localStorage.getItem('userNotifications'));
+            let notif = allNotifs.find(n => n.id === id);
+            if(notif) notif.isRead = true;
+            localStorage.setItem('userNotifications', JSON.stringify(allNotifs));
+            loadNotifs();
+        }
+
+        window.onload = loadNotifs;
+    </script>
+</body>
+</html>
