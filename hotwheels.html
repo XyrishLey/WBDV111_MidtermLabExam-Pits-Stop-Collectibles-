@@ -7,6 +7,49 @@
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Ensures a clean 4-column grid for your collection */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 40px 20px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .wishlist-btn {
+            background: #333;
+            color: white;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 0 0 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .wishlist-btn:hover {
+            background: #e60000;
+            border-color: #e60000;
+        }
+
+        @media (max-width: 1024px) {
+            .products { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .products { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -31,131 +74,123 @@
                         <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a href="aboutUs.html" class="nav-button">About Us</a></li>
-                <li class="nav-item">
-                    <a href="cart.html" class="nav-button">
-                        🛒 Cart <span id="cart-count" style="background: #e60000; color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; margin-left: 5px; display: none;">0</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button">Contact Us</a>
-                </li>
+                <li class="nav-item"><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li class="nav-item"><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+                <li class="nav-item"><a href="contactUs.html" class="nav-button">Contact</a></li>
+                <span id="authSection"></span>
             </ul>
         </nav>
     </header>
 
-    <div style="margin:20px; color: white; font-family: 'Orbitron', sans-serif;">
+    <div class="filter-section" style="margin:20px; color: white; font-family: 'Orbitron', sans-serif;">
         <label>Sort by price: </label>
-        <select id="sort" style="padding: 5px; border-radius: 5px; font-family: 'Inter', sans-serif;">
+        <select id="sort-select" style="padding: 8px; border-radius: 5px; font-family: 'Inter', sans-serif;">
             <option value="default">Default</option>
             <option value="low">Low to High</option>
             <option value="high">High to Low</option>
         </select>
     </div>
 
-    <section class="products">
+    <section class="products" id="product-grid">
         <div class="product-card" data-price="220">
             <img src="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/BARBIE%20DREAM%20CAMPER.jpg">
             <h3>Barbie Dream Camper</h3>
             <p>₱220</p>
-            <a href="#" class="buy-btn" data-name="Barbie Dream Camper" data-price="220" data-img="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/BARBIE%20DREAM%20CAMPER.jpg">Buy Now</a>
+            <div class="card-actions">
+                <button class="wishlist-btn" onclick="addToWishlist('Barbie Dream Camper', 220, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/BARBIE%20DREAM%20CAMPER.jpg')">❤</button>
+                <button class="buy-btn" onclick="goToDetails('Barbie Dream Camper', 220, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/BARBIE%20DREAM%20CAMPER.jpg')">Buy Now</button>
+            </div>
         </div>
+
         <div class="product-card" data-price="250">
             <img src="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/HONDA%20CIVIC%20EF.jpg">
             <h3>'90 Honda Civic EF</h3>
             <p>₱250</p>
-            <a href="#" class="buy-btn" data-name="'90 Honda Civic EF" data-price="250" data-img="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/HONDA%20CIVIC%20EF.jpg">Buy Now</a>
+            <div class="card-actions">
+                <button class="wishlist-btn" onclick="addToWishlist('\'90 Honda Civic EF', 250, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/HONDA%20CIVIC%20EF.jpg')">❤</button>
+                <button class="buy-btn" onclick="goToDetails('\'90 Honda Civic EF', 250, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/HONDA%20CIVIC%20EF.jpg')">Buy Now</button>
+            </div>
         </div>
+
         <div class="product-card" data-price="200">
             <img src="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/2018%20type%20r.jpg">
             <h3>2018 Honda Civic Type R</h3>
             <p>₱200</p>
-            <a href="#" class="buy-btn" data-name="2018 Honda Civic Type R" data-price="200" data-img="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/2018%20type%20r.jpg">Buy Now</a>
+            <div class="card-actions">
+                <button class="wishlist-btn" onclick="addToWishlist('2018 Honda Civic Type R', 200, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/2018%20type%20r.jpg')">❤</button>
+                <button class="buy-btn" onclick="goToDetails('2018 Honda Civic Type R', 200, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/2018%20type%20r.jpg')">Buy Now</button>
+            </div>
         </div>
+
         <div class="product-card" data-price="200">
             <img src="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/skyline%20r32.jpg">
             <h3>Nissan Skyline R33</h3>
             <p>₱200</p>
-            <a href="#" class="buy-btn" data-name="Nissan Skyline R33" data-price="200" data-img="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/skyline%20r32.jpg">Buy Now</a>
+            <div class="card-actions">
+                <button class="wishlist-btn" onclick="addToWishlist('Nissan Skyline R33', 200, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/skyline%20r32.jpg')">❤</button>
+                <button class="buy-btn" onclick="goToDetails('Nissan Skyline R33', 200, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/skyline%20r32.jpg')">Buy Now</button>
+            </div>
         </div>
+
         <div class="product-card" data-price="220">
             <img src="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/skyline%202.jpg">
             <h3>Nissan Skyline R32 (F&F)</h3>
             <p>₱220</p>
-            <a href="#" class="buy-btn" data-name="Nissan Skyline R32 (F&F)" data-price="220" data-img="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/skyline%202.jpg">Buy Now</a>
+            <div class="card-actions">
+                <button class="wishlist-btn" onclick="addToWishlist('Nissan Skyline R32 (F&F)', 220, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/skyline%202.jpg')">❤</button>
+                <button class="buy-btn" onclick="goToDetails('Nissan Skyline R32 (F&F)', 220, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/skyline%202.jpg')">Buy Now</button>
+            </div>
         </div>
+
         <div class="product-card" data-price="180">
             <img src="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/ford%20gt.jpg">
             <h3>Ford GT</h3>
             <p>₱180</p>
-            <a href="#" class="buy-btn" data-name="Ford GT" data-price="180" data-img="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/ford%20gt.jpg">Buy Now</a>
+            <div class="card-actions">
+                <button class="wishlist-btn" onclick="addToWishlist('Ford GT', 180, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/ford%20gt.jpg')">❤</button>
+                <button class="buy-btn" onclick="goToDetails('Ford GT', 180, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS/ford%20gt.jpg')">Buy Now</button>
+            </div>
         </div>
     </section>
 
     <script src="script.js"></script>
     <script>
         function toggleMenu() {
-            const menu = document.querySelector('.nav-menu');
-            menu.classList.toggle('active');
+            document.querySelector('.nav-menu').classList.toggle('active');
         }
 
-        document.addEventListener('click', (e) => {
-            const menu = document.querySelector('.nav-menu');
-            const toggle = document.querySelector('.menu-toggle');
-            if (menu && toggle && !menu.contains(e.target) && !toggle.contains(e.target)) {
-                menu.classList.remove('active');
-            }
-        });
+        function goToDetails(name, price, img) {
+            window.location.href = `product-details.html?name=${encodeURIComponent(name)}&price=${price}&img=${encodeURIComponent(img)}`;
+        }
 
-        document.querySelectorAll('.buy-btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const name = this.getAttribute('data-name');
-                const price = this.getAttribute('data-price');
-                const img = this.getAttribute('data-img');
-                window.location.href = `product-details.html?name=${encodeURIComponent(name)}&price=${price}&img=${encodeURIComponent(img)}`;
-            });
-        });
-
-        window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            const searchTerm = params.get('search');
-
-            if (searchTerm) {
-                const query = searchTerm.toLowerCase();
-                const cards = document.querySelectorAll('.product-card');
-                let foundCount = 0;
-
-                cards.forEach(card => {
-                    const carTitle = card.querySelector('h3').innerText.toLowerCase();
-                    if (carTitle.includes(query)) {
-                        card.style.display = "block";
-                        foundCount++;
-                    } else {
-                        card.style.setProperty("display", "none", "important");
-                    }
-                });
-                displaySearchFeedback(query, foundCount);
-            }
-            if (typeof updateCartCounter === "function") updateCartCounter();
-        };
-
-        function displaySearchFeedback(query, count) {
-            const grid = document.querySelector('.products');
-            const feedback = document.createElement('div');
-            feedback.id = "search-message";
-            feedback.style.cssText = `text-align: center; color: white; padding: 40px 20px; font-family: 'Orbitron', sans-serif; background: rgba(0, 0, 0, 0.85); border-radius: 15px; margin: 40px auto; max-width: 600px; border: 2px solid #e60000; box-shadow: 0 0 20px rgba(230, 0, 0, 0.4); z-index: 10; position: relative;`;
+        function addToWishlist(name, price, img) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const exists = wishlist.find(item => item.name === name);
             
-            if (count === 0) {
-                feedback.innerHTML = `<h2 style="color:#e60000; font-size: 2rem; margin-bottom:15px; text-shadow: 2px 2px #000;">NO RESULTS</h2><p style="color:white; font-size: 1.1rem; margin-bottom: 20px;">We couldn't find <strong>"${query.toUpperCase()}"</strong>.</p><button onclick="window.location.href='hotwheels.html'" style="padding:12px 30px; background:#e60000; color:white; border:none; cursor:pointer; font-family:'Orbitron'; border-radius:5px; font-weight:bold;">SHOW ALL CARS</button>`;
+            if (!exists) {
+                wishlist.push({ name, price, img });
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                alert(`${name} added to your wishlist!`);
             } else {
-                feedback.innerHTML = `<h2 style="font-size: 1.5rem; color: #e60000; margin-bottom: 5px;">FOUND ${count} MATCHES</h2><p style="color: white; font-size: 1rem;">Searching for: "${query.toUpperCase()}"</p>`;
+                alert("This car is already in your wishlist.");
             }
-
-            const oldMessage = document.getElementById('search-message');
-            if (oldMessage) oldMessage.remove();
-            if (grid) grid.parentNode.insertBefore(feedback, grid);
         }
+
+        document.getElementById('sort-select').addEventListener('change', function() {
+            const grid = document.getElementById('product-grid');
+            const cards = Array.from(grid.querySelectorAll('.product-card'));
+            const val = this.value;
+
+            if (val === 'default') return;
+
+            cards.sort((a, b) => {
+                const priceA = parseInt(a.getAttribute('data-price'));
+                const priceB = parseInt(b.getAttribute('data-price'));
+                return val === 'low' ? priceA - priceB : priceB - priceA;
+            });
+
+            cards.forEach(card => grid.appendChild(card));
+        });
     </script>
 </body>
 </html>

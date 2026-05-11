@@ -8,159 +8,348 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            background-color: #0a0a0a !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
+        body { background-color: #0a0a0a !important; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 50px 0; }
+        .checkout-box { max-width: 650px; width: 95%; padding: 40px; background: #111; border-radius: 15px; color: white; border: 1px solid #333; box-shadow: 0 0 30px rgba(230, 0, 0, 0.3); font-family: 'Inter', sans-serif; }
+        h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        .section-title { color: #e60000; border-bottom: 1px solid #333; margin: 25px 0 15px; padding-bottom: 5px; font-size: 1rem; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: #888; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 5px; font-family: 'Inter', sans-serif; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        #payment-verify-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .loader { border: 5px solid #333; border-top: 5px solid #e60000; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .success-check { color: #e60000; font-size: 4rem; display: none; }
+        
+        .place-order-btn { width: 100%; padding: 18px; background: #e60000; color: white; border: none; border-radius: 5px; font-family: 'Orbitron', sans-serif; cursor: pointer; margin-top: 20px; transition: 0.3s; font-size: 1.1rem; }
+        .place-order-btn:hover { background: #ff0000; box-shadow: 0 0 20px rgba(230, 0, 0, 0.6); }
 
-        .checkout-box {
-            max-width: 450px;
-            width: 90%;
-            padding: 40px;
-            background: #1a1a1a;
-            border-radius: 15px;
-            color: white;
-            border: 1px solid #333;
-            box-shadow: 0 0 25px rgba(230, 0, 0, 0.5);
-            font-family: 'Inter', sans-serif;
-        }
+        .conditional-info { display: none; background: rgba(230,0,0,0.05); padding: 15px; border-radius: 8px; border-left: 3px solid #e60000; margin-bottom: 15px; }
+        .restriction-note { font-size: 0.75rem; color: #e60000; margin-top: 5px; font-style: italic; }
 
-        .checkout-box h2 {
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
-            margin-bottom: 30px;
-            color: white;
-            letter-spacing: 1px;
-        }
-
-        .info-group {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .info-group label {
-            display: block;
-            font-weight: bold;
-            font-size: 0.8rem;
-            color: #e60000;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-
-        .info-group p {
-            font-size: 1.1rem;
-            margin: 0;
-            color: #eee;
-        }
-
-        .order-summary {
-            background: rgba(230, 0, 0, 0.1);
-            padding: 20px;
-            margin-top: 30px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid rgba(230, 0, 0, 0.3);
-        }
-
-        .order-summary h3 {
-            font-family: 'Orbitron', sans-serif;
-            margin: 0;
-            font-size: 1.4rem;
-        }
-
-        .place-order-btn {
-            width: 100%;
-            padding: 15px;
-            background: #e60000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            cursor: pointer;
-            margin-top: 25px;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-
-        .place-order-btn:hover {
-            background: #ff1a1a;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
-            transform: translateY(-2px);
-        }
+        /* Payment Details Box */
+        .payment-instructions { display: none; background: #1a1a1a; border: 1px solid #e60000; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; }
+        
+        /* Preview Styles */
+        #image-preview-container { display: none; margin-top: 10px; text-align: center; background: #000; padding: 10px; border-radius: 5px; position: relative; }
+        #payment-preview { max-width: 100%; max-height: 200px; border: 1px solid #e60000; border-radius: 5px; }
+        .remove-img { color: #ff0000; cursor: pointer; font-size: 0.8rem; text-decoration: underline; display: block; margin-top: 5px; }
     </style>
 </head>
 <body>
-    <div class="checkout-box">
-        <h2>Shipping Details</h2>
-        
-        <div class="info-group">
-            <label>Full Name</label>
-            <p id="check-name">Loading...</p>
-        </div>
 
-        <div class="info-group">
-            <label>Delivery Address</label>
-            <p id="check-address">Loading...</p>
-        </div>
-
-        <div class="info-group">
-            <label>Contact Number</label>
-            <p id="check-phone">Loading...</p>
-        </div>
-
-        <div class="info-group">
-            <label>Zip Code</label>
-            <p id="check-zip">Loading...</p>
-        </div>
-
-        <div class="order-summary">
-            <h3>Total: ₱<span id="final-price">0</span></h3>
-        </div>
-
-        <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+    <div id="payment-verify-overlay">
+        <div id="loader-icon" class="loader"></div>
+        <div id="success-icon" class="success-check">⌛</div>
+        <h2 id="status-text" style="font-family: 'Orbitron';">Verifying Details...</h2>
+        <p id="sub-status" style="color: #888;">Please wait while we submit your order request.</p>
     </div>
 
-    <script>
-        window.onload = function() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    <div class="checkout-box">
+        <h2>Finalize Order</h2>
+
+        <h3 class="section-title">1. Delivery Method</h3>
+        <div class="input-group">
+            <select id="courier-select" onchange="handleCourierChange()">
+                <option value="">Select Courier</option>
+                <option value="lbc">LBC Express (Branch Pickup)</option>
+                <option value="lalamove">Lalamove (Rizal/NCR only)</option>
+                <option value="seller" id="seller-delivery-opt">Seller Own Delivery (Rizal Only)</option>
+            </select>
+            <p id="courier-note" class="restriction-note" style="display:none;">*Seller Delivery is unavailable for your province.</p>
+        </div>
+
+        <div id="lbc-branch-info" class="conditional-info">
+            <div class="input-group">
+                <label>Target LBC Branch Name (Required)</label>
+                <input type="text" id="lbc-branch" placeholder="e.g. LBC SM North EDSA">
+            </div>
+        </div>
+
+        <h3 class="section-title">2. Full Shipping Address</h3>
+        <div class="input-group">
+            <label>Receiver Full Name</label>
+            <input type="text" id="check-name" placeholder="Full Name">
+        </div>
+
+        <div class="grid-2">
+            <div class="input-group">
+                <label>Region</label>
+                <select id="region"></select>
+            </div>
+            <div class="input-group">
+                <label>Province / District</label>
+                <select id="province"></select>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="input-group">
+                <label>City / Municipality</label>
+                <select id="city"></select>
+            </div>
+            <div class="input-group">
+                <label>Zip Code</label>
+                <input type="text" id="zip-code" readonly placeholder="Auto-filled" style="background: #1a1a1a; border: 1px solid #333; color: #e60000; font-weight: bold;">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>Barangay</label>
+            <select id="barangay"></select>
+        </div>
+
+        <div class="input-group">
+            <label>House No. / Street / Landmark</label>
+            <input type="text" id="check-address" placeholder="Bldg Name, Street, etc.">
+        </div>
+
+        <h3 class="section-title">3. Payment</h3>
+        <div class="input-group">
+            <select id="payment-method" onchange="togglePaymentFields()">
+                <option value="">Select Payment Method</option>
+                <option value="gcash">GCash</option>
+                <option value="maya">Maya</option>
+                <option value="cod" id="cod-option" disabled>COD (Rizal Seller Delivery Only)</option>
+            </select>
+        </div>
+
+        <div id="payment-instr" class="payment-instructions">
+            <p style="font-size: 0.9rem; margin-bottom: 10px;">Please send payment to:</p>
+            <p><strong id="method-name">GCash</strong>: 0912 345 6789</p>
+            <p>Name: K** J** B*M**A.</p>
+            <p style="font-size: 0.75rem; color: #888; margin-top: 10px;">Note: Orders are subject to seller approval.</p>
+        </div>
+
+        <div id="proof-section" style="display:none; background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px dashed #e60000; margin-bottom: 15px;">
+            <label style="font-size: 0.8rem; color: #888;">Upload Transaction Proof (Required)</label>
+            <input type="file" id="payment-img" style="margin: 10px 0;" accept="image/*" onchange="previewImage(this)">
+            
+            <div id="image-preview-container">
+                <img id="payment-preview" src="#" alt="Proof Preview">
+                <span class="remove-img" onclick="removeImage()">Remove Image</span>
+            </div>
+
+            <input type="text" id="ref-code" maxlength="4" placeholder="Last 4 digits of Ref No.">
+        </div>
+
+        <div style="background: rgba(230,0,0,0.1); padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e60000;">
+            <h3 style="margin:0;">Total: ₱<span id="final-price">0</span></h3>
+            <small id="fee-note" style="color: #888; display: none;">(Includes ₱60 Rizal COD Fee)</small>
+        </div>
+
+        <button class="place-order-btn" onclick="startFinalProcess()">Place Order Now</button>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     
-    if (cart.length === 0) {
-        alert("Your cart is empty!");
-        window.location.href = 'hotwheels.html';
-        return;
-    }
+    <script>
+        let baseTotal = 0;
+        const codFee = 60;
 
-    if(user) {
-        document.getElementById('check-name').innerText = user.fullname || user.username || "Guest Buyer";
-        document.getElementById('check-address').innerText = user.address || "N/A";
-        
-        // Revised phone logic to check multiple possible keys
-        document.getElementById('check-phone').innerText = user.phone || user.contact || user.number || user.phone_number || "N/A";
-        
-        document.getElementById('check-zip').innerText = user.zip || user.zipcode || user.postalCode || "N/A";
-    } else {
-        window.location.href = 'login.html';
-    }
+        function previewImage(input) {
+            const container = document.getElementById('image-preview-container');
+            const preview = document.getElementById('payment-preview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    container.style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
-    let total = 0;
-    cart.forEach(item => {
-        let price = String(item.price).replace(/[^0-9]/g, '');
-        total += parseInt(price) || 0;
-    });
-    document.getElementById('final-price').innerText = total.toLocaleString();
-};
+        function removeImage() {
+            $('#payment-img').val('');
+            $('#image-preview-container').hide();
+        }
 
-function placeOrder() {
-    localStorage.removeItem('cart'); 
-    window.location.href = 'success.html';
-}
+        $(document).ready(function() {
+            const regionSelect = $('#region');
+            const provinceSelect = $('#province');
+            const citySelect = $('#city');
+            const brgySelect = $('#barangay');
+
+            regionSelect.append('<option value="">Select Region</option>');
+            fetch('https://psgc.gitlab.io/api/regions/')
+                .then(res => res.json())
+                .then(data => {
+                    data.sort((a, b) => a.name.localeCompare(b.name));
+                    data.forEach(r => regionSelect.append(`<option value="${r.code}">${r.name}</option>`));
+                });
+
+            regionSelect.on('change', function() {
+                const regionCode = $(this).val();
+                const regionName = $(this).find('option:selected').text();
+                provinceSelect.empty().append('<option value="">Select Province/District</option>');
+                citySelect.empty().append('<option value="">Select City</option>');
+                brgySelect.empty().append('<option value="">Select Barangay</option>');
+                if (!regionCode) return;
+                const endpoint = regionName.includes("National Capital Region") ? 'districts' : 'provinces';
+                fetch(`https://psgc.gitlab.io/api/regions/${regionCode}/${endpoint}/`)
+                    .then(res => res.json())
+                    .then(data => {
+                        data.sort((a, b) => a.name.localeCompare(b.name));
+                        data.forEach(p => provinceSelect.append(`<option value="${p.code}">${p.name}</option>`));
+                    });
+            });
+
+            provinceSelect.on('change', function() {
+                const code = $(this).val();
+                citySelect.empty().append('<option value="">Select City</option>');
+                brgySelect.empty().append('<option value="">Select Barangay</option>');
+                checkRizalRestriction(); 
+                if (!code) return;
+                const isNCR = $("#region option:selected").text().includes("National Capital Region");
+                const type = isNCR ? 'districts' : 'provinces';
+                fetch(`https://psgc.gitlab.io/api/${type}/${code}/cities-municipalities/`)
+                    .then(res => res.json())
+                    .then(data => {
+                        data.sort((a, b) => a.name.localeCompare(b.name));
+                        data.forEach(c => citySelect.append(`<option value="${c.code}">${c.name}</option>`));
+                    });
+            });
+
+            citySelect.on('change', function() {
+                const cityCode = $(this).val();
+                if (!cityCode) return;
+                fetch(`https://psgc.gitlab.io/api/cities-municipalities/${cityCode}/barangays/`)
+                    .then(res => res.json())
+                    .then(data => {
+                        data.sort((a, b) => a.name.localeCompare(b.name));
+                        data.forEach(b => brgySelect.append(`<option value="${b.code}">${b.name}</option>`));
+                    });
+            });
+        });
+
+        function checkRizalRestriction() {
+            const provinceName = $("#province option:selected").text().toLowerCase();
+            const isRizal = provinceName.includes("rizal");
+            const sellerOpt = $('#seller-delivery-opt');
+            
+            if (isRizal) {
+                sellerOpt.prop('disabled', false).show();
+                $('#courier-note').hide();
+            } else {
+                sellerOpt.prop('disabled', true).hide();
+                if ($('#courier-select').val() === 'seller') $('#courier-select').val('');
+                $('#courier-note').show();
+            }
+            handleCourierChange();
+        }
+
+        function handleCourierChange() {
+            const courier = $('#courier-select').val();
+            const codOption = $('#cod-option');
+            const paymentSelect = $('#payment-method');
+
+            $('#lbc-branch-info').css('display', (courier === 'lbc') ? 'block' : 'none');
+
+            if (courier === 'seller') {
+                codOption.prop('disabled', false).text("Cash on Delivery (COD)");
+            } else {
+                codOption.prop('disabled', true).text("COD (Rizal Seller Delivery Only)");
+                if (paymentSelect.val() === 'cod') paymentSelect.val('');
+            }
+            calculateTotal();
+            togglePaymentFields();
+        }
+
+        function togglePaymentFields() {
+            const method = $('#payment-method').val();
+            const showOnline = (method === 'gcash' || method === 'maya');
+            
+            $('#proof-section').css('display', showOnline ? 'block' : 'none');
+            $('#payment-instr').css('display', showOnline ? 'block' : 'none');
+            $('#method-name').text(method === 'gcash' ? 'GCash' : 'Maya');
+            
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const paymentMethod = $('#payment-method').val();
+            let finalTotal = baseTotal;
+            if (paymentMethod === 'cod') {
+                finalTotal += codFee;
+                $('#fee-note').show();
+            } else {
+                $('#fee-note').hide();
+            }
+            $('#final-price').text(finalTotal.toLocaleString());
+        }
+
+        function startFinalProcess() {
+            const courier = $('#courier-select').val();
+            const payment = $('#payment-method').val();
+            const lbcBranch = $('#lbc-branch').val().trim();
+            const region = $('#region').val();
+
+            if (!courier || !payment || !region) {
+                alert("Please complete the Delivery and Payment details.");
+                return;
+            }
+
+            if (courier === 'lbc' && lbcBranch === "") {
+                alert("Please enter the LBC Branch Name.");
+                return;
+            }
+
+            if ((payment === 'gcash' || payment === 'maya') && !$('#payment-img').val()) {
+                alert("Please upload your payment proof.");
+                return;
+            }
+
+            // Logic for Taglish workflow: Save as "Pending Approval"
+            $('#payment-verify-overlay').css('display', 'flex');
+            
+            setTimeout(() => {
+                $('#status-text').text("Submitting Request...");
+                $('#sub-status').text("Waiting for seller to approve payment.");
+
+                // Create Order Object for Admin Page
+                const newOrder = {
+                    orderID: "ORD-" + Math.floor(1000 + Math.random() * 9000),
+                    user: $('#check-name').val(),
+                    total: $('#final-price').text(),
+                    status: "Pending", // Seller will change this later
+                    date: new Date().toLocaleDateString()
+                };
+
+                // Store in localStorage for the Admin to see
+                let orders = JSON.parse(localStorage.getItem('allOrders')) || [];
+                orders.push(newOrder);
+                localStorage.setItem('allOrders', JSON.stringify(orders));
+
+                setTimeout(() => {
+                    $('#loader-icon').hide();
+                    $('#success-icon').show();
+                    $('#status-text').text("Request Sent!");
+                    
+                    setTimeout(() => {
+                        localStorage.removeItem('cart');
+                        window.location.href = 'success.html'; // Create a page saying "Waiting for Approval"
+                    }, 2000);
+                }, 2000);
+            }, 2000);
+        }
+
+        window.onload = function() {
+            const storageUser = localStorage.getItem('user') || localStorage.getItem('currentUser');
+            if (!storageUser) { window.location.href = 'login.html'; return; }
+            
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            baseTotal = 0;
+            cart.forEach(item => {
+                let priceVal = String(item.price).replace(/[^0-9]/g, '');
+                baseTotal += parseInt(priceVal || 0);
+            });
+            calculateTotal();
+            
+            const user = JSON.parse(storageUser);
+            $('#check-name').val(user.fullname || user.username || "");
+        };
     </script>
 </body>
 </html>

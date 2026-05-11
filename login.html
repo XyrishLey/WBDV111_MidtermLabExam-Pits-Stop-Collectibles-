@@ -15,8 +15,8 @@
             background: rgba(0, 0, 0, 0.9);
             border-radius: 20px;
             color: white;
-            border: 1px solid #333;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #e60000;
+            box-shadow: 0 10px 30px rgba(230, 0, 0, 0.2);
             text-align: center;
         }
 
@@ -35,16 +35,24 @@
             display: block;
             margin-bottom: 8px;
             font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            color: #aaa;
+            text-transform: uppercase;
         }
 
         .input-group input {
             width: 100%;
             padding: 12px;
             border-radius: 5px;
-            border: 1px solid #444;
-            background: #222;
+            border: 1px solid #333;
+            background: #111;
             color: white;
             outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #e60000;
         }
 
         .login-btn {
@@ -57,10 +65,12 @@
             font-family: 'Orbitron', sans-serif;
             cursor: pointer;
             transition: 0.3s;
+            text-transform: uppercase;
         }
 
         .login-btn:hover {
             background: #ff1a1a;
+            transform: translateY(-2px);
         }
 
         .signup-link {
@@ -76,10 +86,6 @@
             text-decoration: none;
             font-weight: bold;
         }
-
-        .signup-link a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -88,13 +94,13 @@
         <form id="loginForm">
             <div class="input-group">
                 <label>Username</label>
-                <input type="text" id="username" required>
+                <input type="text" id="username" required autocomplete="username">
             </div>
             <div class="input-group">
                 <label>Password</label>
-                <input type="password" id="password" required>
+                <input type="password" id="password" required autocomplete="current-password">
             </div>
-            <button type="submit" class="login-btn">ENTER PIT STOP</button>
+            <button type="submit" class="login-btn">ENTER </button>
         </form>
 
         <div class="signup-link">
@@ -104,20 +110,47 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const user = JSON.parse(localStorage.getItem('user'));
-            const userIn = document.getElementById('username').value;
-            const passIn = document.getElementById('password').value;
+    // SECURITY: Clear session data when landing on login page
+    // This prevents "back-button" leftovers from causing issues.
+    window.onload = function() {
+        localStorage.removeItem('isAdmin');
+        localStorage.removeItem('loggedIn');
+    };
 
-            if (user && user.username === userIn && user.password === passIn) {
-                localStorage.setItem('loggedIn', 'true');
-                window.location.href = 'index.html';
-            } else {
-                alert("Invalid username or password. If you haven't joined yet, click Create Account below!");
-            }
-        });
-    </script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const userIn = document.getElementById('username').value.trim();
+        const passIn = document.getElementById('password').value;
+
+        // 1. ADMIN CHECK
+        if (userIn === "admin" && passIn === "admin123") {
+            localStorage.setItem('isAdmin', 'true');
+            const adminData = { fullname: "System Admin", username: "admin" };
+            localStorage.setItem('currentUser', JSON.stringify(adminData));
+            
+            alert("Access Granted: Admin Dashboard");
+            // Use replace() so they can't "back" into the login form easily
+            window.location.replace('admin.html');
+            return; 
+        }
+
+        // 2. REGULAR USER CHECK
+        const users = JSON.parse(localStorage.getItem('allUsers')) || [];
+        const foundUser = users.find(u => u.username === userIn && u.password === passIn);
+
+        if (foundUser) {
+            localStorage.setItem('loggedIn', 'true');
+            localStorage.setItem('isAdmin', 'false');
+            localStorage.setItem('currentUser', JSON.stringify(foundUser));
+            localStorage.setItem('user', JSON.stringify(foundUser)); 
+
+            alert("Welcome back, " + foundUser.fullname + "!");
+            window.location.replace('index.html');
+        } else {
+            alert("Invalid username or password.");
+        }
+    });
+</script>
 </body>
 </html>

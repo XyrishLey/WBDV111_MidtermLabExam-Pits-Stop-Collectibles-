@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist | Pits Stop Collectibles</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="nav-bar">
+            <a href="index.html" class="nav-logo"><h2 class="logo-text">Pits Stop Collectibles</h2></a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
+                <li class="nav-item"><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="products" style="margin-top: 50px;">
+        <h1 style="color: white; font-family: 'Orbitron'; text-align: center; width: 100%; grid-column: 1/-1; margin-bottom: 30px;">MY WISHLIST ❤️</h1>
+        <div id="wishlist-container" class="products">
+    </div>
+
+<script>
+    function displayWishlist() {
+        const container = document.getElementById('wishlist-container');
+        const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+        if (wishlist.length === 0) {
+            container.innerHTML = "<h2 style='color:white;'>Your wishlist is empty.</h2>";
+            return;
+        }
+
+        container.innerHTML = wishlist.map((item, index) => `
+            <div class="product-card">
+                <img src="${item.img}">
+                <h3>${item.name}</h3>
+                <p>₱${item.price}</p>
+                <button class="buy-btn" onclick="removeFromWishlist(${index})" style="background:#333;">Remove</button>
+            </div>
+        `).join('');
+    }
+
+    function removeFromWishlist(index) {
+        let wishlist = JSON.parse(localStorage.getItem('wishlist'));
+        wishlist.splice(index, 1);
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        displayWishlist();
+    }
+
+    window.onload = displayWishlist;
+</script>
+</body>
+</html>

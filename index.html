@@ -10,42 +10,42 @@
 </head>
 <body>
     <header>
-    <nav class="nav-bar"> 
-        <a href="index.html" class="nav-logo">
-            <h2 class="logo-text">Pits Stop Collectibles</h2>
-        </a>
-        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-button">Brands ▾</a>
-                <ul class="dropdown-menu">
-                    <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
-                    <li><a href="premium.html" class="nav-button">Hotwheels Premium</a></li>
-                    <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
-                </ul>
-            </li>
-            <li class="nav-item"><a href="aboutUs.html" class="nav-button">About Us</a></li>
-            <li class="nav-item"><a href="cart.html" class="nav-button">🛒 Cart <span id="cart-count"></span></a></li>
-            <li class="nav-item"><a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button">Contact Us</a></li>
-            <div id="authSection"></div>
-        </ul>
-    </nav>
-</header>
+        <nav class="nav-bar"> 
+            <a href="index.html" class="nav-logo">
+                <h2 class="logo-text">Pits Stop Collectibles</h2>
+            </a>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-button">Brands ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Hotwheels Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li class="nav-item"><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+                <li class="nav-item"><a href="contactUs.html" class="nav-button">Contact</a></li>
+                <span id="authSection" style="display: flex; align-items: center;"></span>
+            </ul>
+        </nav>
+    </header>
 
     <section class="hero">
-    <div class="hero-inner">
-        <h1>PITS STOP <br> COLLECTIBLES</h1>
-        <p>Not your ordinary pit stop 🤩🏁<br>Collect • Display • Repeat</p>
-        <a href="hotwheels.html" class="cta-button">SHOP NOW</a>
-    </div>
-</section>
+        <div class="hero-inner">
+            <h1>PITS STOP <br> COLLECTIBLES</h1>
+            <p>Not your ordinary pit stop 🤩🏁<br>Collect • Display • Repeat</p>
+            <a href="hotwheels.html" class="cta-button">SHOP NOW</a>
+        </div>
+    </section>
     
     <footer class="footer">
         <div class="footer-container">
             <h3>Pits Stop Collectibles</h3>
             <p>📍 Cainta, Rizal</p>
-            <p>🛒Your one stop shop!</p>
+            <p>🛒 Your one stop shop!</p>
             <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank">
                 Visit our Facebook
             </a>
@@ -59,19 +59,22 @@
     }
 
     function loadUser() {
-        const user = JSON.parse(localStorage.getItem("user"));
         const loggedIn = localStorage.getItem("loggedIn");
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
         const authSection = document.getElementById("authSection");
 
         if (!authSection) return;
 
-        if (user && loggedIn === "true") {
+        if (loggedIn === "true" && currentUser) {
+            // Kapag logged in, lalabas ang Hi [Name], Inbox, at Logout
             authSection.innerHTML = `
-                <li class="nav-item"><span class="nav-button" style="color: #e60000; font-weight: bold;">Hi, ${user.username}</span></li>
-                <li class="nav-item"><a href="account.html" class="nav-button">View Account</a></li>
+                <li class="nav-item"><span class="nav-button" style="color: #e60000; font-weight: bold;">Hi, ${currentUser.username}</span></li>
+                <li class="nav-item"><a href="inbox.html" class="nav-button" style="color: #00ff00;">📩 Inbox</a></li>
+                <li class="nav-item"><a href="account.html" class="nav-button">Account</a></li>
                 <li class="nav-item"><a href="#" onclick="logout()" class="nav-button">Logout</a></li>
             `;
         } else {
+            // Kapag hindi logged in
             authSection.innerHTML = `
                 <li class="nav-item"><a href="login.html" class="nav-button">Login</a></li>
                 <li class="nav-item"><a href="signup.html" class="nav-button">Sign Up</a></li>
@@ -80,12 +83,14 @@
     }
 
     function logout() {
-        localStorage.removeItem("loggedIn");
-        localStorage.removeItem("user");
-        window.location.href = "index.html";
+        if(confirm("Are you sure you want to log out?")) {
+            localStorage.removeItem("loggedIn");
+            localStorage.removeItem("currentUser");
+            localStorage.removeItem("isAdmin"); // Linisin na rin ang admin state
+            window.location.reload();
+        }
     }
-
-    loadUser();
+    document.addEventListener('DOMContentLoaded', loadUser);
     </script>
 </body>
 </html>
