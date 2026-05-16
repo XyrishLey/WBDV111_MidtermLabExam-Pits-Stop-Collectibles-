@@ -4,53 +4,391 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Wishlist | Pits Stop Collectibles</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <header>
-        <nav class="nav-bar">
-            <a href="index.html" class="nav-logo"><h2 class="logo-text">Pits Stop Collectibles</h2></a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
-                <li class="nav-item"><a href="cart.html" class="nav-button">🛒 Cart</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section class="products" style="margin-top: 50px;">
-        <h1 style="color: white; font-family: 'Orbitron'; text-align: center; width: 100%; grid-column: 1/-1; margin-bottom: 30px;">MY WISHLIST ❤️</h1>
-        <div id="wishlist-container" class="products">
-    </div>
-
-<script>
-    function displayWishlist() {
-        const container = document.getElementById('wishlist-container');
-        const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-
-        if (wishlist.length === 0) {
-            container.innerHTML = "<h2 style='color:white;'>Your wishlist is empty.</h2>";
-            return;
+    <style>
+        /* ─── PAGE HERO ───────────────────────────── */
+        .page-hero {
+            position: relative;
+            text-align: center;
+            padding: 120px 24px 60px;
+            overflow: hidden;
+            background: var(--bg);
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: 30%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 400px;
+            background: radial-gradient(ellipse, rgba(230,0,0,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .page-hero-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        .page-hero-inner {
+            position: relative; z-index: 2;
+            animation: fadeUp 0.8s ease both;
+        }
+        .page-eyebrow {
+            display: flex; align-items: center; justify-content: center;
+            gap: 16px; margin-bottom: 20px;
+        }
+        .page-eyebrow-line { display: block; width: 40px; height: 1px; background: var(--accent); }
+        .page-eyebrow-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem; letter-spacing: 3px; color: var(--accent);
+            background: rgba(230,0,0,0.1); border: 1px solid rgba(230,0,0,0.3);
+            padding: 6px 16px; border-radius: 2px;
+        }
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 9vw, 6rem);
+            letter-spacing: 6px; line-height: 1;
+            color: var(--text); margin-bottom: 16px;
+        }
+        .page-title span { color: transparent; -webkit-text-stroke: 2px var(--accent); }
+        .page-sub {
+            font-family: 'Rajdhani', sans-serif; font-weight: 600;
+            color: var(--text-muted); font-size: 1rem;
+            letter-spacing: 1px; max-width: 480px; margin: 0 auto;
         }
 
-        container.innerHTML = wishlist.map((item, index) => `
-            <div class="product-card">
-                <img src="${item.img}">
-                <h3>${item.name}</h3>
-                <p>₱${item.price}</p>
-                <button class="buy-btn" onclick="removeFromWishlist(${index})" style="background:#333;">Remove</button>
+        /* ─── GRID ───────────────────────────────── */
+        .wishlist-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px 100px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        /* ─── CARD ───────────────────────────────── */
+        .wish-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+        .wish-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+            box-shadow: 0 16px 40px rgba(230,0,0,0.12);
+        }
+
+        .wish-img-wrap {
+            width: 100%; height: 200px;
+            background: #111;
+            overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .wish-img-wrap img {
+            width: 100%; height: 100%;
+            object-fit: contain;
+            padding: 16px;
+            transition: transform 0.4s ease;
+        }
+        .wish-card:hover .wish-img-wrap img { transform: scale(1.07); }
+
+        .wish-body {
+            padding: 16px 18px 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .wish-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem; letter-spacing: 1.5px;
+            color: var(--text); margin-bottom: 6px; line-height: 1.2;
+        }
+        .wish-price {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.05rem; color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .wish-actions {
+            display: flex; gap: 8px;
+            padding: 14px 18px;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+
+        .btn-buy {
+            flex: 1;
+            background: var(--accent);
+            color: #fff; border: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem; letter-spacing: 2px;
+            padding: 11px 14px; border-radius: 3px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 14px var(--accent-glow);
+        }
+        .btn-buy:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+
+        .btn-remove {
+            background: var(--surface);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700; font-size: 0.8rem;
+            letter-spacing: 1px; text-transform: uppercase;
+            padding: 11px 14px; border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+            white-space: nowrap;
+        }
+        .btn-remove:hover { background: rgba(230,0,0,0.1); color: var(--accent); border-color: var(--accent); }
+
+        /* ─── EMPTY STATE ────────────────────────── */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            animation: fadeUp 0.6s ease both;
+        }
+        .empty-icon { font-size: 3.5rem; margin-bottom: 20px; opacity: 0.4; }
+        .empty-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem; letter-spacing: 4px;
+            color: var(--text-muted); margin-bottom: 10px;
+        }
+        .empty-sub {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem; letter-spacing: 2px;
+            color: var(--text-muted); opacity: 0.5;
+            margin-bottom: 28px;
+        }
+        .btn-shop {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--accent); color: #fff;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.95rem; letter-spacing: 3px;
+            padding: 13px 30px; border-radius: 3px;
+            box-shadow: 0 4px 18px var(--accent-glow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-shop:hover { transform: translateY(-2px); box-shadow: 0 8px 26px var(--accent-glow); }
+
+        /* ─── COUNT BADGE ────────────────────────── */
+        .wishlist-count {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem; letter-spacing: 2px;
+            color: var(--text-muted); text-align: center;
+            padding: 0 24px 4px;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .wishlist-count span { color: var(--accent); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ HEADER ════════════════════════════════════════════ -->
+    <header>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleHamburger()" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
             </div>
-        `).join('');
-    }
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+            </ul>
+            <div class="nav-right">
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+            </div>
+        </nav>
 
-    function removeFromWishlist(index) {
-        let wishlist = JSON.parse(localStorage.getItem('wishlist'));
-        wishlist.splice(index, 1);
-        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        displayWishlist();
-    }
+        <div class="hamburger-overlay" id="hamburgerOverlay" onclick="closeHamburger()"></div>
+        <div class="hamburger-drawer" id="hamburgerDrawer">
+            <button class="drawer-close" onclick="closeHamburger()">✕</button>
+            <div id="drawerAuthSection" class="drawer-auth"></div>
+            <div class="drawer-divider"></div>
+            <p class="drawer-label">NAVIGATION</p>
+            <a href="index.html" class="drawer-link">Home</a>
+            <a href="hotwheels.html" class="drawer-link">Hotwheels</a>
+            <a href="premium.html" class="drawer-link">Premium</a>
+            <a href="matchbox.html" class="drawer-link">Matchbox</a>
+            <a href="aboutUs.html" class="drawer-link">About Us</a>
+            <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
+            <a href="cart.html" class="drawer-link">🛒 Cart</a>
+        </div>
+    </header>
 
-    window.onload = displayWishlist;
-</script>
+    <!-- ═══ PAGE HERO ════════════════════════════════════════ -->
+    <section class="page-hero">
+        <div class="page-hero-grid"></div>
+        <div class="page-hero-inner">
+            <div class="page-eyebrow">
+                <span class="page-eyebrow-line"></span>
+                <span class="page-eyebrow-text">YOUR COLLECTION</span>
+                <span class="page-eyebrow-line"></span>
+            </div>
+            <h1 class="page-title">MY <span>WISHLIST</span></h1>
+            <p class="page-sub">Cars you've saved for later. Add them to cart before they sell out.</p>
+        </div>
+    </section>
+
+    <!-- ─── Item count ─────────────────────────────────────── -->
+    <p class="wishlist-count" id="wishlistCount"></p>
+
+    <!-- ═══ GRID ══════════════════════════════════════════════ -->
+    <div class="wishlist-grid" id="wishlistGrid"></div>
+
+    <!-- ═══ FOOTER ═══════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3 class="logo-text">Pits Stop Collectibles</h3>
+                <p class="tagline">Not your ordinary pit stop 🤩🏁</p>
+            </div>
+            <div class="footer-info">
+                <p>📍 Cainta, Rizal</p>
+                <p>🛒 Your one-stop shop for diecast!</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">Follow us on Facebook</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© 2025 Pits Stop Collectibles | All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ─── Hamburger ──────────────────────────────────────────
+        function toggleHamburger() {
+            document.getElementById('hamburgerDrawer').classList.toggle('open');
+            document.getElementById('hamburgerOverlay').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+        }
+        function closeHamburger() {
+            document.getElementById('hamburgerDrawer').classList.remove('open');
+            document.getElementById('hamburgerOverlay').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
+        }
+
+        // ─── Theme ──────────────────────────────────────────────
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+        });
+
+        // ─── Auth Drawer ────────────────────────────────────────
+        function loadUser() {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const drawer = document.getElementById("drawerAuthSection");
+            if (!drawer) return;
+            if (loggedIn === "true" && currentUser) {
+                drawer.innerHTML = `
+                    <p class="drawer-greeting">Hi, <strong>${currentUser.username}</strong> 👋</p>
+                    <a href="inbox.html" class="drawer-link drawer-link--green">📩 Inbox</a>
+                    <a href="account.html" class="drawer-link">👤 Account</a>
+                    <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>`;
+            } else {
+                drawer.innerHTML = `
+                    <a href="login.html" class="drawer-link drawer-link--accent">Login</a>
+                    <a href="signup.html" class="drawer-link">Sign Up</a>`;
+            }
+        }
+        function logout() {
+            if (confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem("loggedIn");
+                localStorage.removeItem("currentUser");
+                localStorage.removeItem("isAdmin");
+                window.location.reload();
+            }
+        }
+
+        // ─── Wishlist ───────────────────────────────────────────
+        function displayWishlist() {
+            const grid  = document.getElementById('wishlistGrid');
+            const count = document.getElementById('wishlistCount');
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            if (wishlist.length === 0) {
+                count.innerHTML = '';
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">❤️</div>
+                        <p class="empty-title">Your Wishlist Is Empty</p>
+                        <p class="empty-sub">Save cars you love and come back for them later</p>
+                        <a href="hotwheels.html" class="btn-shop">Browse the Shop →</a>
+                    </div>`;
+                return;
+            }
+
+            count.innerHTML = `<span>${wishlist.length}</span> item${wishlist.length !== 1 ? 's' : ''} saved`;
+
+            grid.innerHTML = wishlist.map((item, index) => {
+                const imgSrc = item.img || item.image || '';
+                return `
+                <div class="wish-card">
+                    <div class="wish-img-wrap">
+                        <img src="${imgSrc}" alt="${item.name}" onerror="this.style.opacity='0.3'">
+                    </div>
+                    <div class="wish-body">
+                        <h3 class="wish-name">${item.name}</h3>
+                        <p class="wish-price">₱${item.price}</p>
+                    </div>
+                    <div class="wish-actions">
+                        <button class="btn-buy" onclick="addToCart(${index})">Add to Cart</button>
+                        <button class="btn-remove" onclick="removeFromWishlist(${index})">✕ Remove</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function removeFromWishlist(index) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            wishlist.splice(index, 1);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            displayWishlist();
+        }
+
+        function addToCart(index) {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const item = wishlist[index];
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push(item);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert(`🛒 "${item.name}" added to cart!`);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { loadUser(); displayWishlist(); });
+    </script>
 </body>
 </html>

@@ -5,91 +5,181 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home | Pits Stop Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <nav class="nav-bar"> 
-            <a href="index.html" class="nav-logo">
-                <h2 class="logo-text">Pits Stop Collectibles</h2>
-            </a>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-button">Brands ▾</a>
+        <nav class="nav-bar">
+            <!-- Left: Hamburger -->
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleHamburger()" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+
+            <!-- Center: Nav links -->
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
                     <ul class="dropdown-menu">
                         <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
-                        <li><a href="premium.html" class="nav-button">Hotwheels Premium</a></li>
+                        <li><a href="premium.html" class="nav-button">Premium</a></li>
                         <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
-                <li class="nav-item"><a href="cart.html" class="nav-button">🛒 Cart</a></li>
-                <li class="nav-item"><a href="contactUs.html" class="nav-button">Contact</a></li>
-                <div id="authSection"></div>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
             </ul>
+
+            <!-- Right: Theme toggle -->
+            <div class="nav-right">
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+            </div>
         </nav>
+
+        <!-- Hamburger Drawer -->
+        <div class="hamburger-overlay" id="hamburgerOverlay" onclick="closeHamburger()"></div>
+        <div class="hamburger-drawer" id="hamburgerDrawer">
+            <button class="drawer-close" onclick="closeHamburger()">✕</button>
+            <div id="drawerAuthSection" class="drawer-auth"></div>
+            <div class="drawer-divider"></div>
+            <p class="drawer-label">NAVIGATION</p>
+            <a href="index.html" class="drawer-link">Home</a>
+            <a href="hotwheels.html" class="drawer-link">Hotwheels</a>
+            <a href="premium.html" class="drawer-link">Premium</a>
+            <a href="matchbox.html" class="drawer-link">Matchbox</a>
+            <a href="aboutUs.html" class="drawer-link">About Us</a>
+            <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
+            <a href="cart.html" class="drawer-link">🛒 Cart</a>
+        </div>
     </header>
 
     <section class="hero">
+        <!-- Decorative grid lines -->
+        <div class="hero-grid"></div>
+        <!-- Tire track accent -->
+        <div class="tire-track left"></div>
+        <div class="tire-track right"></div>
+
         <div class="hero-inner">
-            <h1>PITS STOP <br> COLLECTIBLES</h1>
-            <p>Not your ordinary pit stop 🤩🏁<br>Collect • Display • Repeat</p>
-            <a href="hotwheels.html" class="cta-button">SHOP NOW</a>
+            <div class="hero-eyebrow">
+                <span class="eyebrow-line"></span>
+                <span class="eyebrow-text">2025 PREMIUM DROPS NOW LIVE</span>
+                <span class="eyebrow-line"></span>
+            </div>
+
+            <h1 class="hero-title">
+                <span class="title-pits">PITS STOP</span>
+                <span class="title-collectibles">COLLECTIBLES</span>
+            </h1>
+
+            <p class="hero-sub">
+                The Philippines' Premier Destination for Diecast Collectors.<br>
+                <span class="hero-tags">Mainlines &nbsp;·&nbsp; Premiums &nbsp;·&nbsp; Rare Finds</span>
+            </p>
+
+            <div class="hero-btns">
+                <a href="hotwheels.html" class="cta-button">
+                    <span class="btn-inner">EXPLORE SHOP</span>
+                    <span class="btn-arrow">→</span>
+                </a>
+                <a href="premium.html" class="cta-secondary">PREMIUM LINE</a>
+            </div>
+
+            <div class="hero-preorder-container">
+                <span class="preorder-label">UPCOMING 2026 RELEASE &amp; PREMIUMS</span>
+                <a href="preorder.html" class="cta-preorder">RESERVE / PRE-ORDER NOW</a>
+            </div>
+        </div>
+
+        <!-- Bottom banner strip -->
+        <div class="hero-strip">
+            <span>DIECAST &nbsp;·&nbsp; COLLECTIBLES &nbsp;·&nbsp; HOTWHEELS &nbsp;·&nbsp; PREMIUM &nbsp;·&nbsp; MATCHBOX &nbsp;·&nbsp; RARE FINDS &nbsp;·&nbsp; PHILIPPINES &nbsp;·&nbsp;</span>
+            <span aria-hidden="true">DIECAST &nbsp;·&nbsp; COLLECTIBLES &nbsp;·&nbsp; HOTWHEELS &nbsp;·&nbsp; PREMIUM &nbsp;·&nbsp; MATCHBOX &nbsp;·&nbsp; RARE FINDS &nbsp;·&nbsp; PHILIPPINES &nbsp;·&nbsp;</span>
         </div>
     </section>
-    
+
     <footer class="footer">
         <div class="footer-container">
-            <h3>Pits Stop Collectibles</h3>
-            <p>📍 Cainta, Rizal</p>
-            <p>🛒 Your one stop shop!</p>
-            <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank">
-                Visit our Facebook
-            </a>
-            <p class="copyright">© 2025 All Rights Reserved</p>
+            <div class="footer-brand">
+                <h3 class="logo-text">Pits Stop Collectibles</h3>
+                <p class="tagline">Not your ordinary pit stop 🤩🏁</p>
+            </div>
+            <div class="footer-info">
+                <p>📍 Cainta, Rizal</p>
+                <p>🛒 Your one-stop shop for diecast!</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">Follow us on Facebook</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 Pits Stop Collectibles | All Rights Reserved</p>
+            </div>
         </div>
     </footer>
 
     <script>
-    function toggleMenu() {
-        document.querySelector('.nav-menu').classList.toggle('active');
-    }
-
-    function loadUser() {
-        const loggedIn = localStorage.getItem("loggedIn");
-        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        const authSection = document.getElementById("authSection");
-
-        if (!authSection) return;
-
-        if (loggedIn === "true" && currentUser) {
-            // Wrapped everything in <li> tags to match your menu structure
-            authSection.innerHTML = `
-                <li class="nav-item"><span class="nav-button" style="color: #e60000; font-weight: bold;">Hi, ${currentUser.username}</span></li>
-                <li class="nav-item"><a href="inbox.html" class="nav-button" style="color: #00ff00;">📩 Inbox</a></li>
-                <li class="nav-item"><a href="account.html" class="nav-button">Account</a></li>
-                <li class="nav-item"><a href="#" onclick="logout()" class="nav-button">Logout</a></li>
-            `;
-        } else {
-            authSection.innerHTML = `
-                <li class="nav-item"><a href="login.html" class="nav-button">Login</a></li>
-                <li class="nav-item"><a href="signup.html" class="nav-button">Sign Up</a></li>
-            `;
+        // ─── Hamburger Drawer ───────────────────────────────────────────
+        function toggleHamburger() {
+            document.getElementById('hamburgerDrawer').classList.toggle('open');
+            document.getElementById('hamburgerOverlay').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
         }
-    }
-
-    function logout() {
-        if(confirm("Are you sure you want to log out?")) {
-            localStorage.removeItem("loggedIn");
-            localStorage.removeItem("currentUser");
-            localStorage.removeItem("isAdmin");
-            window.location.reload();
+        function closeHamburger() {
+            document.getElementById('hamburgerDrawer').classList.remove('open');
+            document.getElementById('hamburgerOverlay').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
         }
-    }
-    document.addEventListener('DOMContentLoaded', loadUser);
+
+        // ─── Theme Toggle ───────────────────────────────────────────────
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        });
+
+        // ─── Auth ───────────────────────────────────────────────────────
+        function loadUser() {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const drawer = document.getElementById("drawerAuthSection");
+            if (!drawer) return;
+
+            if (loggedIn === "true" && currentUser) {
+                drawer.innerHTML = `
+                    <p class="drawer-greeting">Hi, <strong>${currentUser.username}</strong> 👋</p>
+                    <a href="inbox.html" class="drawer-link drawer-link--green">📩 Inbox</a>
+                    <a href="account.html" class="drawer-link">👤 Account</a>
+                    <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>
+                `;
+            } else {
+                drawer.innerHTML = `
+                    <a href="login.html" class="drawer-link drawer-link--accent">Login</a>
+                    <a href="signup.html" class="drawer-link">Sign Up</a>
+                `;
+            }
+        }
+
+        function logout() {
+            if (confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem("loggedIn");
+                localStorage.removeItem("currentUser");
+                localStorage.removeItem("isAdmin");
+                window.location.reload();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadUser);
     </script>
 </body>
 </html>

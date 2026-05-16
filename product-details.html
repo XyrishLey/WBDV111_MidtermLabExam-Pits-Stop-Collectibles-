@@ -5,36 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details | Pits Stops Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
+        :root {
+            --primary-red: #e60000;
+            --dark-bg: rgba(15, 15, 15, 0.95);
+        }
+
+        body.product-page {
+            background-color: #000; /* Fallback */
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* Breadcrumbs */
+        .breadcrumb {
+            max-width: 1200px;
+            margin: 120px auto 10px;
+            padding: 0 40px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #888;
+        }
+        .breadcrumb a { color: #888; text-decoration: none; transition: 0.3s; }
+        .breadcrumb a:hover { color: var(--primary-red); }
+
+        /* Main Container */
         .product-container {
             display: flex;
             max-width: 1200px;
-            margin: 120px auto 50px;
-            padding: 40px;
-            gap: 50px;
-            background: rgba(0, 0, 0, 0.9);
-            border-radius: 20px;
-            color: white;
-            border: 1px solid #333;
+            margin: 0 auto 80px;
+            padding: 50px;
+            gap: 60px;
+            background: var(--dark-bg);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
+        /* Left Side: Image */
         .product-image-side {
-            flex: 1;
+            flex: 1.2;
+            overflow: hidden;
+            border-radius: 15px;
+            background: #fff; 
             display: flex;
+            align-items: center;
             justify-content: center;
+            height: fit-content;
         }
 
         .product-image-side img {
             width: 100%;
-            max-width: 450px;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(230, 0, 0, 0.4);
-            border: 2px solid #444;
+            height: auto;
+            transition: transform 0.5s ease;
+            cursor: zoom-in;
             object-fit: contain;
         }
 
+        .product-image-side:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Right Side: Info */
         .product-info-side {
             flex: 1;
             display: flex;
@@ -42,59 +77,100 @@
             justify-content: center;
         }
 
+        .brand-label {
+            color: var(--primary-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
         .product-info-side h1 {
             font-family: 'Orbitron', sans-serif;
             font-size: 2.8rem;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
+            line-height: 1.1;
+            margin-bottom: 15px;
+            text-transform: uppercase;
         }
 
-        .product-info-side .price {
+        .price-tag {
             font-size: 2.2rem;
-            color: #e60000;
-            font-weight: bold;
-            margin-bottom: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stock-status {
+            font-size: 0.7rem;
+            background: #27ae60;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
         }
 
         .description {
             font-family: 'Inter', sans-serif;
-            line-height: 1.8;
+            font-weight: 300;
             color: #bbb;
-            margin-bottom: 30px;
+            line-height: 1.6;
+            border-left: 3px solid var(--primary-red);
+            padding-left: 20px;
+            margin-bottom: 35px;
         }
 
+        /* Purchase Actions */
         .purchase-actions {
-            display: flex;
-            gap: 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
         }
 
-        .wishlist-btn {
-            background: #222;
-            border: 1px solid #444;
+        .cta-button {
+            background: var(--primary-red);
             color: white;
-            padding: 12px 24px;
-            border-radius: 5px;
-            cursor: pointer;
+            border: none;
+            padding: 18px;
             font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
             transition: 0.3s;
             text-transform: uppercase;
         }
 
+        .cta-button:hover {
+            background: #ff1a1a;
+            transform: translateY(-2px);
+        }
+
+        .wishlist-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #444;
+            color: white;
+            padding: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.2rem;
+        }
+
         .wishlist-btn:hover {
-            background: #e60000;
-            border-color: #e60000;
+            background: white;
+            color: black;
         }
 
         @media (max-width: 768px) {
             .product-container {
                 flex-direction: column;
-                margin: 80px 20px;
-                padding: 20px;
-                text-align: center;
+                margin: 100px 20px;
+                padding: 30px;
             }
-            .purchase-actions {
-                flex-direction: column;
-            }
+            .product-info-side h1 { font-size: 2rem; }
+            .purchase-actions { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -117,80 +193,93 @@
                 </li>
                 <li class="nav-item"><a href="aboutUs.html" class="nav-button">About Us</a></li>
                 <li class="nav-item">
-                    <a href="cart.html" class="nav-button">
-                        🛒 Cart <span id="cart-count" style="background: #e60000; color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; margin-left: 5px; display: none;">0</span>
-                    </a>
+                    <a href="cart.html" class="nav-button">🛒 Cart <span id="cart-count" style="display: none;">0</span></a>
                 </li>
             </ul>
         </nav>
     </header>
+
+    <div class="breadcrumb">
+        <a href="index.html">Home</a> / <span id="category-path">Collectibles</span> / <span id="current-item-path">Details</span>
+    </div>
 
     <section class="product-container">
         <div class="product-image-side">
             <img id="product-img" src="" alt="Product Image">
         </div>
         <div class="product-info-side">
+            <span class="brand-label">Official Diecast</span>
             <h1 id="product-name">Loading...</h1>
-            <p class="price" id="product-price"></p>
+            <div class="price-tag">
+                <span id="product-price">₱0.00</span>
+                <span class="stock-status">In Stock</span>
+            </div>
+            
             <p class="description">
-                Official diecast collectible. High-quality build with authentic detailing. 
-                A must-have for any serious car enthusiast or collector.
+                Experience precision engineering in 1:64 scale. This collectible features a die-cast metal body and authentic detailing for the ultimate display quality.
             </p>
             
             <div class="purchase-actions">
                 <button class="cta-button" onclick="addToCart()">ADD TO CART</button>
-                <button class="wishlist-btn" onclick="addToWishlist()">WISHLIST</button>
+                <button class="wishlist-btn" onclick="addToWishlist()">❤</button>
             </div>
         </div>
     </section>
 
     <script>
         function toggleMenu() {
-            const menu = document.querySelector('.nav-menu');
-            menu.classList.toggle('active');
+            document.querySelector('.nav-menu').classList.toggle('active');
         }
 
-        // Global variables to store product data from URL
-        let currentItem = { name: '', price: '', img: '' };
+        let currentItem = null;
 
         window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            currentItem.name = params.get('name');
-            currentItem.price = params.get('price');
-            currentItem.img = params.get('img');
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('id');
 
-            if (currentItem.name) document.getElementById('product-name').innerText = currentItem.name;
-            if (currentItem.price) document.getElementById('product-price').innerText = "₱" + currentItem.price;
-            if (currentItem.img) document.getElementById('product-img').src = currentItem.img;
-        };
+    if (productId) {
+        const allProducts = JSON.parse(localStorage.getItem('allProducts')) || [];
+        currentItem = allProducts.find(p => p.id == productId);
+
+        if (currentItem) {
+            document.getElementById('product-name').innerText = currentItem.name;
+            document.getElementById('product-price').innerText = "₱" + currentItem.price;
+            document.getElementById('product-img').src = currentItem.image;
+
+            // This dynamically pulls the specific data for THIS car
+            const detailsHtml = `
+                <div class="product-specs" style="margin-bottom: 20px; color: #888; font-size: 0.9rem;">
+                    <p><strong>Manufacturer:</strong> ${currentItem.manufacturer || 'Mattel'}</p>
+                    <p><strong>Release Year:</strong> ${currentItem.year || '2024'}</p>
+                    <p><strong>Series:</strong> ${currentItem.series || 'Mainline'}</p>
+                    <p><strong>Condition:</strong> Mint in Blister (MIB)</p>
+                </div>
+            `;
+            
+            // Insert it before the description paragraph
+            const descElement = document.querySelector('.description');
+            descElement.insertAdjacentHTML('beforebegin', detailsHtml);
+        }
+    }
+};
 
         function addToCart() {
-            if (!currentItem.name) return;
-
+            if (!currentItem) return;
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart.push(currentItem);
             localStorage.setItem('cart', JSON.stringify(cart));
-            
             alert(currentItem.name + ' added to cart!');
             window.location.href = 'cart.html'; 
         }
 
         function addToWishlist() {
-            if (!currentItem.name) return;
-
+            if (!currentItem) return;
             let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-            
-            // Avoid adding the same car twice
-            const exists = wishlist.find(item => item.name === currentItem.name);
-            
-            if (!exists) {
+            if (!wishlist.find(item => item.id === currentItem.id)) {
                 wishlist.push(currentItem);
                 localStorage.setItem('wishlist', JSON.stringify(wishlist));
-                alert(currentItem.name + ' added to your wishlist!');
-            } else {
-                alert(currentItem.name + ' is already in your wishlist.');
+                alert(currentItem.name + ' added to wishlist!');
             }
-            
             window.location.href = 'wishlist.html';
         }
     </script>

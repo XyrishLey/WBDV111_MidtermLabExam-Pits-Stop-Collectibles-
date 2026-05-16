@@ -6,81 +6,415 @@
     <title>Matchbox | Pit Stops Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* --- GLOBAL RESET --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                              url('https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/cover%20photo.jpg');
+            background-attachment: fixed;
+            background-size: cover;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* --- NAVIGATION --- */
+        header {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 3px solid #e60000;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 10px 0;
+        }
+
+        .nav-bar {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-logo {
+            text-decoration: none;
+        }
+
+        .nav-logo h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.2;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .search-container {
+            flex: 0 1 400px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: 1px solid #333;
+            background: #111;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-container input:focus {
+            border-color: #e60000;
+            box-shadow: 0 0 10px rgba(230, 0, 0, 0.3);
+        }
+
+        .menu-toggle {
+            font-size: 2rem;
+            color: #e60000;
+            cursor: pointer;
+            display: block;
+        }
+
+        /* --- SIDEBAR MENU --- */
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: #000;
+            border-left: 3px solid #e60000;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 30px;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            list-style: none;
+            z-index: 999;
+        }
+
+        .nav-menu.active { right: 0; }
+
+        .nav-button {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: white;
+            text-decoration: none;
+            padding: 15px 0;
+            border-bottom: 1px solid #222;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .nav-button:hover {
+            color: #e60000;
+            padding-left: 10px;
+        }
+
+        /* --- FILTERS --- */
+        .filter-section {
+            max-width: 1400px;
+            margin: 30px auto 0;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-section label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        #sort-select {
+            padding: 8px 12px;
+            background: #111;
+            color: white;
+            border: 1px solid #444;
+            border-radius: 4px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* --- PRODUCT GRID --- */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.4s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            border-color: #e60000;
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center; 
+        transition: 0.3s;
+        }
+
+        .img-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: 0.3s;
+        }
+
+        .sold-out-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e60000;
+            color: white;
+            padding: 5px 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.6rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .product-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            margin: 20px 0 5px;
+            min-height: 2.4em;
+        }
+
+        .product-card p {
+            color: #e60000;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .wishlist-btn {
+            background: #222;
+            color: white;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            flex: 0 0 50px;
+            transition: 0.3s;
+        }
+
+        .buy-btn, .notify-btn {
+            flex-grow: 1;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            padding: 12px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .buy-btn { background: #e60000; color: white; }
+        .notify-btn { background: #444; color: white; }
+
+        @media (max-width: 768px) {
+            .search-container { display: none; }
+            .nav-logo h2 { font-size: 0.7rem; }
+        }
+    </style>
 </head>
 <body>
     <header>
         <nav class="nav-bar">
-            <a href="index.html" class="nav-logo">
-                <h2 class="logo-text">Pits Stops Collectibles</h2>
+            <a href="index.html" class="nav-logo" style="text-decoration:none;">
+                <h2>PITS STOPS<br>COLLECTIBLES</h2>
             </a>
-
-                <div class="search-container">
-                    <input type="text" id="site-search" placeholder="Search for cars..." onkeyup="handleSearch(event)">
-                        <button onclick="executeSearch()">🔍</button>
-                            </div>
+            
+            <div class="search-container">
+                <input type="text" id="site-search" placeholder="Search Matchbox cars..." onkeyup="handleSearch(event)">
+            </div>
 
             <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <ul class="nav-menu">
-    <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
-    <li class="nav-item dropdown">
-        <a href="#" class="nav-button">Brands ▾</a>
-        <ul class="dropdown-menu">
-            <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
-            <li><a href="premium.html" class="nav-button">Hotwheels Premium</a></li>
-            <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
-        </ul>
-    </li>
-    <li class="nav-item"><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
-    <li class="nav-item"><a href="cart.html" class="nav-button">🛒 Cart</a></li>
-    <li class="nav-item"><a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button">Contact</a></li>
-    <span id="authSection" style="display: flex; align-items: center;"></span>
-</ul>
-                </li>
-                <li class="nav-item"><a href="aboutUs.html" class="nav-button">About Us</a></li>
-                <li class="nav-item">
-        <a href="cart.html" class="nav-button">
-            🛒 Cart <span id="cart-count" style="background: #e60000; color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; margin-left: 5px; display: none;">0</span>
-        </a>
-                <li class="nav-item">
-                    <a href="contactUs.html" class="nav-button">Contact Us</a>
-                </li>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-button">HOME</a></li>
+                <li><a href="hotwheels.html" class="nav-button">HOTWHEELS</a></li>
+                <li><a href="premium.html" class="nav-button">PREMIUM</a></li>
+                <li><a href="matchbox.html" class="nav-button">MATCHBOX</a></li>
+                <li><a href="wishlist.html" class="nav-button">❤️ WISHLIST</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 CART</a></li>
+                <li><a href="contactUs.html" class="nav-button">Contact Us</a></li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li id="authSection" style="padding: 15px; font-family: 'Orbitron'; color: #e60000; border-top: 1px solid #222;"></li>
             </ul>
         </nav>
     </header>
 
-    <div style="margin:20px; color: white; font-family: 'Orbitron', sans-serif;">
-        <label>Sort by price: </label>
-        <select id="sort" style="padding: 5px; border-radius: 5px; font-family: 'Inter', sans-serif;">
-            <option value="default">Default</option>
-            <option value="low">Low to High</option>
-            <option value="high">High to Low</option>
-        </select>
-    </div>
+    <section class="products" id="product-grid"></section>
 
-    <section class="products">
-    <div class="product-card" data-price="220">
-        <img src="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/MATCHBOX/CAYMAN%20220%20MATCHBOX.jpg">
-        <h3>Porsche Cayman</h3>
-        <p>₱220</p>
-        <button class="buy-btn" onclick="window.location.href='product-details.html?name=Porsche%20Cayman&price=220&img=https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/MATCHBOX/CAYMAN%20220%20MATCHBOX.jpg'">Buy Now</button>
-        <button class="wish-btn" onclick="addToWishlist('mb1', 'Porsche Cayman', 220, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/MATCHBOX/CAYMAN%20220%20MATCHBOX.jpg')">❤️ Wishlist</button>
-    </div>
-</section>
-
-    <script src="script.js"></script>
     <script>
         function toggleMenu() {
-            const menu = document.querySelector('.nav-menu');
-            menu.classList.toggle('active');
+            document.getElementById('navMenu').classList.toggle('active');
         }
-        document.addEventListener('click', (e) => {
-            const menu = document.querySelector('.nav-menu');
-            const toggle = document.querySelector('.menu-toggle');
-            if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-                menu.classList.remove('active');
+
+        function seedMatchboxData() {
+            const matchboxCars = [
+                { 
+                    id: 301, 
+                    name: "Porsche Cayman", 
+                    price: "220", 
+                    category: "matchbox", 
+                    image: "https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/MATCHBOX/CAYMAN%20220%20MATCHBOX.jpg", 
+                    quantity: 5 
+                }
+            ];
+
+            let products = JSON.parse(localStorage.getItem('allProducts')) || [];
+            let updated = false;
+
+            matchboxCars.forEach(car => {
+                if (!products.some(p => p.id === car.id)) {
+                    products.push(car);
+                    updated = true;
+                }
+            });
+
+            if (updated) localStorage.setItem('allProducts', JSON.stringify(products));
+        }
+
+        function loadMatchboxProducts() {
+            const grid = document.getElementById('product-grid');
+            const allProducts = JSON.parse(localStorage.getItem('allProducts')) || [];
+            const filtered = allProducts.filter(p => p.category === 'matchbox');
+
+            grid.innerHTML = ""; 
+
+            filtered.forEach(p => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product-card';
+                productDiv.innerHTML = `
+                    <div class="img-container">
+                        <img src="${p.image}">
+                    </div>
+                    <h3>${p.name}</h3>
+                    <p>₱${p.price}</p>
+                    <div class="card-actions">
+                        <button class="wishlist-btn" onclick="addToWishlist('${p.name}', ${p.price}, '${p.image}')">❤</button>
+                        <button class="buy-btn" onclick="window.location.href='product-details.html?name=${encodeURIComponent(p.name)}&price=${p.price}&img=${encodeURIComponent(p.image)}'">BUY NOW</button>
+                    </div>`;
+                grid.appendChild(productDiv);
+            });
+        }
+
+        function addToWishlist(name, price, img) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            if (!wishlist.find(item => item.name === name)) {
+                wishlist.push({ name, price, img });
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                alert("❤️ Added to Wishlist!");
             }
-        });
+        }
+
+        window.onload = function() { 
+            seedMatchboxData(); 
+            loadMatchboxProducts(); 
+        };
+
+        // 1. SEARCH FUNCTIONALITY
+function handleSearch(event) {
+    const searchTerm = event.target.value.toLowerCase();
+    const allProducts = JSON.parse(localStorage.getItem('allProducts')) || [];
+    
+    // Filters based on the current page's category
+    const currentPageCategory = window.location.pathname.includes('hotwheels') ? 'hotwheels' : 
+                               window.location.pathname.includes('premium') ? 'premium' : 'matchbox';
+
+    const filtered = allProducts.filter(p => 
+        p.category === currentPageCategory && 
+        p.name.toLowerCase().includes(searchTerm)
+    );
+
+    renderGrid(filtered);
+}
+
+// 2. ADVANCED FILTERS (SORTING)
+function handleSort() {
+    const sortValue = document.getElementById('sort-select').value;
+    const allProducts = JSON.parse(localStorage.getItem('allProducts')) || [];
+    
+    const currentPageCategory = window.location.pathname.includes('hotwheels') ? 'hotwheels' : 
+                               window.location.pathname.includes('premium') ? 'premium' : 'matchbox';
+    
+    let productsToSort = allProducts.filter(p => p.category === currentPageCategory);
+
+    if (sortValue === 'low') {
+        productsToSort.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    } else if (sortValue === 'high') {
+        productsToSort.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+    }
+
+    renderGrid(productsToSort);
+}
+
+// 3. REUSABLE RENDER FUNCTION
+function renderGrid(productsList) {
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = ""; 
+
+    productsList.forEach(p => {
+        const isSoldOut = (parseInt(p.quantity) <= 0);
+        const productDiv = document.createElement('div');
+        productDiv.className = 'product-card';
+        productDiv.innerHTML = `
+            <div class="img-container">
+                <img src="${p.image}" style="${isSoldOut ? 'filter: grayscale(1); opacity: 0.5;' : ''}">
+                ${isSoldOut ? '<div class="sold-out-badge">SOLD OUT</div>' : ''}
+            </div>
+            <h3>${p.name}</h3>
+            <p>₱${p.price}</p>
+            <div class="card-actions">
+                <button class="wishlist-btn" onclick="addToWishlist(${p.id})">❤</button>
+                ${isSoldOut ? 
+                    `<button class="notify-btn" onclick="notifyMe('${p.name}')">Notify me</button>` : 
+                    `<button class="buy-btn" onclick="window.location.href='product-details.html?id=${p.id}'">BUY NOW</button>`
+                }
+            </div>`;
+        grid.appendChild(productDiv);
+    });
+}
     </script>
 </body>
 </html>

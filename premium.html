@@ -3,83 +3,630 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotwheels Premium | Pit Stops Collectibles</title>
+    <title>Premium | Pits Stop Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ─── SHOP PAGE STYLES ──────────────────────
+           Identical to hotwheels.html — do not change.
+        ─────────────────────────────────────────── */
+
+        .page-hero {
+            position: relative;
+            text-align: center;
+            padding: 120px 24px 50px;
+            overflow: hidden;
+            background: var(--bg);
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: 40%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 350px;
+            background: radial-gradient(ellipse, rgba(230,0,0,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .page-hero-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.3; pointer-events: none;
+        }
+        .page-hero-inner { position: relative; z-index: 2; animation: fadeUp 0.8s ease both; }
+        .page-eyebrow {
+            display: flex; align-items: center; justify-content: center;
+            gap: 16px; margin-bottom: 18px;
+        }
+        .page-eyebrow-line { display: block; width: 40px; height: 1px; background: var(--accent); }
+        .page-eyebrow-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem; letter-spacing: 3px; color: var(--accent);
+            background: rgba(230,0,0,0.1); border: 1px solid rgba(230,0,0,0.3);
+            padding: 6px 16px; border-radius: 2px;
+        }
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.8rem, 8vw, 5.5rem);
+            letter-spacing: 6px; line-height: 1;
+            color: var(--text); margin-bottom: 12px;
+        }
+        .page-title span { color: transparent; -webkit-text-stroke: 2px var(--accent); }
+        .page-sub {
+            font-family: 'Rajdhani', sans-serif; font-weight: 600;
+            color: var(--text-muted); font-size: 0.95rem;
+            letter-spacing: 1px; max-width: 500px; margin: 0 auto;
+        }
+
+        .filter-bar {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .filter-bar label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.68rem; letter-spacing: 2px;
+            color: var(--text-muted); text-transform: uppercase;
+        }
+        .filter-bar input[type="text"] {
+            flex: 1; min-width: 200px; max-width: 360px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 16px;
+            border-radius: 3px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem; font-weight: 600;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .filter-bar input[type="text"]:focus { border-color: var(--accent); }
+        .filter-bar input[type="text"]::placeholder { color: var(--text-muted); opacity: 0.6; }
+        .filter-bar select {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 3px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem; font-weight: 600;
+            cursor: pointer; outline: none;
+            transition: border-color 0.2s;
+        }
+        .filter-bar select:focus { border-color: var(--accent); }
+        .result-count {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem; letter-spacing: 2px;
+            color: var(--text-muted); margin-left: auto;
+        }
+        .result-count span { color: var(--accent); }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
+        }
+
+        .product-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+            box-shadow: 0 16px 40px rgba(230,0,0,0.12);
+        }
+
+        .card-img-wrap {
+            position: relative;
+            width: 100%; height: 200px;
+            background: #111;
+            overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .card-img-wrap img {
+            width: 100%; height: 100%;
+            object-fit: contain;
+            padding: 12px;
+            transition: transform 0.4s ease;
+        }
+        .product-card:hover .card-img-wrap img { transform: scale(1.08); }
+        .card-img-wrap img.sold-out-img { filter: grayscale(1); opacity: 0.45; }
+
+        .sold-out-badge {
+            position: absolute; top: 10px; right: 10px;
+            background: var(--accent); color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.58rem; letter-spacing: 2px;
+            padding: 5px 10px; border-radius: 2px;
+            text-transform: uppercase; z-index: 2;
+        }
+        .low-stock-badge {
+            position: absolute; top: 10px; left: 10px;
+            background: rgba(255,107,0,0.9); color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.55rem; letter-spacing: 1.5px;
+            padding: 4px 9px; border-radius: 2px;
+            text-transform: uppercase; z-index: 2;
+        }
+
+        .card-body { padding: 16px 16px 0; flex: 1; display: flex; flex-direction: column; }
+        .card-series {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem; letter-spacing: 2px;
+            color: var(--text-muted); text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .card-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.15rem; letter-spacing: 1.5px;
+            color: var(--text); line-height: 1.2;
+            margin-bottom: 8px; flex: 1;
+        }
+        .card-price {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1rem; color: var(--accent);
+            margin-bottom: 4px;
+        }
+        .card-stock {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.78rem; font-weight: 600;
+            color: var(--text-muted); margin-bottom: 12px;
+        }
+        .card-stock.low { color: #ff6b00; }
+
+        .card-actions {
+            display: flex; gap: 8px;
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+        .btn-wish {
+            background: var(--surface);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            width: 42px; height: 42px;
+            border-radius: 3px; cursor: pointer;
+            font-size: 1rem; flex-shrink: 0;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .btn-wish:hover { background: rgba(230,0,0,0.1); color: #ff4d6d; border-color: #ff4d6d; }
+        .btn-buy {
+            flex: 1;
+            background: var(--accent);
+            color: #fff; border: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem; letter-spacing: 2px;
+            padding: 0 14px; border-radius: 3px;
+            cursor: pointer; height: 42px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 14px var(--accent-glow);
+        }
+        .btn-buy:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+        .btn-notify {
+            flex: 1; height: 42px;
+            background: var(--surface);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700; font-size: 0.8rem;
+            letter-spacing: 1px; text-transform: uppercase;
+            border-radius: 3px; cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .btn-notify:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+
+        .empty-state {
+            grid-column: 1 / -1; text-align: center; padding: 80px 20px;
+        }
+        .empty-state p {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem; letter-spacing: 4px; color: var(--text-muted);
+        }
+
+        @media (max-width: 600px) {
+            .shop-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; padding: 0 12px 80px; }
+            .card-img-wrap { height: 150px; }
+        }
+    </style>
 </head>
 <body>
+
+    <!-- ═══ HEADER ════════════════════════════════════════════ -->
     <header>
         <nav class="nav-bar">
-            <a href="index.html" class="nav-logo">
-                <h2 class="logo-text">Pits Stops Collectibles</h2>
-            </a>
-
-                <div class="search-container">
-                    <input type="text" id="site-search" placeholder="Search for cars..." onkeyup="handleSearch(event)">
-                        <button onclick="executeSearch()">🔍</button>
-                            </div>
-
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <ul class="nav-menu">
-    <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
-    <li class="nav-item dropdown">
-        <a href="#" class="nav-button">Brands ▾</a>
-        <ul class="dropdown-menu">
-            <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
-            <li><a href="premium.html" class="nav-button">Hotwheels Premium</a></li>
-            <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
-        </ul>
-    </li>
-    <li class="nav-item"><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
-    <li class="nav-item"><a href="cart.html" class="nav-button">🛒 Cart</a></li>
-    <li class="nav-item"><a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button">Contact</a></li>
-    <span id="authSection" style="display: flex; align-items: center;"></span>
-</ul>
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleHamburger()" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
                 </li>
-                <li class="nav-item"><a href="aboutUs.html" class="nav-button">About Us</a></li>
-                <li class="nav-item">
-        <a href="cart.html" class="nav-button">
-            🛒 Cart <span id="cart-count" style="background: #e60000; color: white; border-radius: 50%; padding: 2px 8px; font-size: 12px; margin-left: 5px; display: none;">0</span>
-        </a>
-                <li class="nav-item">
-                    <a href="contactUs.html" class="nav-button">Contact Us</a>
-                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
             </ul>
+            <div class="nav-right">
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+            </div>
         </nav>
+
+        <div class="hamburger-overlay" id="hamburgerOverlay" onclick="closeHamburger()"></div>
+        <div class="hamburger-drawer" id="hamburgerDrawer">
+            <button class="drawer-close" onclick="closeHamburger()">✕</button>
+            <div id="drawerAuthSection" class="drawer-auth"></div>
+            <div class="drawer-divider"></div>
+            <p class="drawer-label">NAVIGATION</p>
+            <a href="index.html" class="drawer-link">Home</a>
+            <a href="hotwheels.html" class="drawer-link">Hotwheels</a>
+            <a href="premium.html" class="drawer-link">Premium</a>
+            <a href="matchbox.html" class="drawer-link">Matchbox</a>
+            <a href="aboutUs.html" class="drawer-link">About Us</a>
+            <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
+            <a href="cart.html" class="drawer-link">🛒 Cart</a>
+        </div>
     </header>
 
-    <div style="margin:20px; color: white; font-family: 'Orbitron', sans-serif;">
-        <label>Sort by price: </label>
-        <select id="sort" style="padding: 5px; border-radius: 5px; font-family: 'Inter', sans-serif;">
+    <!-- ═══ PAGE HERO ════════════════════════════════════════ -->
+    <section class="page-hero">
+        <div class="page-hero-grid"></div>
+        <div class="page-hero-inner">
+            <div class="page-eyebrow">
+                <span class="page-eyebrow-line"></span>
+                <span class="page-eyebrow-text">PREMIUM COLLECTION</span>
+                <span class="page-eyebrow-line"></span>
+            </div>
+            <h1 class="page-title">HOT<span>WHEELS</span> PREMIUM</h1>
+            <p class="page-sub">Real Riders. Rubber tires. Premium detailing. Built for serious collectors.</p>
+        </div>
+    </section>
+
+    <!-- ═══ FILTER BAR ════════════════════════════════════════ -->
+    <div class="filter-bar">
+        <label>Search</label>
+        <input type="text" id="site-search" placeholder="Search premium cars..." onkeyup="handleSearch(event)">
+        <label>Sort</label>
+        <select id="sort-select" onchange="handleSort()">
             <option value="default">Default</option>
-            <option value="low">Low to High</option>
-            <option value="high">High to Low</option>
+            <option value="low">Price: Low → High</option>
+            <option value="high">Price: High → Low</option>
         </select>
+        <span class="result-count" id="resultCount"></span>
     </div>
 
-    <section class="products">
-    <div class="product-card" data-price="3200">
-        <img src="https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS%20PREMIUM/2016%20GRAN%20TURISMO%20SET%203200.jpg">
-        <h3>2016 Hot Wheels - Gran Turismo (SET)</h3>
-        <p>₱3,200</p>
-        <button class="buy-btn" onclick="window.location.href='product-details.html?name=Gran%20Turismo%20Set&price=3200&img=https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS%20PREMIUM/2016%20GRAN%20TURISMO%20SET%203200.jpg'">Buy Now</button>
-        <button class="wish-btn" onclick="addToWishlist('prem1', 'Gran Turismo Set', 3200, 'https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/HOTWHEELS%20PREMIUM/2016%20GRAN%20TURISMO%20SET%203200.jpg')">❤️ Wishlist</button>
-    </div>
-</section>
+    <!-- ═══ PRODUCT GRID ══════════════════════════════════════ -->
+    <section class="shop-grid" id="product-grid"></section>
 
-    <script src="script.js"></script>
+    <!-- ═══ FOOTER ═══════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3 class="logo-text">Pits Stop Collectibles</h3>
+                <p class="tagline">Not your ordinary pit stop 🤩🏁</p>
+            </div>
+            <div class="footer-info">
+                <p>📍 Cainta, Rizal</p>
+                <p>🛒 Your one-stop shop for diecast!</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">Follow us on Facebook</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© 2025 Pits Stop Collectibles | All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        function toggleMenu() {
-            const menu = document.querySelector('.nav-menu');
-            menu.classList.toggle('active');
+        // ════════════════════════════════════════════════════
+        // ▼▼▼  ONLY CHANGE THIS LINE PER PAGE  ▼▼▼
+        const PAGE_CATEGORY = 'premium';
+        // ▲▲▲  'hotwheels' | 'premium' | 'matchbox'  ▲▲▲
+        // ════════════════════════════════════════════════════
+
+        // ─── Hamburger ──────────────────────────────────────
+        function toggleHamburger() {
+            document.getElementById('hamburgerDrawer').classList.toggle('open');
+            document.getElementById('hamburgerOverlay').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
         }
-        document.addEventListener('click', (e) => {
-            const menu = document.querySelector('.nav-menu');
-            const toggle = document.querySelector('.menu-toggle');
-            if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-                menu.classList.remove('active');
+        function closeHamburger() {
+            document.getElementById('hamburgerDrawer').classList.remove('open');
+            document.getElementById('hamburgerOverlay').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
+        }
+
+        // ─── Theme ──────────────────────────────────────────
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+        });
+
+        // ─── Auth Drawer ────────────────────────────────────
+        function loadUser() {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const drawer = document.getElementById("drawerAuthSection");
+            if (!drawer) return;
+            if (loggedIn === "true" && currentUser) {
+                drawer.innerHTML = `
+                    <p class="drawer-greeting">Hi, <strong>${currentUser.username}</strong> 👋</p>
+                    <a href="inbox.html" class="drawer-link drawer-link--green">📩 Inbox</a>
+                    <a href="account.html" class="drawer-link">👤 Account</a>
+                    <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>`;
+            } else {
+                drawer.innerHTML = `
+                    <a href="login.html" class="drawer-link drawer-link--accent">Login</a>
+                    <a href="signup.html" class="drawer-link">Sign Up</a>`;
             }
+        }
+        function logout() {
+            if (confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem("loggedIn");
+                localStorage.removeItem("currentUser");
+                localStorage.removeItem("isAdmin");
+                window.location.reload();
+            }
+        }
+
+        // ─── Seed Data ──────────────────────────────────────
+        // Edit your premium products here.
+        // To add a new car: copy one block, change the id,
+        // name, price, image, quantity, year, manufacturer, series.
+        // Keep category: "premium"
+        // ════════════════════════════════════════════════════
+        function seedInitialData() {
+            const starterCars = [
+                {
+                    id: 201,
+                    name: "Euro Speed Automobil Pininfarina Battista",
+                    price: "350",
+                    category: "premium",
+                    image: "https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/PREMIUM/pininfarina%20350.jpg",
+                    quantity: 5,
+                    year: "2024",
+                    manufacturer: "Pininfarina",
+                    series: "Euro Speed"
+                },
+                {
+                    id: 202,
+                    name: "Circuit Legends Porsche 911 GT3 R(992)",
+                    price: "900",
+                    category: "premium",
+                    image: "https://github.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/blob/main/IMAGES/PREMIUM/porsche%20(1).jpg?raw=true",
+                    quantity: 1,
+                    year: "2025",
+                    manufacturer: "Porsche",
+                    series: "Circuit Legends"
+                },
+                {
+                    id: 203,
+                    name: "Euro Speed Ferrari LaFerrari",
+                    price: "990",
+                    category: "premium",
+                    image: "https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/PREMIUM/laf1.jpg",
+                    quantity: 5,
+                    year: "2025",
+                    manufacturer: "Ferrari",
+                    series: "Euro Speed"
+                },
+                {
+                    id: 204,
+                    name: "Exotic Envy Lamborghini Reventon Roadster",
+                    price: "640",
+                    category: "premium",
+                    image: "https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/PREMIUM/reventon%20roadster%20600.jpg",
+                    quantity: 2,
+                    year: "2024",
+                    manufacturer: "Lamborghini",
+                    series: "Exotic Envy"
+                },
+                {
+                    id: 205,
+                    name: "Exotic Envy McLaren Senna",
+                    price: "700",
+                    category: "premium",
+                    image: "https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/PREMIUM/senna1.jpg",
+                    quantity: 1,
+                    year: "2024",
+                    manufacturer: "McLaren",
+                    series: "Exotic Envy"
+                },
+                {
+                    id: 206,
+                    name: "Circuit Legends Pandem Subaru BRZ",
+                    price: "450",
+                    category: "premium",
+                    image: "https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/PREMIUM/pandem%20450.jpg",
+                    quantity: 3,
+                    year: "2023",
+                    manufacturer: "Subaru",
+                    series: "Circuit Legends"
+                },
+                {
+                    id: 207,
+                    name: "Gran Turismo Porsche 911 GT3 RS",
+                    price: "850",
+                    category: "premium",
+                    image: "https://raw.githubusercontent.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/refs/heads/main/IMAGES/PREMIUM/gt3RS.webp",
+                    quantity: 2,
+                    year: "2024",
+                    manufacturer: "Porsche",
+                    series: "Gran Turismo"
+                },
+                {
+                    id: 208,
+                    name: "SILHOUETTES LB-WORKS McLAREN 720S (CHASE)",
+                    price: "5000",
+                    category: "premium",
+                    image: "https://github.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/blob/main/IMAGES/PREMIUM/720s%205000.jpg?raw=true",
+                    quantity: 1,
+                    year: "2025",
+                    manufacturer: "Mclaren",
+                    series: "Silhouettes"
+                }
+                // ─── ADD NEW CARS BELOW THIS LINE ───────────
+            ];
+
+            let products = JSON.parse(localStorage.getItem('allProducts')) || [];
+
+            starterCars.forEach(car => {
+                const existing = products.findIndex(p => p.id === car.id);
+                if (existing === -1) {
+                    products.push(car);
+                } else {
+                    // Update if anything changed
+                    products[existing] = { ...products[existing], ...car };
+                }
+            });
+
+            localStorage.setItem('allProducts', JSON.stringify(products));
+            loadProducts();
+        }
+
+        // ─── Wishlist ────────────────────────────────────────
+        function addToWishlist(name, price, image) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            if (!wishlist.find(item => item.name === name)) {
+                wishlist.push({ name, price, image });
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                alert("❤️ Added to Wishlist!");
+            } else {
+                alert("Already in your wishlist.");
+            }
+        }
+
+        // ─── Notify ──────────────────────────────────────────
+        function notifyMe(prodName) {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            if (loggedIn !== "true" || !currentUser) {
+                alert("Please log in to request a restock notification.");
+                return;
+            }
+            let waitlist = JSON.parse(localStorage.getItem('restockWaitlist')) || [];
+            const already = waitlist.find(w => w.productName === prodName && w.username === currentUser.username);
+            if (!already) {
+                waitlist.push({ productName: prodName, username: currentUser.username });
+                localStorage.setItem('restockWaitlist', JSON.stringify(waitlist));
+            }
+            alert("🏁 Restock request noted! We'll notify you when " + prodName + " is back.");
+        }
+
+        // ─── Render ──────────────────────────────────────────
+        function renderGrid(productsList) {
+            const grid = document.getElementById('product-grid');
+            const countEl = document.getElementById('resultCount');
+            grid.innerHTML = "";
+
+            if (productsList.length === 0) {
+                grid.innerHTML = `<div class="empty-state"><p>No items found</p></div>`;
+                countEl.innerHTML = '';
+                return;
+            }
+
+            countEl.innerHTML = `<span>${productsList.length}</span> item${productsList.length !== 1 ? 's' : ''}`;
+
+            productsList.forEach(p => {
+                const qty = parseInt(p.quantity);
+                const isSoldOut = qty <= 0;
+                const isLow = !isSoldOut && qty <= 3;
+
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="card-img-wrap">
+                        ${isLow ? `<span class="low-stock-badge">Only ${qty} left</span>` : ''}
+                        ${isSoldOut ? `<span class="sold-out-badge">Sold Out</span>` : ''}
+                        <img src="${p.image}" alt="${p.name}" ${isSoldOut ? 'class="sold-out-img"' : ''} onerror="this.style.opacity='0.3'">
+                    </div>
+                    <div class="card-body">
+                        <p class="card-series">${p.series || ''}</p>
+                        <h3 class="card-name">${p.name}</h3>
+                        <p class="card-price">₱${p.price}</p>
+                        <p class="card-stock ${isLow ? 'low' : ''}">
+                            ${isSoldOut ? 'Out of stock' : isLow ? `${qty} units left` : `In stock · ${qty} units`}
+                        </p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn-wish" title="Add to Wishlist" onclick="addToWishlist('${p.name}', '${p.price}', '${p.image}')">❤</button>
+                        ${isSoldOut
+                            ? `<button class="btn-notify" onclick="notifyMe('${p.name}')">Notify Me</button>`
+                            : `<button class="btn-buy" onclick="window.location.href='product-details.html?id=${p.id}'">Buy Now →</button>`
+                        }
+                    </div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        // ─── Load ────────────────────────────────────────────
+        function loadProducts() {
+            const all = JSON.parse(localStorage.getItem('allProducts')) || [];
+            renderGrid(all.filter(p => p.category === PAGE_CATEGORY));
+        }
+
+        // ─── Search ──────────────────────────────────────────
+        function handleSearch(event) {
+            const term = event.target.value.toLowerCase();
+            const all = JSON.parse(localStorage.getItem('allProducts')) || [];
+            renderGrid(all.filter(p =>
+                p.category === PAGE_CATEGORY &&
+                p.name.toLowerCase().includes(term)
+            ));
+        }
+
+        // ─── Sort ────────────────────────────────────────────
+        function handleSort() {
+            const val = document.getElementById('sort-select').value;
+            const term = document.getElementById('site-search').value.toLowerCase();
+            const all = JSON.parse(localStorage.getItem('allProducts')) || [];
+
+            let list = all.filter(p =>
+                p.category === PAGE_CATEGORY &&
+                p.name.toLowerCase().includes(term)
+            );
+
+            if (val === 'low')  list.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+            if (val === 'high') list.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+
+            renderGrid(list);
+        }
+
+        // ─── Init ────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUser();
+            seedInitialData();
         });
     </script>
 </body>

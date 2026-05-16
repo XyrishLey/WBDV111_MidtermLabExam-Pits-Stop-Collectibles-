@@ -5,136 +5,285 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart | Pits Stop Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ... keeping your existing styles ... */
-        .cart-container { max-width: 1000px; margin: 120px auto; padding: 40px; background: rgba(0, 0, 0, 0.9); border-radius: 20px; color: white; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e60000; padding-bottom: 15px; margin-bottom: 30px; }
-        .cart-header h1 { font-family: 'Orbitron', sans-serif; font-size: 2rem; margin: 0; }
-        .keep-shopping { color: #ccc; text-decoration: none; font-family: 'Inter', sans-serif; font-size: 0.9rem; transition: 0.3s; }
-        .keep-shopping:hover { color: #e60000; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.05); margin-bottom: 15px; padding: 20px; border-radius: 10px; border: 1px solid #222; }
-        .item-details { display: flex; align-items: center; gap: 25px; }
-        .cart-item img { width: 120px; height: 80px; object-fit: cover; border-radius: 5px; border: 1px solid #444; }
-        .item-info h4 { font-family: 'Orbitron', sans-serif; margin: 0 0 5px 0; font-size: 1.2rem; }
-        .item-info p { color: #e60000; font-weight: bold; margin: 0; font-size: 1.1rem; }
-        
-        /* Action Buttons */
-        .item-actions { display: flex; flex-direction: column; gap: 8px; }
-        .remove-btn { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-family: 'Inter', sans-serif; transition: 0.3s; }
-        .remove-btn:hover { background: #ff4d4d; color: white; }
-        
-        /* New Wishlist Button Style */
-        .wishlist-btn { background: none; border: 1px solid #aaa; color: #aaa; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; transition: 0.3s; }
-        .wishlist-btn:hover { border-color: #e60000; color: #e60000; }
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+        }
 
-        .cart-summary { margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; text-align: right; }
-        .total-row { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; margin-bottom: 20px; }
-        .nudge-text { color: #888; font-style: italic; margin-bottom: 20px; display: block; }
-        .checkout-btn { width: 100%; padding: 18px; background: #e60000; color: white; border: none; border-radius: 5px; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
-        .checkout-btn:hover { background: #ff1a1a; transform: translateY(-2px); }
+        .cart-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            max-width: 1200px;
+            margin: 120px auto;
+            gap: 30px;
+            padding: 0 20px;
+        }
 
-        @media (max-width: 768px) { .cart-container { margin: 80px 15px; padding: 20px; } .cart-item { flex-direction: column; text-align: center; gap: 15px; } .item-details { flex-direction: column; gap: 10px; } }
+        /* Glassmorphism Effect */
+        .cart-main, .cart-sidebar {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(230, 0, 0, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .cart-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            margin: 0;
+            text-shadow: 0 0 15px rgba(230, 0, 0, 0.5);
+        }
+
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-left: 20px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: #e60000; }
+
+        /* Item Styling */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            margin-bottom: 15px;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+
+        .cart-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(230, 0, 0, 0.4);
+            transform: scale(1.01);
+        }
+
+        .item-details {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cart-item img {
+            width: 100px;
+            height: 70px;
+            object-fit: contain;
+            background: #1a1a1a;
+            padding: 5px;
+            border-radius: 12px;
+        }
+
+        .item-info h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            margin: 0 0 5px 0;
+        }
+
+        .item-info p {
+            color: #e60000;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* Modern Buttons */
+        .item-actions { display: flex; gap: 10px; }
+
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: #ccc;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .icon-btn.wish:hover { background: rgba(255, 20, 147, 0.2); color: #ff1493; }
+        .icon-btn.remove:hover { background: rgba(230, 0, 0, 0.2); color: #e60000; }
+
+        /* Sidebar Summary */
+        .cart-sidebar h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            margin-top: 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            color: #888;
+        }
+
+        .total-row {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            margin-top: 20px;
+            font-size: 1.8rem;
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(90deg, #e60000, #ff4d4d);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(230, 0, 0, 0.3);
+            transition: 0.3s;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(230, 0, 0, 0.5);
+        }
+
+        @media (max-width: 900px) {
+            .cart-wrapper { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <div class="cart-container">
-        <div class="cart-header">
-            <h1>YOUR CART</h1>
-            <div>
-                <a href="wishlist.html" class="keep-shopping" style="margin-right: 20px;">❤️ View Wishlist</a>
-                <a href="hotwheels.html" class="keep-shopping">← Keep Shopping</a>
+    <div class="cart-wrapper">
+        <main class="cart-main">
+            <div class="cart-header">
+                <h1>YOUR CART</h1>
+                <div class="nav-links">
+                    <a href="index.html">← Home</a>
+                    <a href="wishlist.html">❤️ Wishlist</a>
+                </div>
             </div>
-        </div>
 
-        <div id="cart-items-list"></div>
+            <div id="cart-items-list">
+                <!-- Items injected here -->
+            </div>
+        </main>
 
-        <div class="cart-summary">
-            <span class="nudge-text" id="nudge-msg">Items in your cart are selling fast!</span>
-            <div class="total-row">Total: ₱<span id="cart-total">0</span></div>
-            <button class="checkout-btn" onclick="checkAuthAndCheckout()">Secure Checkout</button>
-        </div>
+        <aside class="cart-sidebar">
+            <h2>ORDER SUMMARY</h2>
+            <div class="summary-row">
+        <span>Standard Shipping</span>
+        <span>Calculated at checkout</span>
+    </div>
+    <div class="summary-row">
+        <!-- Revised formal message -->
+        <span id="nudge-msg" style="color: #aaa; font-size: 0.85rem; font-style: normal;">
+            Your selection is ready for processing.
+        </span>
+    </div>
+    
+    <div class="total-row">
+        ₱<span id="cart-total">0</span>
+    </div>
+
+    <button class="checkout-btn" onclick="checkAuthAndCheckout()">PROCEED TO CHECKOUT</button>
+    <div style="text-align: center; margin-top: 15px;">
+        <span style="font-size: 0.75rem; color: #666; letter-spacing: 1px;">
+            🔒 SECURE SSL ENCRYPTION ACTIVE
+        </span>
+    </div>
+</aside>
     </div>
 
     <script>
-        function displayCart() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const list = document.getElementById('cart-items-list');
-            const nudge = document.getElementById('nudge-msg');
-            let total = 0;
-            
-            if (cart.length === 0) {
-                list.innerHTML = `<p style="text-align:center; padding: 40px; color: #666;">Your cart is empty. Time to hunt some treasure!</p>`;
-                document.getElementById('cart-total').innerText = "0";
-                return;
-            }
+    function displayCart() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const list = document.getElementById('cart-items-list');
+        const nudge = document.getElementById('nudge-msg');
+        let total = 0;
+        
+        if (cart.length === 0) {
+            list.innerHTML = `<div style="text-align:center; padding: 60px;">
+                <p style="color: #666; font-size: 1.2rem;">Your garage is empty.</p>
+                <a href="hotwheels.html" style="color: #e60000; text-decoration: none; font-weight: bold;">Start Hunting →</a>
+            </div>`;
+            document.getElementById('cart-total').innerText = "0";
+            return;
+        }
 
-            nudge.innerText = cart.length === 1 ? "Your shelf looks a bit lonely!" : "Great collection started!";
+        nudge.innerText = cart.length === 1 ? "Your shelf looks a bit lonely!" : "Great collection started!";
 
-            list.innerHTML = '';
-            cart.forEach((item, index) => {
-                total += parseInt(item.price);
-                list.innerHTML += `
-                    <div class="cart-item">
-                        <div class="item-details">
-                            <img src="${item.img}" alt="${item.name}">
-                            <div class="item-info">
-                                <h4>${item.name}</h4>
-                                <p>₱${item.price}</p>
-                            </div>
+        list.innerHTML = '';
+        cart.forEach((item, index) => {
+            total += parseInt(item.price);
+            const imageSrc = item.img || item.image;
+
+            list.innerHTML += `
+                <div class="cart-item">
+                    <div class="item-details">
+                        <img src="${imageSrc}" alt="${item.name}">
+                        <div class="item-info">
+                            <h4>${item.name}</h4>
+                            <p>₱${item.price}</p>
                         </div>
-                        <div class="item-actions">
-                            <button class="wishlist-btn" onclick="moveToWishlist(${index})">Save to Wishlist</button>
-                            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
-                        </div>
-                    </div>`;
-            });
-            document.getElementById('cart-total').innerText = total;
-        }
+                    </div>
+                    <div class="item-actions">
+                        <button class="icon-btn wish" title="Save to Wishlist" onclick="moveToWishlist(${index})">❤</button>
+                        <button class="icon-btn remove" title="Remove Item" onclick="removeItem(${index})">✕</button>
+                    </div>
+                </div>`;
+        });
+        document.getElementById('cart-total').innerText = total.toLocaleString();
+    }
 
-        function removeItem(index) {
-            let cart = JSON.parse(localStorage.getItem('cart'));
-            cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            displayCart();
-        }
-
-        // --- THE WISHLIST LOGIC ---
-        function moveToWishlist(index) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-            
-            const item = cart[index];
-
-            // Avoid duplicates in wishlist
-            const alreadyInWishlist = wishlist.find(w => w.name === item.name);
-            
-            if (!alreadyInWishlist) {
-                wishlist.push(item);
-                localStorage.setItem('wishlist', JSON.stringify(wishlist));
-                alert(item.name + " moved to your Wishlist! 🏁");
-            } else {
-                alert("Item is already in your wishlist.");
-            }
-
-            // Remove from cart
-            cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            displayCart();
-        }
-
-        function checkAuthAndCheckout() {
-            const loggedIn = localStorage.getItem("loggedIn");
-            if (loggedIn === "true") {
-                window.location.href = 'checkout.html';
-            } else {
-                alert("Please login first.");
-                window.location.href = 'login.html';
-            }
-        }
-
+    function removeItem(index) {
+        let cart = JSON.parse(localStorage.getItem('cart'));
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
         displayCart();
+    }
+
+    function moveToWishlist(index) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        const item = cart[index];
+        
+        if (!wishlist.find(w => w.name === item.name)) {
+            wishlist.push(item);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        }
+
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        displayCart();
+    }
+
+    function checkAuthAndCheckout() {
+        const loggedIn = localStorage.getItem("loggedIn");
+        if (loggedIn === "true") {
+            window.location.href = 'checkout.html';
+        } else {
+            alert("Please login first.");
+            window.location.href = 'login.html';
+        }
+    }
+
+    displayCart();
     </script>
 </body>
 </html>
