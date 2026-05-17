@@ -7,18 +7,454 @@
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+
+        /* ══════════════════════════════════════════
+           NEW DROPS BANNER (top strip)
+        ══════════════════════════════════════════ */
+        .drops-bar {
+            position: fixed;
+            top: 72px; left: 0; right: 0;
+            z-index: 1900;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 8px 48px 8px 16px;
+            transition: transform 0.35s ease, opacity 0.35s ease;
+        }
+        .drops-bar.hidden {
+            transform: translateY(-110%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .drops-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: #fff;
+            background: rgba(0,0,0,0.25);
+            padding: 3px 10px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .drops-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #fff;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+        .drops-link {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            color: #fff;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 3px 10px;
+            border-radius: 2px;
+            white-space: nowrap;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .drops-link:hover { background: rgba(0,0,0,0.2); }
+        .drops-close {
+            position: absolute;
+            right: 14px; top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .drops-close:hover { color: #fff; }
+
+        /* Hero offset when banner is visible */
+        .hero.with-banner { padding-top: 172px; }
+
+        /* ══════════════════════════════════════════
+           SHARED SECTION STYLES
+        ══════════════════════════════════════════ */
+        .home-section {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 70px 24px 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-header-left { display: flex; flex-direction: column; gap: 4px; }
+        .section-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem; letter-spacing: 3px;
+            color: var(--accent); text-transform: uppercase;
+        }
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem; letter-spacing: 3px;
+            color: var(--text); line-height: 1;
+        }
+        .section-title span { color: transparent; -webkit-text-stroke: 1.5px var(--accent); }
+
+        .view-all-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.85rem; letter-spacing: 2px;
+            color: var(--accent); text-decoration: none;
+            border: 1px solid rgba(230,0,0,0.35);
+            padding: 8px 18px; border-radius: 3px;
+            transition: background 0.2s; white-space: nowrap;
+        }
+        .view-all-btn:hover { background: rgba(230,0,0,0.1); }
+
+        .section-divider {
+            max-width: 1300px;
+            margin: 70px auto 0;
+            padding: 0 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ══════════════════════════════════════════
+           NEWS / ANNOUNCEMENT BOARD
+        ══════════════════════════════════════════ */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .news-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+        .news-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 12px 32px rgba(230,0,0,0.1);
+        }
+
+        .news-img {
+            width: 100%; height: 200px;
+            overflow: hidden;
+            background: #111;
+            position: relative;
+        }
+        .news-img img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+        .news-card:hover .news-img img { transform: scale(1.05); }
+
+        /* Category tag on image */
+        .news-cat {
+            position: absolute; bottom: 10px; left: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.55rem; letter-spacing: 2px;
+            padding: 4px 10px; border-radius: 2px;
+            text-transform: uppercase; z-index: 2;
+        }
+        .news-cat.new-release  { background: var(--accent); color: #fff; }
+        .news-cat.announcement { background: rgba(0,0,0,0.7); color: #ccc; border: 1px solid rgba(255,255,255,0.2); }
+        .news-cat.facebook     { background: #1877f2; color: #fff; }
+        .news-cat.restock      { background: #ff6b00; color: #fff; }
+
+        .news-body { padding: 18px 18px 20px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+
+        .news-date {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.58rem; letter-spacing: 2px;
+            color: var(--text-muted); text-transform: uppercase;
+        }
+
+        .news-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.25rem; letter-spacing: 1.5px;
+            color: var(--text); line-height: 1.15;
+        }
+
+        .news-desc {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem; font-weight: 600;
+            color: var(--text-muted); line-height: 1.6;
+            flex: 1;
+        }
+
+        .news-action {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.8rem; letter-spacing: 2px;
+            color: var(--accent); text-decoration: none;
+            margin-top: 4px;
+            transition: opacity 0.2s;
+        }
+        .news-action:hover { opacity: 0.75; }
+
+        /* ══════════════════════════════════════════
+           FEATURED PRODUCT GRID
+        ══════════════════════════════════════════ */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .feat-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .feat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 14px 36px rgba(230,0,0,0.12);
+        }
+        .feat-img {
+            width: 100%; height: 170px;
+            background: #111; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .feat-img img {
+            width: 100%; height: 100%;
+            object-fit: contain; padding: 10px;
+            transition: transform 0.4s ease;
+        }
+        .feat-card:hover .feat-img img { transform: scale(1.08); }
+        .feat-img img.grayscale { filter: grayscale(1); opacity: 0.45; }
+
+        .feat-sold-badge {
+            position: absolute; top: 8px; right: 8px;
+            background: var(--accent); color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.55rem; letter-spacing: 1.5px;
+            padding: 4px 8px; border-radius: 2px;
+            text-transform: uppercase; z-index: 2;
+        }
+        .feat-low-badge {
+            position: absolute; top: 8px; left: 8px;
+            background: rgba(255,107,0,0.9); color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.52rem; letter-spacing: 1.5px;
+            padding: 3px 8px; border-radius: 2px;
+            text-transform: uppercase; z-index: 2;
+        }
+        .feat-body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; }
+        .feat-series {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.56rem; letter-spacing: 1.8px;
+            color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;
+        }
+        .feat-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem; letter-spacing: 1.2px;
+            color: var(--text); line-height: 1.15;
+            flex: 1; margin-bottom: 8px;
+        }
+        .feat-price {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.95rem; color: var(--accent);
+        }
+        .feat-empty {
+            grid-column: 1 / -1; text-align: center; padding: 40px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.68rem; letter-spacing: 2px;
+            color: var(--text-muted); opacity: 0.5;
+        }
+
+        /* ══════════════════════════════════════════
+           WHAT IS HOTWHEELS SECTION
+        ══════════════════════════════════════════ */
+        .info-section {
+            background: var(--bg-alt);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-top: 70px;
+        }
+
+        .info-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 70px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .info-eyebrow {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem; letter-spacing: 3px;
+            color: var(--accent); text-transform: uppercase;
+            margin-bottom: 12px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .info-eyebrow::before {
+            content: '';
+            display: block;
+            width: 24px; height: 2px;
+            background: var(--accent);
+        }
+
+        .info-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            letter-spacing: 4px; line-height: 1;
+            color: var(--text); margin-bottom: 20px;
+        }
+        .info-title span { color: transparent; -webkit-text-stroke: 2px var(--accent); }
+
+        .info-desc {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem; font-weight: 600;
+            color: var(--text-muted); line-height: 1.8;
+            margin-bottom: 28px;
+        }
+
+        .info-facts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .info-fact {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            border-radius: 3px;
+            padding: 14px 16px;
+        }
+        .info-fact-num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem; letter-spacing: 2px;
+            color: var(--accent); line-height: 1;
+            margin-bottom: 4px;
+        }
+        .info-fact-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem; font-weight: 700;
+            color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Cards side */
+        .info-cards-side {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .brand-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px 16px;
+            text-decoration: none;
+            display: flex; flex-direction: column; gap: 10px;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+        .brand-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(230,0,0,0.1);
+        }
+        .brand-card-icon { font-size: 1.8rem; }
+        .brand-card-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem; letter-spacing: 2px;
+            color: var(--text);
+        }
+        .brand-card-desc {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.82rem; font-weight: 600;
+            color: var(--text-muted); line-height: 1.5;
+            flex: 1;
+        }
+        .brand-card-link {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem; letter-spacing: 2px;
+            color: var(--accent); text-transform: uppercase;
+        }
+
+        /* Tall card that spans 2 rows */
+        .brand-card.tall { grid-row: span 2; }
+
+        /* ══════════════════════════════════════════
+           BOTTOM PADDING
+        ══════════════════════════════════════════ */
+        .page-end { padding-bottom: 80px; }
+
+        /* ══════════════════════════════════════════
+           MOBILE
+        ══════════════════════════════════════════ */
+        @media (max-width: 900px) {
+            .drops-bar { top: 60px; flex-wrap: wrap; padding: 8px 40px 8px 12px; gap: 6px; }
+            .hero.with-banner { padding-top: 200px; }
+            .news-grid { grid-template-columns: 1fr 1fr; }
+            .featured-grid { grid-template-columns: repeat(2, 1fr); }
+            .info-inner { grid-template-columns: 1fr; gap: 40px; }
+            .info-cards-side { grid-template-columns: repeat(2, 1fr); }
+            .brand-card.tall { grid-row: auto; }
+        }
+
+        @media (max-width: 600px) {
+            .news-grid { grid-template-columns: 1fr; }
+            .featured-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .feat-img { height: 130px; }
+            .section-title { font-size: 1.5rem; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .info-facts { grid-template-columns: 1fr 1fr; }
+            .drops-text { font-size: 0.75rem; }
+            .home-section { padding: 50px 16px 0; }
+        }
+    </style>
 </head>
 <body>
+
+    <!-- ══════════════════════════════════════════
+         NEW DROPS BANNER
+         · Edit .drops-text for the message
+         · Edit .drops-link href for destination
+         · Add style="display:none" to turn off
+    ══════════════════════════════════════════ -->
+    <div class="drops-bar" id="dropsBar">
+        <span class="drops-label">NEW DROPS</span>
+        <span class="drops-text">2026 Aero Styles &amp; Circuit Legends — Pre-order slots now open!</span>
+        <a href="preorder.html" class="drops-link">PRE-ORDER →</a>
+        <button class="drops-close" onclick="dismissDrops()" aria-label="Close">✕</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         HEADER
+    ══════════════════════════════════════════ -->
     <header>
         <nav class="nav-bar">
-            <!-- Left: Hamburger -->
             <div class="nav-left">
                 <button class="hamburger" id="hamburgerBtn" onclick="toggleHamburger()" aria-label="Menu">
                     <span></span><span></span><span></span>
                 </button>
             </div>
-
-            <!-- Center: Nav links -->
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-button">Home</a></li>
                 <li class="dropdown">
@@ -37,14 +473,11 @@
                     </a>
                 </li>
             </ul>
-
-            <!-- Right: Theme toggle -->
             <div class="nav-right">
                 <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
             </div>
         </nav>
 
-        <!-- Hamburger Drawer -->
         <div class="hamburger-overlay" id="hamburgerOverlay" onclick="closeHamburger()"></div>
         <div class="hamburger-drawer" id="hamburgerDrawer">
             <button class="drawer-close" onclick="closeHamburger()">✕</button>
@@ -61,30 +494,27 @@
         </div>
     </header>
 
-    <section class="hero">
-        <!-- Decorative grid lines -->
+    <!-- ══════════════════════════════════════════
+         HERO
+    ══════════════════════════════════════════ -->
+    <section class="hero with-banner" id="heroSection">
         <div class="hero-grid"></div>
-        <!-- Tire track accent -->
         <div class="tire-track left"></div>
         <div class="tire-track right"></div>
-
         <div class="hero-inner">
             <div class="hero-eyebrow">
                 <span class="eyebrow-line"></span>
                 <span class="eyebrow-text">2025 PREMIUM DROPS NOW LIVE</span>
                 <span class="eyebrow-line"></span>
             </div>
-
             <h1 class="hero-title">
                 <span class="title-pits">PITS STOP</span>
                 <span class="title-collectibles">COLLECTIBLES</span>
             </h1>
-
             <p class="hero-sub">
                 The Philippines' Premier Destination for Diecast Collectors.<br>
                 <span class="hero-tags">Mainlines &nbsp;·&nbsp; Premiums &nbsp;·&nbsp; Rare Finds</span>
             </p>
-
             <div class="hero-btns">
                 <a href="hotwheels.html" class="cta-button">
                     <span class="btn-inner">EXPLORE SHOP</span>
@@ -92,20 +522,142 @@
                 </a>
                 <a href="premium.html" class="cta-secondary">PREMIUM LINE</a>
             </div>
-
             <div class="hero-preorder-container">
                 <span class="preorder-label">UPCOMING 2026 RELEASE &amp; PREMIUMS</span>
                 <a href="preorder.html" class="cta-preorder">RESERVE / PRE-ORDER NOW</a>
             </div>
         </div>
-
-        <!-- Bottom banner strip -->
         <div class="hero-strip">
             <span>DIECAST &nbsp;·&nbsp; COLLECTIBLES &nbsp;·&nbsp; HOTWHEELS &nbsp;·&nbsp; PREMIUM &nbsp;·&nbsp; MATCHBOX &nbsp;·&nbsp; RARE FINDS &nbsp;·&nbsp; PHILIPPINES &nbsp;·&nbsp;</span>
             <span aria-hidden="true">DIECAST &nbsp;·&nbsp; COLLECTIBLES &nbsp;·&nbsp; HOTWHEELS &nbsp;·&nbsp; PREMIUM &nbsp;·&nbsp; MATCHBOX &nbsp;·&nbsp; RARE FINDS &nbsp;·&nbsp; PHILIPPINES &nbsp;·&nbsp;</span>
         </div>
     </section>
 
+    <!-- ══════════════════════════════════════════
+         NEWS & ANNOUNCEMENTS BOARD
+         To add/edit posts: update the NEWS array
+         in the <script> below.
+    ══════════════════════════════════════════ -->
+    <div class="home-section">
+        <div class="section-header">
+            <div class="section-header-left">
+                <span class="section-tag">Latest Updates</span>
+                <h2 class="section-title">NEWS &amp; <span>DROPS</span></h2>
+            </div>
+            <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="view-all-btn">See All on FB →</a>
+        </div>
+        <div class="news-grid" id="newsGrid"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         FEATURED — HOTWHEELS
+    ══════════════════════════════════════════ -->
+    <div class="section-divider"></div>
+    <div class="home-section">
+        <div class="section-header">
+            <div class="section-header-left">
+                <span class="section-tag">Mainline Collection</span>
+                <h2 class="section-title">HOT<span>WHEELS</span></h2>
+            </div>
+            <a href="hotwheels.html" class="view-all-btn">View All →</a>
+        </div>
+        <div class="featured-grid" id="feat-hotwheels"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         FEATURED — PREMIUM
+    ══════════════════════════════════════════ -->
+    <div class="section-divider"></div>
+    <div class="home-section">
+        <div class="section-header">
+            <div class="section-header-left">
+                <span class="section-tag">Premium Collection</span>
+                <h2 class="section-title">HOT<span>WHEELS</span> PREMIUM</h2>
+            </div>
+            <a href="premium.html" class="view-all-btn">View All →</a>
+        </div>
+        <div class="featured-grid" id="feat-premium"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         FEATURED — MATCHBOX
+    ══════════════════════════════════════════ -->
+    <div class="section-divider"></div>
+    <div class="home-section">
+        <div class="section-header">
+            <div class="section-header-left">
+                <span class="section-tag">Matchbox Collection</span>
+                <h2 class="section-title">MATCH<span>BOX</span></h2>
+            </div>
+            <a href="matchbox.html" class="view-all-btn">View All →</a>
+        </div>
+        <div class="featured-grid" id="feat-matchbox"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         WHAT IS HOTWHEELS / BRANDS INFO
+    ══════════════════════════════════════════ -->
+    <div class="info-section">
+        <div class="info-inner">
+            <!-- Left: text -->
+            <div class="info-text-side">
+                <p class="info-eyebrow">About the Hobby</p>
+                <h2 class="info-title">WHAT IS<br><span>DIECAST</span>?</h2>
+                <p class="info-desc">
+                    Diecast collectibles are precision-made metal model cars manufactured by pouring molten metal into a die — a steel mould — under pressure. The result is a highly detailed, durable miniature replica of real-world vehicles, from everyday street cars to rare supercars and race machines.
+                </p>
+                <p class="info-desc">
+                    Hot Wheels, launched by Mattel in 1968, is the world's leading diecast brand — known for bold liveries, fantasy castings, and premium Real Riders lines. Matchbox focuses on realism and scale accuracy. Together they've shaped a global community of millions of collectors.
+                </p>
+                <div class="info-facts">
+                    <div class="info-fact">
+                        <p class="info-fact-num">1:64</p>
+                        <p class="info-fact-label">Standard Scale</p>
+                    </div>
+                    <div class="info-fact">
+                        <p class="info-fact-num">1968</p>
+                        <p class="info-fact-label">Hot Wheels Founded</p>
+                    </div>
+                    <div class="info-fact">
+                        <p class="info-fact-num">6B+</p>
+                        <p class="info-fact-label">Cars Produced</p>
+                    </div>
+                    <div class="info-fact">
+                        <p class="info-fact-num">PH</p>
+                        <p class="info-fact-label">Based in Cainta, Rizal</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: brand cards -->
+            <div class="info-cards-side">
+                <a href="hotwheels.html" class="brand-card tall">
+                    <span class="brand-card-icon">🔥</span>
+                    <p class="brand-card-name">Hot Wheels Mainline</p>
+                    <p class="brand-card-desc">The classic 1:64 line that started it all. Affordable, colourful, and endlessly collectible. New series drop every year with themed assortments.</p>
+                    <span class="brand-card-link">Browse →</span>
+                </a>
+                <a href="premium.html" class="brand-card">
+                    <span class="brand-card-icon">⭐</span>
+                    <p class="brand-card-name">HW Premium</p>
+                    <p class="brand-card-desc">Real Riders rubber tires, metal bodies, premium packaging. Built for serious collectors.</p>
+                    <span class="brand-card-link">Browse →</span>
+                </a>
+                <a href="matchbox.html" class="brand-card">
+                    <span class="brand-card-icon">🟦</span>
+                    <p class="brand-card-name">Matchbox</p>
+                    <p class="brand-card-desc">Realistic scale accuracy and authentic detailing since 1953. A collector's staple.</p>
+                    <span class="brand-card-link">Browse →</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-end"></div>
+
+    <!-- ══════════════════════════════════════════
+         FOOTER
+    ══════════════════════════════════════════ -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-brand">
@@ -126,7 +678,67 @@
     </footer>
 
     <script>
-        // ─── Hamburger Drawer ───────────────────────────────────────────
+        // ══════════════════════════════════════════════════════
+        //  NEWS POSTS — Edit this array to update the board.
+        //  Fields:
+        //    cat:   'new-release' | 'announcement' | 'facebook' | 'restock'
+        //    catLabel: text shown on the badge
+        //    date:  display date string
+        //    img:   image URL (use your GitHub raw image links)
+        //    title: headline
+        //    desc:  short description (2–3 sentences max)
+        //    link:  where "Read More / View" points (FB post, preorder page, etc.)
+        //    linkLabel: button text
+        // ══════════════════════════════════════════════════════
+        const NEWS = [
+            {
+                cat: 'new-release',
+                catLabel: 'New Release',
+                date: 'May 2026',
+                img: 'https://github.com/XyrishLey/WBDV111_MidtermLabExam-Pits-Stop-Collectibles-/blob/main/IMAGES/PRE%20ORDER/BOULEVARD%202026.webp?raw=true',
+                title: 'Hot Wheels Premium Boulevard Mix (Cars #151-#155)',
+                desc: 'The highly anticipated Boulevard set has arrived. Featuring five iconic street legends and off-road beasts including the Toyota Alphard, Koenigsegg CC850, and GR Supra—all with full die-cast metal bodies and Real Riders rubber tires.',
+                link: 'preorder.html',
+                linkLabel: 'Pre-Order Now →'
+            },
+        ];
+        // ══════════════════════════════════════════════════════
+
+        function renderNews() {
+            const grid = document.getElementById('newsGrid');
+            grid.innerHTML = '';
+            NEWS.forEach(n => {
+                const card = document.createElement('div');
+                card.className = 'news-card';
+                card.innerHTML = `
+                    <div class="news-img">
+                        <span class="news-cat ${n.cat}">${n.catLabel}</span>
+                        <img src="${n.img}" alt="${n.title}" onerror="this.style.opacity='0.2'">
+                    </div>
+                    <div class="news-body">
+                        <p class="news-date">${n.date}</p>
+                        <p class="news-title">${n.title}</p>
+                        <p class="news-desc">${n.desc}</p>
+                        <a href="${n.link}" class="news-action">${n.linkLabel}</a>
+                    </div>`;
+                grid.appendChild(card);
+            });
+        }
+
+        // ─── New Drops Banner ────────────────────────────────
+        function initDrops() {
+            if (sessionStorage.getItem('dropsDismissed')) {
+                document.getElementById('dropsBar').classList.add('hidden');
+                document.getElementById('heroSection').classList.remove('with-banner');
+            }
+        }
+        function dismissDrops() {
+            document.getElementById('dropsBar').classList.add('hidden');
+            document.getElementById('heroSection').classList.remove('with-banner');
+            sessionStorage.setItem('dropsDismissed', '1');
+        }
+
+        // ─── Hamburger ───────────────────────────────────────
         function toggleHamburger() {
             document.getElementById('hamburgerDrawer').classList.toggle('open');
             document.getElementById('hamburgerOverlay').classList.toggle('open');
@@ -138,42 +750,37 @@
             document.getElementById('hamburgerBtn').classList.remove('active');
         }
 
-        // ─── Theme Toggle ───────────────────────────────────────────────
+        // ─── Theme ───────────────────────────────────────────
         const themeToggle = document.getElementById('theme-toggle');
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-
         themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            const cur = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
         });
 
-        // ─── Auth ───────────────────────────────────────────────────────
+        // ─── Auth ─────────────────────────────────────────────
         function loadUser() {
             const loggedIn = localStorage.getItem("loggedIn");
             const currentUser = JSON.parse(localStorage.getItem("currentUser"));
             const drawer = document.getElementById("drawerAuthSection");
             if (!drawer) return;
-
             if (loggedIn === "true" && currentUser) {
                 drawer.innerHTML = `
                     <p class="drawer-greeting">Hi, <strong>${currentUser.username}</strong> 👋</p>
                     <a href="inbox.html" class="drawer-link drawer-link--green">📩 Inbox</a>
                     <a href="account.html" class="drawer-link">👤 Account</a>
-                    <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>
-                `;
+                    <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>`;
             } else {
                 drawer.innerHTML = `
                     <a href="login.html" class="drawer-link drawer-link--accent">Login</a>
-                    <a href="signup.html" class="drawer-link">Sign Up</a>
-                `;
+                    <a href="signup.html" class="drawer-link">Sign Up</a>`;
             }
         }
-
         function logout() {
             if (confirm("Are you sure you want to log out?")) {
                 localStorage.removeItem("loggedIn");
@@ -183,11 +790,58 @@
             }
         }
 
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        // ─── Cart Badge ───────────────────────────────────────
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const badge = document.getElementById('cart-count');
-                if (cart.length > 0) { badge.style.display = 'inline'; badge.textContent = cart.length; }
+            if (cart.length > 0) { badge.style.display = 'inline'; badge.textContent = cart.length; }
+        }
 
-        document.addEventListener('DOMContentLoaded', loadUser);
+        // ─── Featured Products ────────────────────────────────
+        const FEATURED_LIMIT = 4; // change to show more cards per row
+
+        function buildFeatCard(p) {
+            const qty = parseInt(p.quantity);
+            const isSoldOut = qty <= 0;
+            const isLow = !isSoldOut && qty <= 3;
+            const card = document.createElement('div');
+            card.className = 'feat-card';
+            card.onclick = () => window.location.href = `product-details.html?id=${p.id}`;
+            card.innerHTML = `
+                <div class="feat-img">
+                    ${isSoldOut ? `<span class="feat-sold-badge">Sold Out</span>` : ''}
+                    ${isLow ? `<span class="feat-low-badge">Only ${qty} left</span>` : ''}
+                    <img src="${p.image}" alt="${p.name}" ${isSoldOut ? 'class="grayscale"' : ''} onerror="this.style.opacity='0.2'">
+                </div>
+                <div class="feat-body">
+                    <p class="feat-series">${p.series || ''}</p>
+                    <p class="feat-name">${p.name}</p>
+                    <p class="feat-price">₱${p.price}</p>
+                </div>`;
+            return card;
+        }
+
+        function renderFeatured(category, containerId) {
+            const container = document.getElementById(containerId);
+            const all = JSON.parse(localStorage.getItem('allProducts')) || [];
+            const items = all.filter(p => p.category === category).slice(0, FEATURED_LIMIT);
+            if (items.length === 0) {
+                container.innerHTML = `<p class="feat-empty">No products yet — check back soon.</p>`;
+                return;
+            }
+            items.forEach(p => container.appendChild(buildFeatCard(p)));
+        }
+
+        // ─── Init ─────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            initDrops();
+            loadUser();
+            updateCartBadge();
+            renderNews();
+            renderFeatured('hotwheels', 'feat-hotwheels');
+            renderFeatured('premium',   'feat-premium');
+            renderFeatured('matchbox',  'feat-matchbox');
+        });
     </script>
 </body>
 </html>
