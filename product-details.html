@@ -5,52 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details | Pits Stops Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Same Google Fonts as style.css -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        :root {
-            --primary-red: #e60000;
-            --dark-bg: rgba(15, 15, 15, 0.95);
-        }
+        /* ── PRODUCT PAGE ONLY STYLES ─────────────────────────────
+           All colours reference the variables already defined in
+           style.css so light/dark theme toggling works for free.
+        ──────────────────────────────────────────────────────── */
 
-        body.product-page {
-            background-color: #000; /* Fallback */
-            color: white;
-            min-height: 100vh;
-        }
-
-        /* Breadcrumbs */
+        /* Breadcrumb */
         .breadcrumb {
             max-width: 1200px;
-            margin: 120px auto 10px;
+            margin: 100px auto 12px;   /* 100px clears the 72px fixed header */
             padding: 0 40px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            color: #888;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
         }
-        .breadcrumb a { color: #888; text-decoration: none; transition: 0.3s; }
-        .breadcrumb a:hover { color: var(--primary-red); }
+        .breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover { color: var(--accent); }
+        .breadcrumb span { color: var(--text); }
 
-        /* Main Container */
+        /* ── PRODUCT CONTAINER ── */
         .product-container {
             display: flex;
             max-width: 1200px;
             margin: 0 auto 80px;
             padding: 50px;
             gap: 60px;
-            background: var(--dark-bg);
+            background: var(--surface);
             backdrop-filter: blur(15px);
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.35);
         }
 
-        /* Left Side: Image */
+        /* ── IMAGE SIDE ── */
         .product-image-side {
             flex: 1.2;
             overflow: hidden;
-            border-radius: 15px;
-            background: #fff; 
+            border-radius: 12px;
+            background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -65,11 +67,9 @@
             object-fit: contain;
         }
 
-        .product-image-side:hover img {
-            transform: scale(1.08);
-        }
+        .product-image-side:hover img { transform: scale(1.08); }
 
-        /* Right Side: Info */
+        /* ── INFO SIDE ── */
         .product-info-side {
             flex: 1;
             display: flex;
@@ -78,198 +78,310 @@
         }
 
         .brand-label {
-            color: var(--primary-red);
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
+            letter-spacing: 3px;
+            font-size: 0.7rem;
+            margin-bottom: 12px;
+            background: rgba(230,0,0,0.08);
+            border: 1px solid rgba(230,0,0,0.25);
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 2px;
         }
 
         .product-info-side h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.8rem;
-            line-height: 1.1;
-            margin-bottom: 15px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            letter-spacing: 3px;
             text-transform: uppercase;
+            color: var(--text);
+            line-height: 1.05;
+            margin-bottom: 18px;
         }
 
         .price-tag {
+            font-family: 'Bebas Neue', sans-serif;
             font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 25px;
+            letter-spacing: 2px;
+            color: var(--text);
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 14px;
         }
 
         .stock-status {
-            font-size: 0.7rem;
-            background: #27ae60;
-            color: white;
-            padding: 4px 12px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            background: #1a7a45;
+            color: #fff;
+            padding: 5px 14px;
             border-radius: 50px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .description {
-            font-family: 'Inter', sans-serif;
-            font-weight: 300;
-            color: #bbb;
-            line-height: 1.6;
-            border-left: 3px solid var(--primary-red);
-            padding-left: 20px;
-            margin-bottom: 35px;
-        }
-
-        /* Purchase Actions */
-        .purchase-actions {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 15px;
-        }
-
-        .cta-button {
-            background: var(--primary-red);
-            color: white;
-            border: none;
-            padding: 18px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
             text-transform: uppercase;
         }
 
-        .cta-button:hover {
-            background: #ff1a1a;
-            transform: translateY(-2px);
+        /* Specs inserted dynamically */
+        .product-specs {
+            margin-bottom: 20px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 2;
+        }
+        .product-specs strong { color: var(--text); font-weight: 700; }
+
+        .description {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 400;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.75;
+            border-left: 3px solid var(--accent);
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+
+        /* ── PURCHASE ACTIONS ── */
+        .purchase-actions {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 14px;
+        }
+
+        /* Re-use the .cta-button already defined in style.css;
+           override font only since style.css uses Bebas Neue which is correct */
+        .purchase-actions .cta-button {
+            border: none;
+            font-size: 1rem;
+            padding: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            /* rest inherits from style.css .cta-button */
         }
 
         .wishlist-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid #444;
-            color: white;
-            padding: 18px;
-            border-radius: 8px;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: 0.3s;
             font-size: 1.2rem;
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
         }
-
         .wishlist-btn:hover {
-            background: white;
-            color: black;
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(230,0,0,0.06);
         }
 
-        @media (max-width: 768px) {
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
             .product-container {
                 flex-direction: column;
-                margin: 100px 20px;
+                margin: 0 20px 60px;
                 padding: 30px;
+                gap: 32px;
             }
-            .product-info-side h1 { font-size: 2rem; }
             .purchase-actions { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .breadcrumb { margin-top: 90px; padding: 0 20px; }
+            .product-info-side h1 { font-size: 1.8rem; }
+            .price-tag { font-size: 1.6rem; }
         }
     </style>
 </head>
-<body class="product-page">
+<body>
+
+    <!-- ══ HEADER (matches index.html pattern exactly) ══ -->
     <header>
         <nav class="nav-bar">
-            <a href="index.html" class="nav-logo">
-                <h2 class="logo-text">Pits Stops Collectibles</h2>
-            </a>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            <!-- Left: Hamburger -->
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+
+            <!-- Center: Nav links -->
             <ul class="nav-menu">
-                <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-button">Brands ▾</a>
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
-                        <li><a href="premium.html" class="nav-button">Hotwheels Premium</a></li>
+                        <li><a href="hotwheels.html" class="nav-button">Hot Wheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Hot Wheels Premium</a></li>
                         <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a href="aboutUs.html" class="nav-button">About Us</a></li>
-                <li class="nav-item">
-                    <a href="cart.html" class="nav-button">🛒 Cart <span id="cart-count" style="display: none;">0</span></a>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li>
+                    <a href="cart.html" class="nav-button">
+                        🛒 Cart <span id="cart-count" style="display:none; background:var(--accent); color:#fff; border-radius:50%; padding:1px 6px; font-size:0.7rem; margin-left:4px;">0</span>
+                    </a>
                 </li>
             </ul>
+
+            <!-- Right: Theme toggle -->
+            <div class="nav-right">
+                <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+            </div>
         </nav>
     </header>
 
+    <!-- Hamburger Drawer (same as index.html) -->
+    <div class="hamburger-overlay" id="drawerOverlay"></div>
+    <nav class="hamburger-drawer" id="hamburgerDrawer">
+        <button class="drawer-close" id="drawerClose">✕</button>
+        <div class="drawer-greeting">Pits Stops Collectibles</div>
+        <span class="drawer-label">Navigation</span>
+        <a href="index.html" class="drawer-link">Home</a>
+        <span class="drawer-label">Brands</span>
+        <a href="hotwheels.html" class="drawer-link">Hot Wheels</a>
+        <a href="premium.html" class="drawer-link">Hot Wheels Premium</a>
+        <a href="matchbox.html" class="drawer-link">Matchbox</a>
+        <div class="drawer-divider"></div>
+        <a href="aboutUs.html" class="drawer-link">About Us</a>
+        <a href="cart.html" class="drawer-link drawer-link--accent">🛒 Cart</a>
+    </nav>
+
+    <!-- ══ BREADCRUMB ══ -->
     <div class="breadcrumb">
-        <a href="index.html">Home</a> / <span id="category-path">Collectibles</span> / <span id="current-item-path">Details</span>
+        <a href="index.html">Home</a> /
+        <span id="category-path">Collectibles</span> /
+        <span id="current-item-path">Details</span>
     </div>
 
+    <!-- ══ PRODUCT SECTION ══ -->
     <section class="product-container">
+        <!-- Image -->
         <div class="product-image-side">
             <img id="product-img" src="" alt="Product Image">
         </div>
+
+        <!-- Info -->
         <div class="product-info-side">
             <span class="brand-label">Official Diecast</span>
-            <h1 id="product-name">Loading...</h1>
+            <h1 id="product-name">Loading…</h1>
+
             <div class="price-tag">
                 <span id="product-price">₱0.00</span>
                 <span class="stock-status">In Stock</span>
             </div>
-            
+
+            <!-- Specs injected here by JS -->
+
             <p class="description">
-                Experience precision engineering in 1:64 scale. This collectible features a die-cast metal body and authentic detailing for the ultimate display quality.
+                Experience precision engineering in 1:64 scale. This collectible features a
+                die-cast metal body and authentic detailing for the ultimate display quality.
             </p>
-            
+
             <div class="purchase-actions">
-                <button class="cta-button" onclick="addToCart()">ADD TO CART</button>
-                <button class="wishlist-btn" onclick="addToWishlist()">❤</button>
+                <button class="cta-button" onclick="addToCart()">Add to Cart →</button>
+                <button class="wishlist-btn" onclick="addToWishlist()" title="Add to Wishlist">❤</button>
             </div>
         </div>
     </section>
 
-    <script>
-        function toggleMenu() {
-            document.querySelector('.nav-menu').classList.toggle('active');
-        }
+    <!-- ══ FOOTER ══ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <h3>Pits Stops Collectibles</h3>
+            <p class="tagline">"Where Every Model Tells a Story"</p>
+            <p class="footer-info">
+                📍 Imus, Cavite, Philippines<br>
+                📦 Nationwide Shipping Available
+            </p>
+            <div class="social-links">
+                <a href="https://www.facebook.com/PitsStopsCollectibles" target="_blank" class="fb-link">
+                    Facebook Page →
+                </a>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© 2025 Pits Stops Collectibles — All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
 
+    <script>
+        /* ── THEME TOGGLE (same logic as index.html) ── */
+        const themeBtn = document.getElementById('themeBtn');
+        const saved = localStorage.getItem('theme');
+        if (saved === 'light') { document.documentElement.setAttribute('data-theme','light'); themeBtn.textContent = '☀️'; }
+        themeBtn.addEventListener('click', () => {
+            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+            document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            themeBtn.textContent = isLight ? '🌙' : '☀️';
+        });
+
+        /* ── HAMBURGER DRAWER ── */
+        const hamburgerBtn  = document.getElementById('hamburgerBtn');
+        const hamburgerDrawer = document.getElementById('hamburgerDrawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const drawerClose   = document.getElementById('drawerClose');
+
+        function openDrawer()  { hamburgerDrawer.classList.add('open'); drawerOverlay.classList.add('open'); hamburgerBtn.classList.add('active'); }
+        function closeDrawer() { hamburgerDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); hamburgerBtn.classList.remove('active'); }
+
+        hamburgerBtn.addEventListener('click', openDrawer);
+        drawerClose.addEventListener('click', closeDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        /* ── CART COUNT BADGE ── */
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const badge = document.getElementById('cart-count');
+            if (cart.length > 0) { badge.style.display = 'inline'; badge.textContent = cart.length; }
+        }
+        updateCartBadge();
+
+        /* ── LOAD PRODUCT ── */
         let currentItem = null;
 
-        window.onload = function() {
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get('id');
+        window.onload = function () {
+            const params    = new URLSearchParams(window.location.search);
+            const productId = params.get('id');
 
-    if (productId) {
-        const allProducts = JSON.parse(localStorage.getItem('allProducts')) || [];
-        currentItem = allProducts.find(p => p.id == productId);
+            if (productId) {
+                const allProducts = JSON.parse(localStorage.getItem('allProducts')) || [];
+                currentItem = allProducts.find(p => p.id == productId);
 
-        if (currentItem) {
-            document.getElementById('product-name').innerText = currentItem.name;
-            document.getElementById('product-price').innerText = "₱" + currentItem.price;
-            document.getElementById('product-img').src = currentItem.image;
+                if (currentItem) {
+                    document.title = currentItem.name + ' | Pits Stops Collectibles';
+                    document.getElementById('product-name').innerText  = currentItem.name;
+                    document.getElementById('product-price').innerText = '₱' + currentItem.price;
+                    document.getElementById('product-img').src          = currentItem.image;
+                    document.getElementById('product-img').alt          = currentItem.name;
+                    document.getElementById('current-item-path').innerText = currentItem.name;
+                    if (currentItem.category) document.getElementById('category-path').innerText = currentItem.category;
 
-            // This dynamically pulls the specific data for THIS car
-            const detailsHtml = `
-                <div class="product-specs" style="margin-bottom: 20px; color: #888; font-size: 0.9rem;">
-                    <p><strong>Manufacturer:</strong> ${currentItem.manufacturer || 'Mattel'}</p>
-                    <p><strong>Release Year:</strong> ${currentItem.year || '2024'}</p>
-                    <p><strong>Series:</strong> ${currentItem.series || 'Mainline'}</p>
-                    <p><strong>Condition:</strong> Mint in Blister (MIB)</p>
-                </div>
-            `;
-            
-            // Insert it before the description paragraph
-            const descElement = document.querySelector('.description');
-            descElement.insertAdjacentHTML('beforebegin', detailsHtml);
-        }
-    }
-};
+                    const specsHtml = `
+                        <div class="product-specs">
+                            <p><strong>Manufacturer:</strong> ${currentItem.manufacturer || 'Mattel'}</p>
+                            <p><strong>Release Year:</strong> ${currentItem.year || '2024'}</p>
+                            <p><strong>Series:</strong> ${currentItem.series || 'Mainline'}</p>
+                            <p><strong>Condition:</strong> Mint in Blister (MIB)</p>
+                        </div>`;
+                    document.querySelector('.description').insertAdjacentHTML('beforebegin', specsHtml);
+                }
+            }
+            updateCartBadge();
+        };
 
+        /* ── CART / WISHLIST ── */
         function addToCart() {
             if (!currentItem) return;
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart.push(currentItem);
             localStorage.setItem('cart', JSON.stringify(cart));
             alert(currentItem.name + ' added to cart!');
-            window.location.href = 'cart.html'; 
+            window.location.href = 'cart.html';
         }
 
         function addToWishlist() {
@@ -282,6 +394,10 @@
             }
             window.location.href = 'wishlist.html';
         }
+
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const badge = document.getElementById('cart-count');
+        if (cart.length > 0) { badge.style.display = 'inline'; badge.textContent = cart.length; }
     </script>
 </body>
 </html>

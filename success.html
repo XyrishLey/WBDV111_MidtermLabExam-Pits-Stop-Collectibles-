@@ -3,154 +3,738 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Success | Pits Stop</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>Order Placed | Pits Stops Collectibles</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
-        body { 
-            background: #0a0a0a; 
-            color: white; 
-            font-family: 'Inter', sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0;
-            overflow: hidden;
+        /* ── SUCCESS PAGE ─────────────────────────────────────────── */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: var(--bg);
+            overflow-x: hidden;
         }
 
-        .success-container { 
-            background: #151515;
-            padding: 60px; 
-            border-radius: 15px; 
-            box-shadow: 0 0 40px rgba(230, 0, 0, 0.3); 
-            border: 1px solid #333;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-        }
-
-        h1 { 
-            font-family: 'Orbitron', sans-serif;
-            color: #e60000; 
-            font-size: 2rem;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-        }
-
-        #status-text {
-            color: #888;
-            margin-bottom: 30px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .progress-bar { 
-            width: 100%; 
-            height: 6px; 
-            background: #222; 
-            border-radius: 10px; 
-            margin: 20px 0; 
-            overflow: hidden; 
-        }
-
-        .progress-fill { 
-            height: 100%; 
-            width: 0%; 
-            background: #e60000; 
-            box-shadow: 0 0 15px #e60000;
-            transition: width 2.5s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-
-        .tracking-num { 
-            background: #222;
-            padding: 10px;
-            border-radius: 5px;
-            color: #fff; 
-            font-family: 'Orbitron', sans-serif; 
-            font-size: 0.9rem; 
-            margin: 25px 0;
-            border: 1px dashed #444;
-        }
-
-        .home-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 30px;
-            background: #e60000;
-            color: white;
-            text-decoration: none;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
-            border-radius: 5px;
-            transition: 0.3s;
-            opacity: 0;
-            transform: translateY(10px);
+        /* Subtle grid like rest of site */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.3;
             pointer-events: none;
+            z-index: 0;
         }
 
-        .home-btn.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
+        /* Red radial glow */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 30%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px; height: 500px;
+            background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .home-btn:hover {
-            background: #ff1a1a;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        .page-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 640px;
+            padding: 110px 20px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
         }
 
-        #check-mark {
+        /* ══════════════════════════════════════
+           PHASE 1 — PROCESSING SCREEN
+        ══════════════════════════════════════ */
+        #phase-processing {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 24px;
+            animation: fadeUp 0.6s ease both;
+        }
+
+        .processing-icon {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .processing-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .processing-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 8vw, 3.2rem);
+            letter-spacing: 5px;
+            color: var(--text);
+            line-height: 1;
+            margin: 0;
+        }
+
+        .processing-steps {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            max-width: 380px;
+            text-align: left;
+        }
+
+        .processing-steps li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            transition: color 0.4s;
+        }
+
+        .step-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
+        }
+
+        .processing-steps li.done .step-dot {
+            background: #00cc66;
+            border-color: #00cc66;
+            box-shadow: 0 0 8px rgba(0,204,102,0.5);
+        }
+        .processing-steps li.done { color: var(--text); }
+
+        .processing-steps li.active .step-dot {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow);
+            animation: pulse 1s ease infinite;
+        }
+        .processing-steps li.active { color: var(--accent); }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+        }
+
+        /* ══════════════════════════════════════
+           PHASE 2 — SUCCESS SCREEN
+        ══════════════════════════════════════ */
+        #phase-success {
             display: none;
-            font-size: 3rem;
-            color: #00ff00;
-            margin-bottom: 20px;
-            animation: pop 0.4s ease-out;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+            animation: fadeUp 0.7s ease both;
         }
 
-        @keyframes pop {
-            0% { transform: scale(0); }
-            80% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Checkmark */
+        .success-check {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: rgba(0,204,102,0.1);
+            border: 2px solid #00cc66;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        .success-eyebrow {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            color: #00cc66;
+            background: rgba(0,204,102,0.08);
+            border: 1px solid rgba(0,204,102,0.25);
+            padding: 5px 16px;
+            border-radius: 2px;
+        }
+
+        .success-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.8rem, 10vw, 5rem);
+            letter-spacing: 6px;
+            color: var(--text);
+            line-height: 1;
+            margin: 0;
+            text-align: center;
+        }
+
+        .success-title span {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--accent);
+        }
+
+        .success-sub {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.7;
+            max-width: 420px;
+        }
+
+        /* ── ORDER CARD ── */
+        .order-card {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .order-card-header {
+            background: rgba(230,0,0,0.08);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .order-card-header span {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .order-id {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+        }
+
+        .order-card-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .order-row .label {
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .order-row .value {
+            font-weight: 700;
+            color: var(--text);
+            text-align: right;
+            max-width: 60%;
+        }
+
+        .order-row .value.green  { color: #00cc66; }
+        .order-row .value.accent { color: var(--accent); }
+
+        /* ── TRACKING TIMELINE ── */
+        .tracking-section {
+            width: 100%;
+        }
+
+        .tracking-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            color: var(--text);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tracking-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .timeline-left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 32px;
+            flex-shrink: 0;
+        }
+
+        .timeline-dot {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            transition: all 0.5s;
+            border: 2px solid var(--border);
+            background: var(--bg-alt);
+            color: var(--text-muted);
+        }
+
+        .timeline-dot.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 16px var(--accent-glow);
+            color: #fff;
+        }
+
+        .timeline-dot.done {
+            background: rgba(0,204,102,0.15);
+            border-color: #00cc66;
+            color: #00cc66;
+        }
+
+        .timeline-dot.pending {
+            opacity: 0.4;
+        }
+
+        .timeline-line {
+            width: 2px;
+            flex: 1;
+            min-height: 36px;
+            background: var(--border);
+            margin: 4px 0;
+        }
+
+        .timeline-line.done { background: #00cc66; }
+        .timeline-line.active { background: linear-gradient(to bottom, #00cc66, var(--border)); }
+
+        .timeline-content {
+            padding-bottom: 28px;
+            flex: 1;
+        }
+
+        .timeline-content h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            color: var(--text);
+            margin: 0 0 4px;
+        }
+
+        .timeline-content h4.pending-text { color: var(--text-muted); }
+
+        .timeline-content p {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .timeline-time {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            opacity: 0.7;
+        }
+
+        /* ── ACTION BUTTONS ── */
+        .action-btns {
+            display: flex;
+            gap: 14px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .btn-home {
+            flex: 1;
+            min-width: 140px;
+            padding: 16px;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            border-radius: 4px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+
+        .btn-home:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--accent-glow); }
+
+        .btn-fb {
+            flex: 1;
+            min-width: 140px;
+            padding: 16px;
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            border-radius: 4px;
+            text-align: center;
+            border: 1.5px solid var(--border);
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .btn-fb:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── PENDING NOTICE ── */
+        .pending-notice {
+            width: 100%;
+            background: rgba(255,165,0,0.06);
+            border: 1px solid rgba(255,165,0,0.3);
+            border-left: 4px solid orange;
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .pending-notice strong { color: orange; }
+
+        @media (max-width: 480px) {
+            .action-btns { flex-direction: column; }
+            .order-card-body { padding: 18px; }
         }
     </style>
 </head>
 <body>
-    <div class="success-container">
-        <div id="check-mark">✓</div>
-        <h1 id="main-title">ORDER PLACED!</h1>
-        <p id="status-text">Processing your collectibles...</p>
-        
-        <div class="progress-bar">
-            <div class="progress-fill" id="fill"></div>
+
+    <!-- ══ HEADER ══ -->
+    <header>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hot Wheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Hot Wheels Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+            </ul>
+            <div class="nav-right">
+                <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hamburger Drawer -->
+    <div class="hamburger-overlay" id="drawerOverlay"></div>
+    <nav class="hamburger-drawer" id="hamburgerDrawer">
+        <button class="drawer-close" id="drawerClose">✕</button>
+        <div class="drawer-greeting">Pits Stops Collectibles</div>
+        <span class="drawer-label">Navigation</span>
+        <a href="index.html" class="drawer-link">Home</a>
+        <span class="drawer-label">Brands</span>
+        <a href="hotwheels.html" class="drawer-link">Hot Wheels</a>
+        <a href="premium.html" class="drawer-link">Hot Wheels Premium</a>
+        <a href="matchbox.html" class="drawer-link">Matchbox</a>
+        <div class="drawer-divider"></div>
+        <a href="aboutUs.html" class="drawer-link">About Us</a>
+        <a href="cart.html" class="drawer-link drawer-link--accent">🛒 Cart</a>
+    </nav>
+
+    <div class="page-content">
+
+        <!-- ══ PHASE 1: PROCESSING ══ -->
+        <div id="phase-processing">
+            <div class="processing-icon"></div>
+            <p class="processing-label">Please Wait</p>
+            <h1 class="processing-title">Processing Order</h1>
+
+            <ul class="processing-steps">
+                <li id="step-1"><span class="step-dot"></span> Securing your order details</li>
+                <li id="step-2"><span class="step-dot"></span> Verifying payment information</li>
+                <li id="step-3"><span class="step-dot"></span> Notifying the seller</li>
+                <li id="step-4"><span class="step-dot"></span> Generating order confirmation</li>
+            </ul>
         </div>
 
-        <div class="tracking-num">
-            <span style="color: #666;">TRACKING:</span> PITS-88-SKYLNE
+        <!-- ══ PHASE 2: SUCCESS ══ -->
+        <div id="phase-success">
+            <div class="success-check">✓</div>
+            <span class="success-eyebrow">Order Request Submitted</span>
+            <h1 class="success-title">Order <span>Placed!</span></h1>
+            <p class="success-sub">
+                Your order has been sent to the seller for approval.
+                You'll be contacted via <strong>Facebook</strong> once your payment is verified and your parcel is ready to ship.
+            </p>
+
+            <!-- Order Info Card -->
+            <div class="order-card">
+                <div class="order-card-header">
+                    <span>Order Reference</span>
+                    <span class="order-id" id="display-order-id">ORD-????</span>
+                </div>
+                <div class="order-card-body">
+                    <div class="order-row">
+                        <span class="label">Status</span>
+                        <span class="value" style="color: orange;">⏳ Pending Seller Approval</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="label">Customer</span>
+                        <span class="value" id="display-name">—</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="label">Total Paid</span>
+                        <span class="value accent" id="display-total">—</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="label">Payment</span>
+                        <span class="value" id="display-payment">—</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="label">Courier</span>
+                        <span class="value" id="display-courier">—</span>
+                    </div>
+                    <div class="order-row">
+                        <span class="label">Date</span>
+                        <span class="value" id="display-date">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracking Timeline -->
+            <div class="tracking-section">
+                <p class="tracking-title">Parcel Journey</p>
+                <div class="timeline">
+
+                    <div class="timeline-item">
+                        <div class="timeline-left">
+                            <div class="timeline-dot done">✓</div>
+                            <div class="timeline-line done"></div>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Order Placed</h4>
+                            <p>Your order request has been submitted successfully.</p>
+                            <p class="timeline-time" id="placed-time">—</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-left">
+                            <div class="timeline-dot active">⏳</div>
+                            <div class="timeline-line active"></div>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Awaiting Seller Approval</h4>
+                            <p>The seller is reviewing your payment. This usually takes a few hours.</p>
+                            <p class="timeline-time">In Progress</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-left">
+                            <div class="timeline-dot pending">📦</div>
+                            <div class="timeline-line"></div>
+                        </div>
+                        <div class="timeline-content">
+                            <h4 class="pending-text">Order Confirmed & Packing</h4>
+                            <p>Seller will pack your diecast carefully once payment is approved.</p>
+                            <p class="timeline-time">Upcoming</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-left">
+                            <div class="timeline-dot pending">🚚</div>
+                            <div class="timeline-line"></div>
+                        </div>
+                        <div class="timeline-content">
+                            <h4 class="pending-text">Handed to Courier</h4>
+                            <p>Your parcel will be dropped off at the courier or picked up by Lalamove.</p>
+                            <p class="timeline-time">Upcoming</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-left">
+                            <div class="timeline-dot pending">🏁</div>
+                        </div>
+                        <div class="timeline-content" style="padding-bottom: 0;">
+                            <h4 class="pending-text">Delivered!</h4>
+                            <p>Your collectible arrives at your door. Happy collecting! 🎉</p>
+                            <p class="timeline-time">Upcoming</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Pending Notice -->
+            <div class="pending-notice">
+                💬 <strong>How to track your order:</strong> Since this is a small business, the seller will personally message you on
+                <strong>Facebook</strong> with updates. Make sure your Facebook is linked to your account or message the page directly at
+                <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" style="color: var(--accent);">Pits Stops Collectibles</a>.
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-btns">
+                <a href="index.html" class="btn-home">Back to Home →</a>
+                <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="btn-fb">Message Seller →</a>
+            </div>
         </div>
 
-        <a href="index.html" class="home-btn" id="home-btn">BACK TO HOME</a>
     </div>
 
     <script>
+        /* ── THEME + DRAWER ── */
+        const themeBtn = document.getElementById('themeBtn');
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') { document.documentElement.setAttribute('data-theme','light'); themeBtn.textContent = '☀️'; }
+        themeBtn.addEventListener('click', () => {
+            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+            document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            themeBtn.textContent = isLight ? '🌙' : '☀️';
+        });
+
+        const hamburgerBtn    = document.getElementById('hamburgerBtn');
+        const hamburgerDrawer = document.getElementById('hamburgerDrawer');
+        const drawerOverlay   = document.getElementById('drawerOverlay');
+        const drawerClose     = document.getElementById('drawerClose');
+        function openDrawer()  { hamburgerDrawer.classList.add('open'); drawerOverlay.classList.add('open'); hamburgerBtn.classList.add('active'); }
+        function closeDrawer() { hamburgerDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); hamburgerBtn.classList.remove('active'); }
+        hamburgerBtn.addEventListener('click', openDrawer);
+        drawerClose.addEventListener('click', closeDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        /* ── PROCESSING ANIMATION → SUCCESS ── */
         window.onload = function() {
-            const fill = document.getElementById('fill');
-            const status = document.getElementById('status-text');
-            const title = document.getElementById('main-title');
-            const btn = document.getElementById('home-btn');
-            const check = document.getElementById('check-mark');
 
-            setTimeout(() => { 
-                fill.style.width = '100%'; 
-            }, 100);
+            // Load last order from localStorage
+            const orders = JSON.parse(localStorage.getItem('allOrders')) || [];
+            const order  = orders[orders.length - 1] || {};
 
-            setTimeout(() => {
-                status.innerText = "Order Confirmed & Ready for Shipping";
-                status.style.color = "#00ff00";
-                title.innerText = "SUCCESS!";
-                check.style.display = "block";
-                btn.classList.add('show');
-            }, 2600);
+            const steps = ['step-1','step-2','step-3','step-4'];
+            const delays = [600, 1400, 2200, 3000]; // when each step turns "done"
+
+            // Activate first step immediately
+            document.getElementById('step-1').classList.add('active');
+
+            steps.forEach((id, i) => {
+                // Mark current step as active after previous done
+                if (i > 0) {
+                    setTimeout(() => {
+                        document.getElementById(steps[i-1]).classList.remove('active');
+                        document.getElementById(steps[i-1]).classList.add('done');
+                        document.getElementById(id).classList.add('active');
+                    }, delays[i] - 200);
+                }
+                // Mark last step done then show success
+                if (i === steps.length - 1) {
+                    setTimeout(() => {
+                        document.getElementById(id).classList.remove('active');
+                        document.getElementById(id).classList.add('done');
+
+                        // Short pause then switch to success screen
+                        setTimeout(() => {
+                            const processing = document.getElementById('phase-processing');
+                            const success    = document.getElementById('phase-success');
+
+                            processing.style.transition = 'opacity 0.5s';
+                            processing.style.opacity = '0';
+
+                            setTimeout(() => {
+                                processing.style.display = 'none';
+                                success.style.display = 'flex';
+
+                                // Populate order card
+                                const courierMap = { lbc: 'LBC Express', lalamove: 'Lalamove', seller: 'Seller Delivery', cod: 'COD' };
+                                const payMap     = { gcash: 'GCash', maya: 'Maya', cod: 'Cash on Delivery' };
+
+                                document.getElementById('display-order-id').textContent = order.orderID  || 'ORD-????';
+                                document.getElementById('display-name').textContent     = order.user     || '—';
+                                document.getElementById('display-total').textContent    = order.total ? '₱' + order.total : '—';
+                                document.getElementById('display-payment').textContent  = payMap[order.payment]  || order.payment  || '—';
+                                document.getElementById('display-courier').textContent  = courierMap[order.courier] || order.courier || '—';
+                                document.getElementById('display-date').textContent     = order.date     || new Date().toLocaleDateString('en-PH');
+                                document.getElementById('placed-time').textContent      = order.date     || new Date().toLocaleDateString('en-PH');
+
+                            }, 500);
+                        }, 600);
+                    }, delays[i] + 400);
+                }
+            });
         };
     </script>
 </body>

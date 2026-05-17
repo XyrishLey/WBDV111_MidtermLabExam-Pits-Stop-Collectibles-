@@ -3,130 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | Pit Stops Collectibles</title>
+    <title>About Us | Pits Stops Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
+        /* ── ABOUT PAGE ONLY STYLES ───────────────────────────────
+           All colours use CSS variables from style.css so light/dark
+           theme toggling works automatically.
+        ──────────────────────────────────────────────────────── */
+
         .about-hero {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 100px 20px;
+            padding: 160px 24px 100px;
             text-align: center;
-            min-height: 80vh;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
         }
 
+        /* Same subtle grid overlay as the main hero */
+        .about-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        /* Radial glow */
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 40%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 400px;
+            background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .about-inner {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 48px;
+            max-width: 860px;
+            width: 100%;
+            animation: fadeUp 0.9s ease both;
+        }
+
+        /* ── EYEBROW ── */
+        .about-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .about-eyebrow .eyebrow-line {
+            display: block;
+            width: 40px; height: 1px;
+            background: var(--accent);
+        }
+
+        .about-eyebrow .eyebrow-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            background: rgba(230,0,0,0.08);
+            border: 1px solid rgba(230,0,0,0.25);
+            padding: 6px 16px;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ── PAGE TITLE ── */
+        .about-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            letter-spacing: 6px;
+            color: var(--text);
+            line-height: 1;
+            margin: 0;
+        }
+
+        .about-title span {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--text);
+        }
+
+        /* ── SOCIAL LINKS ── */
         .social-container {
             display: flex;
-            gap: 40px;
-            margin-bottom: 40px;
+            gap: 32px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
         .social-box {
             text-decoration: none;
-            color: white;
-            transition: transform 0.3s ease;
+            color: var(--text);
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 12px;
+            padding: 24px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
         }
 
         .social-box:hover {
-            transform: scale(1.1);
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 28px var(--accent-glow);
         }
 
         .social-box img {
-            width: 80px; 
-            height: 80px;
+            width: 64px;
+            height: 64px;
             object-fit: contain;
-            margin-bottom: 15px;
         }
 
         .social-box h3 {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Bebas Neue', sans-serif;
             font-size: 1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
             margin: 0;
         }
 
+        /* ── DESCRIPTION CARD ── */
         .about-description {
-            max-width: 800px;
-            background: rgba(26, 26, 26, 0.9);
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid #333;
-            box-shadow: 0 0 20px rgba(230, 0, 0, 0.2);
+            width: 100%;
+            background: var(--surface);
+            padding: 36px 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 0 32px var(--accent-glow);
+            text-align: left;
         }
 
         .about-description p {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.8;
-            font-size: 1.1rem;
-            color: #ccc;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 400;
+            line-height: 1.85;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .about-description p strong {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        @media (max-width: 600px) {
+            .about-description { padding: 24px 22px; }
+            .social-box { padding: 20px 24px; }
         }
     </style>
 </head>
 <body>
+
+    <!-- ══ HEADER ══ -->
     <header>
         <nav class="nav-bar">
-            <a href="index.html" class="nav-logo">
-                <h2 class="logo-text">Pits Stops Collectibles</h2>
-            </a>
-            
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
 
             <ul class="nav-menu">
-    <li class="nav-item"><a href="index.html" class="nav-button">Home</a></li>
-    <li class="nav-item dropdown">
-        <a href="#" class="nav-button">Brands ▾</a>
-        <ul class="dropdown-menu">
-            <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
-            <li><a href="premium.html" class="nav-button">Hotwheels Premium</a></li>
-            <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
-        </ul>
-    </li>
-    <li class="nav-item"><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
-    <li class="nav-item"><a href="cart.html" class="nav-button">🛒 Cart</a></li>
-    <li class="nav-item"><a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button">Contact</a></li>
-    <span id="authSection" style="display: flex; align-items: center;"></span>
-</ul>
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hot Wheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Hot Wheels Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li>
+                    <a href="cart.html" class="nav-button">
+                        🛒 Cart <span id="cart-count" style="display:none; background:var(--accent); color:#fff; border-radius:50%; padding:1px 6px; font-size:0.7rem; margin-left:4px;">0</span>
+                    </a>
+                </li>
+                <li><a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button" target="_blank">Contact</a></li>
+            </ul>
+
+            <div class="nav-right">
+                <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+            </div>
         </nav>
     </header>
 
+    <!-- Hamburger Drawer -->
+    <div class="hamburger-overlay" id="drawerOverlay"></div>
+    <nav class="hamburger-drawer" id="hamburgerDrawer">
+        <button class="drawer-close" id="drawerClose">✕</button>
+        <div class="drawer-greeting">Pits Stops Collectibles</div>
+        <span class="drawer-label">Navigation</span>
+        <a href="index.html" class="drawer-link">Home</a>
+        <span class="drawer-label">Brands</span>
+        <a href="hotwheels.html" class="drawer-link">Hot Wheels</a>
+        <a href="premium.html" class="drawer-link">Hot Wheels Premium</a>
+        <a href="matchbox.html" class="drawer-link">Matchbox</a>
+        <div class="drawer-divider"></div>
+        <a href="aboutUs.html" class="drawer-link">About Us</a>
+        <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
+        <a href="cart.html" class="drawer-link drawer-link--accent">🛒 Cart</a>
+        <a href="https://www.facebook.com/profile.php?id=61572190615239" class="drawer-link" target="_blank">Contact</a>
+    </nav>
+
+    <!-- ══ ABOUT SECTION ══ -->
     <section class="about-hero">
-        <div class="social-container">
-            <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="social-box">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg" alt="Facebook">
-                <h3>Facebook</h3>
-            </a>
+        <div class="about-inner">
 
-            <a href="https://www.instagram.com/pitsstopcollectibles/" target="_blank" class="social-box">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-                <h3>Instagram</h3>
-            </a>
-        </div>
+            <div class="about-eyebrow">
+                <span class="eyebrow-line"></span>
+                <span class="eyebrow-text">Est. October 2025</span>
+                <span class="eyebrow-line"></span>
+            </div>
 
-        <div class="about-description">
-            <p>We are a toy collectibles reselling business which opened its doors to customers in October 2025. We provide collectors with special diecast car products which include Hot wheels, Matchbox and Tomica.</p>
+            <h1 class="about-title">About <span>Us</span></h1>
+
+            <div class="social-container">
+                <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="social-box">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg" alt="Facebook">
+                    <h3>Facebook</h3>
+                </a>
+                <a href="https://www.instagram.com/pitsstopcollectibles/" target="_blank" class="social-box">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+                    <h3>Instagram</h3>
+                </a>
+            </div>
+
+            <div class="about-description">
+                <p>
+                    We are a <strong>toy collectibles reselling business</strong> which opened its doors to customers in
+                    <strong>October 2025</strong>. We provide collectors with special diecast car products which include
+                    <strong>Hot Wheels</strong>, <strong>Matchbox</strong>, and <strong>Tomica</strong>.
+                </p>
+            </div>
+
         </div>
     </section>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.querySelector('.nav-menu');
-            menu.classList.toggle('active');
-        }
+    <!-- ══ FOOTER ══ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <h3>Pits Stops Collectibles</h3>
+            <p class="tagline">"Where Every Model Tells a Story"</p>
+            <p class="footer-info">
+                📍 Imus, Cavite, Philippines<br>
+                📦 Nationwide Shipping Available
+            </p>
+            <div class="social-links">
+                <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">
+                    Facebook Page →
+                </a>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© 2025 Pits Stops Collectibles — All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
 
-        document.addEventListener('click', (e) => {
-            const menu = document.querySelector('.nav-menu');
-            const toggle = document.querySelector('.menu-toggle');
-            if (menu && toggle && !menu.contains(e.target) && !toggle.contains(e.target)) {
-                menu.classList.remove('active');
-            }
+    <script>
+        /* ── THEME TOGGLE ── */
+        const themeBtn = document.getElementById('themeBtn');
+        const saved = localStorage.getItem('theme');
+        if (saved === 'light') { document.documentElement.setAttribute('data-theme', 'light'); themeBtn.textContent = '☀️'; }
+        themeBtn.addEventListener('click', () => {
+            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+            document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            themeBtn.textContent = isLight ? '🌙' : '☀️';
         });
+
+        /* ── HAMBURGER DRAWER ── */
+        const hamburgerBtn    = document.getElementById('hamburgerBtn');
+        const hamburgerDrawer = document.getElementById('hamburgerDrawer');
+        const drawerOverlay   = document.getElementById('drawerOverlay');
+        const drawerClose     = document.getElementById('drawerClose');
+
+        function openDrawer()  { hamburgerDrawer.classList.add('open'); drawerOverlay.classList.add('open'); hamburgerBtn.classList.add('active'); }
+        function closeDrawer() { hamburgerDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); hamburgerBtn.classList.remove('active'); }
+
+        hamburgerBtn.addEventListener('click', openDrawer);
+        drawerClose.addEventListener('click', closeDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        /* ── CART BADGE ── */
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const badge = document.getElementById('cart-count');
+        if (cart.length > 0) { badge.style.display = 'inline'; badge.textContent = cart.length; }
     </script>
 </body>
 </html>

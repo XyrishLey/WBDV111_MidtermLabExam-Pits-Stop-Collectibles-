@@ -3,110 +3,474 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout | Pits Stop Collectibles</title>
+    <title>Checkout | Pits Stops Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        body { background-color: #0a0a0a !important; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 50px 0; }
-        .checkout-box { max-width: 650px; width: 95%; padding: 40px; background: #111; border-radius: 15px; color: white; border: 1px solid #333; box-shadow: 0 0 30px rgba(230, 0, 0, 0.3); font-family: 'Inter', sans-serif; }
-        h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
-        .section-title { color: #e60000; border-bottom: 1px solid #333; margin: 25px 0 15px; padding-bottom: 5px; font-size: 1rem; }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: #888; }
-        .input-group input, .input-group select { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 5px; font-family: 'Inter', sans-serif; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
-        #payment-verify-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .loader { border: 5px solid #333; border-top: 5px solid #e60000; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 20px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .success-check { color: #e60000; font-size: 4rem; display: none; }
-        
-        .place-order-btn { width: 100%; padding: 18px; background: #e60000; color: white; border: none; border-radius: 5px; font-family: 'Orbitron', sans-serif; cursor: pointer; margin-top: 20px; transition: 0.3s; font-size: 1.1rem; }
-        .place-order-btn:hover { background: #ff0000; box-shadow: 0 0 20px rgba(230, 0, 0, 0.6); }
+        /* ── CHECKOUT PAGE STYLES ─────────────────────────────────
+           Uses style.css variables throughout for theme support.
+        ──────────────────────────────────────────────────────── */
 
-        .conditional-info { display: none; background: rgba(230,0,0,0.05); padding: 15px; border-radius: 8px; border-left: 3px solid #e60000; margin-bottom: 15px; }
-        .restriction-note { font-size: 0.75rem; color: #e60000; margin-top: 5px; font-style: italic; }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 110px 20px 60px;
+            background: var(--bg);
+        }
 
-        /* Payment Details Box */
-        .payment-instructions { display: none; background: #1a1a1a; border: 1px solid #e60000; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; }
-        
-        /* Preview Styles */
-        #image-preview-container { display: none; margin-top: 10px; text-align: center; background: #000; padding: 10px; border-radius: 5px; position: relative; }
-        #payment-preview { max-width: 100%; max-height: 200px; border: 1px solid #e60000; border-radius: 5px; }
-        .remove-img { color: #ff0000; cursor: pointer; font-size: 0.8rem; text-decoration: underline; display: block; margin-top: 5px; }
+        /* ── PAGE TITLE ── */
+        .checkout-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        .checkout-eyebrow span {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            background: rgba(230,0,0,0.08);
+            border: 1px solid rgba(230,0,0,0.25);
+            padding: 5px 14px;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        .checkout-eyebrow .eyebrow-line { display: block; width: 32px; height: 1px; background: var(--accent); }
+
+        .checkout-heading {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            letter-spacing: 5px;
+            color: var(--text);
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        /* ── CHECKOUT BOX ── */
+        .checkout-box {
+            max-width: 680px;
+            width: 100%;
+            padding: 44px 40px;
+            background: var(--surface);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        /* Section titles */
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            margin: 30px 0 18px;
+            text-transform: uppercase;
+        }
+        .section-title:first-child { margin-top: 0; }
+
+        /* ── FORM ELEMENTS ── */
+        .input-group { margin-bottom: 14px; }
+
+        .input-group label {
+            display: block;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 5px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .input-group input::placeholder { color: var(--text-muted); font-weight: 400; }
+
+        /* Readonly zip */
+        .input-group input[readonly] {
+            background: rgba(230,0,0,0.06);
+            border-color: rgba(230,0,0,0.3);
+            color: var(--accent);
+            font-weight: 700;
+            cursor: not-allowed;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        .restriction-note {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-top: 6px;
+            display: none;
+            font-style: italic;
+        }
+
+        /* ── CONDITIONAL BLOCKS ── */
+        .conditional-info {
+            display: none;
+            background: rgba(230,0,0,0.04);
+            padding: 14px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+            margin-bottom: 14px;
+        }
+
+        /* ── PAYMENT INSTRUCTIONS ── */
+        .payment-instructions {
+            display: none;
+            background: var(--bg-alt);
+            border: 1px solid var(--accent);
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+        .payment-instructions p { font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; color: var(--text-muted); margin: 4px 0; }
+        .payment-instructions strong { color: var(--text); }
+        .payment-instructions .acct-number {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin: 8px 0;
+        }
+
+        /* ── PROOF UPLOAD ── */
+        .proof-section {
+            display: none;
+            background: var(--bg-alt);
+            padding: 18px;
+            border-radius: 8px;
+            border: 1px dashed var(--accent);
+            margin-bottom: 14px;
+        }
+
+        .proof-section label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .proof-section input[type="file"] {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            margin: 8px 0 14px;
+            cursor: pointer;
+        }
+
+        .proof-section input[type="text"] {
+            width: 100%;
+            padding: 11px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 5px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .proof-section input[type="text"]:focus { border-color: var(--accent); }
+
+        #image-preview-container {
+            display: none;
+            margin: 10px 0;
+            text-align: center;
+            background: var(--bg);
+            padding: 10px;
+            border-radius: 6px;
+        }
+        #payment-preview { max-width: 100%; max-height: 200px; border: 1px solid var(--accent); border-radius: 5px; }
+        .remove-img { color: var(--accent); cursor: pointer; font-size: 0.8rem; text-decoration: underline; display: block; margin-top: 6px; font-family: 'Rajdhani', sans-serif; }
+
+        /* ── TOTAL BOX ── */
+        .total-box {
+            background: rgba(230,0,0,0.07);
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(230,0,0,0.3);
+            margin-bottom: 6px;
+        }
+        .total-box h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            color: var(--text);
+            margin: 0;
+        }
+        .total-box small {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            display: none;
+        }
+
+        /* ── PLACE ORDER BUTTON ── */
+        .place-order-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            margin-top: 18px;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+        .place-order-btn:hover {
+            background: #ff1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px var(--accent-glow);
+        }
+        .place-order-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ── SECURITY BADGE ── */
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 14px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        /* ── VERIFY OVERLAY ── */
+        #payment-verify-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.96);
+            z-index: 9000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        #payment-verify-overlay.active { display: flex; }
+
+        .loader {
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            width: 56px; height: 56px;
+            animation: spin 0.9s linear infinite;
+            margin-bottom: 24px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #success-icon { color: var(--accent); font-size: 3.5rem; display: none; margin-bottom: 16px; }
+        #status-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 4px;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        #sub-status { font-family: 'Rajdhani', sans-serif; color: var(--text-muted); font-size: 0.95rem; }
+
+        /* ── FIELD ERROR STATE ── */
+        .input-group input.error,
+        .input-group select.error { border-color: #ff4444; box-shadow: 0 0 0 3px rgba(255,68,68,0.2); }
+        .field-error { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: #ff4444; letter-spacing: 1px; margin-top: 4px; display: none; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .checkout-box { padding: 28px 20px; }
+            .grid-2 { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- ══ VERIFY OVERLAY ══ -->
     <div id="payment-verify-overlay">
         <div id="loader-icon" class="loader"></div>
-        <div id="success-icon" class="success-check">⌛</div>
-        <h2 id="status-text" style="font-family: 'Orbitron';">Verifying Details...</h2>
-        <p id="sub-status" style="color: #888;">Please wait while we submit your order request.</p>
+        <div id="success-icon">⌛</div>
+        <h2 id="status-text">Verifying Details...</h2>
+        <p id="sub-status">Please wait while we submit your order request.</p>
     </div>
 
-    <div class="checkout-box">
-        <h2>Finalize Your Order</h2>
+    <!-- ══ HEADER ══ -->
+    <header>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hot Wheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Hot Wheels Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart <span id="cart-count" style="display:none; background:var(--accent); color:#fff; border-radius:50%; padding:1px 6px; font-size:0.7rem; margin-left:4px;">0</span></a></li>
+            </ul>
+            <div class="nav-right">
+                <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+            </div>
+        </nav>
+    </header>
 
-        <h3 class="section-title">1. Delivery Method</h3>
+    <!-- Hamburger Drawer -->
+    <div class="hamburger-overlay" id="drawerOverlay"></div>
+    <nav class="hamburger-drawer" id="hamburgerDrawer">
+        <button class="drawer-close" id="drawerClose">✕</button>
+        <div class="drawer-greeting">Pits Stops Collectibles</div>
+        <span class="drawer-label">Navigation</span>
+        <a href="index.html" class="drawer-link">Home</a>
+        <span class="drawer-label">Brands</span>
+        <a href="hotwheels.html" class="drawer-link">Hot Wheels</a>
+        <a href="premium.html" class="drawer-link">Hot Wheels Premium</a>
+        <a href="matchbox.html" class="drawer-link">Matchbox</a>
+        <div class="drawer-divider"></div>
+        <a href="aboutUs.html" class="drawer-link">About Us</a>
+        <a href="cart.html" class="drawer-link drawer-link--accent">🛒 Cart</a>
+    </nav>
+
+    <!-- ══ PAGE TITLE ══ -->
+    <div class="checkout-eyebrow">
+        <span class="eyebrow-line"></span>
+        <span>Secure Checkout</span>
+        <span class="eyebrow-line"></span>
+    </div>
+    <h1 class="checkout-heading">Finalize Your Order</h1>
+
+    <!-- ══ CHECKOUT FORM ══ -->
+    <div class="checkout-box">
+
+        <!-- STEP 1: Delivery -->
+        <p class="section-title">1 — Delivery Method</p>
         <div class="input-group">
+            <label>Courier</label>
             <select id="courier-select" onchange="handleCourierChange()">
                 <option value="">Select Courier</option>
                 <option value="lbc">LBC Express (Branch Pickup)</option>
-                <option value="lalamove">Lalamove (Rizal/NCR only)</option>
+                <option value="lalamove">Lalamove (Rizal / NCR only)</option>
                 <option value="seller" id="seller-delivery-opt">Seller Own Delivery (Rizal Only)</option>
             </select>
-            <p id="courier-note" class="restriction-note" style="display:none;">*Seller Delivery is unavailable for your province.</p>
+            <p id="courier-note" class="restriction-note">* Seller Delivery is unavailable outside Rizal.</p>
         </div>
 
         <div id="lbc-branch-info" class="conditional-info">
             <div class="input-group">
-                <label>Target LBC Branch Name (Required)</label>
-                <input type="text" id="lbc-branch" placeholder="e.g. LBC SM North EDSA">
+                <label>Target LBC Branch Name <span style="color:var(--accent)">*</span></label>
+                <input type="text" id="lbc-branch" placeholder="e.g. LBC SM North EDSA" maxlength="100">
             </div>
         </div>
 
-        <h3 class="section-title">2. Full Shipping Address</h3>
+        <!-- STEP 2: Address -->
+        <p class="section-title">2 — Shipping Address</p>
+
         <div class="input-group">
-            <label>Receiver Full Name</label>
-            <input type="text" id="check-name" placeholder="Full Name">
+            <label>Receiver Full Name <span style="color:var(--accent)">*</span></label>
+            <input type="text" id="check-name" placeholder="Full Name" maxlength="80" autocomplete="name">
         </div>
 
         <div class="grid-2">
             <div class="input-group">
-                <label>Region</label>
-                <select id="region"></select>
+                <label>Region <span style="color:var(--accent)">*</span></label>
+                <select id="region" onchange="onRegionChange()">
+                    <option value="">Loading regions…</option>
+                </select>
             </div>
             <div class="input-group">
-                <label>Province / District</label>
-                <select id="province"></select>
+                <label>Province / District <span style="color:var(--accent)">*</span></label>
+                <select id="province" onchange="onProvinceChange()" disabled>
+                    <option value="">Select Region first</option>
+                </select>
             </div>
         </div>
 
         <div class="grid-2">
             <div class="input-group">
-                <label>City / Municipality</label>
-                <select id="city"></select>
+                <label>City / Municipality <span style="color:var(--accent)">*</span></label>
+                <select id="city" onchange="onCityChange()" disabled>
+                    <option value="">Select Province first</option>
+                </select>
             </div>
             <div class="input-group">
                 <label>Zip Code</label>
-                <input type="text" id="zip-code" readonly placeholder="Auto-filled" style="background: #1a1a1a; border: 1px solid #333; color: #e60000; font-weight: bold;">
+                <input type="text" id="zip-code" readonly placeholder="Auto-filled" maxlength="10">
             </div>
         </div>
 
         <div class="input-group">
-            <label>Barangay</label>
-            <select id="barangay"></select>
+            <label>Barangay <span style="color:var(--accent)">*</span></label>
+            <select id="barangay" disabled>
+                <option value="">Select City first</option>
+            </select>
         </div>
 
         <div class="input-group">
-            <label>House No. / Street / Landmark</label>
-            <input type="text" id="check-address" placeholder="Bldg Name, Street, etc.">
+            <label>House No. / Street / Landmark <span style="color:var(--accent)">*</span></label>
+            <input type="text" id="check-address" placeholder="Bldg Name, Street, Landmark" maxlength="200" autocomplete="street-address">
         </div>
 
-        <h3 class="section-title">3. Payment</h3>
         <div class="input-group">
+            <label>Contact Number <span style="color:var(--accent)">*</span></label>
+            <input type="tel" id="contact-number" placeholder="09XX XXX XXXX" maxlength="13" autocomplete="tel">
+        </div>
+
+        <!-- STEP 3: Payment -->
+        <p class="section-title">3 — Payment</p>
+        <div class="input-group">
+            <label>Payment Method <span style="color:var(--accent)">*</span></label>
             <select id="payment-method" onchange="togglePaymentFields()">
                 <option value="">Select Payment Method</option>
                 <option value="gcash">GCash</option>
@@ -116,239 +480,466 @@
         </div>
 
         <div id="payment-instr" class="payment-instructions">
-            <p style="font-size: 0.9rem; margin-bottom: 10px;">Please send payment to:</p>
-            <p><strong id="method-name">GCash</strong>: 0912 345 6789</p>
-            <p>Name: K** J** B*M**A.</p>
-            <p style="font-size: 0.75rem; color: #888; margin-top: 10px;">Note: Orders are subject to seller approval.</p>
+            <p>Send payment to:</p>
+            <p><strong id="method-name">GCash</strong></p>
+            <p class="acct-number">0912 345 6789</p>
+            <p>Account Name: <strong>K** J** B*M**A.</strong></p>
+            <p style="font-size:0.78rem; margin-top:10px; color:var(--text-muted);">Orders are subject to seller approval after payment verification.</p>
         </div>
 
-        <div id="proof-section" style="display:none; background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px dashed #e60000; margin-bottom: 15px;">
-            <label style="font-size: 0.8rem; color: #888;">Upload Transaction Proof (Required)</label>
-            <input type="file" id="payment-img" style="margin: 10px 0;" accept="image/*" onchange="previewImage(this)">
-            
+        <div id="proof-section" class="proof-section">
+            <label>Upload Payment Screenshot <span style="color:var(--accent)">*</span></label>
+            <input type="file" id="payment-img" accept="image/png,image/jpeg,image/jpg,image/webp" onchange="previewImage(this)">
             <div id="image-preview-container">
                 <img id="payment-preview" src="#" alt="Proof Preview">
-                <span class="remove-img" onclick="removeImage()">Remove Image</span>
+                <span class="remove-img" onclick="removeImage()">✕ Remove Image</span>
             </div>
-
-            <input type="text" id="ref-code" maxlength="4" placeholder="Last 4 digits of Ref No.">
+            <label style="margin-top: 12px;">Last 4 Digits of Reference No. <span style="color:var(--accent)">*</span></label>
+            <input type="text" id="ref-code" maxlength="4" placeholder="e.g. 5678" inputmode="numeric" pattern="[0-9]{4}">
         </div>
 
-        <div style="background: rgba(230,0,0,0.1); padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e60000;">
-            <h3 style="margin:0;">Total: ₱<span id="final-price">0</span></h3>
-            <small id="fee-note" style="color: #888; display: none;">(Includes ₱60 Rizal COD Fee)</small>
+        <!-- TOTAL -->
+        <div class="total-box">
+            <h3>Total: ₱<span id="final-price">0</span></h3>
+            <small id="fee-note">(Includes ₱60 Rizal COD Fee)</small>
         </div>
 
-        <button class="place-order-btn" onclick="startFinalProcess()">Place Order Now</button>
+        <button class="place-order-btn" id="placeOrderBtn" onclick="startFinalProcess()">
+            Place Order Now →
+        </button>
+
+        <div class="security-note">
+            🔒 YOUR INFORMATION IS STORED LOCALLY AND NEVER SHARED WITH THIRD PARTIES
+        </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
     <script>
-        let baseTotal = 0;
-        const codFee = 60;
+        /* ════════════════════════════════════════
+           THEME + DRAWER
+        ════════════════════════════════════════ */
+        const themeBtn = document.getElementById('themeBtn');
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') { document.documentElement.setAttribute('data-theme','light'); themeBtn.textContent = '☀️'; }
+        themeBtn.addEventListener('click', () => {
+            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+            document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            themeBtn.textContent = isLight ? '🌙' : '☀️';
+        });
 
-        function previewImage(input) {
-            const container = document.getElementById('image-preview-container');
-            const preview = document.getElementById('payment-preview');
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    container.style.display = 'block';
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
+        const hamburgerBtn    = document.getElementById('hamburgerBtn');
+        const hamburgerDrawer = document.getElementById('hamburgerDrawer');
+        const drawerOverlay   = document.getElementById('drawerOverlay');
+        const drawerClose     = document.getElementById('drawerClose');
+        function openDrawer()  { hamburgerDrawer.classList.add('open'); drawerOverlay.classList.add('open'); hamburgerBtn.classList.add('active'); }
+        function closeDrawer() { hamburgerDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); hamburgerBtn.classList.remove('active'); }
+        hamburgerBtn.addEventListener('click', openDrawer);
+        drawerClose.addEventListener('click', closeDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        /* Cart badge */
+        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        const badge = document.getElementById('cart-count');
+        if (cartItems.length > 0) { badge.style.display = 'inline'; badge.textContent = cartItems.length; }
+
+        /* ════════════════════════════════════════
+           SECURITY HELPERS
+        ════════════════════════════════════════ */
+        function sanitize(str) {
+            return String(str).replace(/<[^>]*>/g, '').trim();
         }
 
-        function removeImage() {
-            $('#payment-img').val('');
-            $('#image-preview-container').hide();
+        function isValidPHPhone(num) {
+            return /^(09|\+639)\d{9}$/.test(num.replace(/\s/g,''));
         }
 
-        $(document).ready(function() {
-            const regionSelect = $('#region');
-            const provinceSelect = $('#province');
-            const citySelect = $('#city');
-            const brgySelect = $('#barangay');
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('ref-code').addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g,'');
+            });
 
-            regionSelect.append('<option value="">Select Region</option>');
-            fetch('https://psgc.gitlab.io/api/regions/')
-                .then(res => res.json())
-                .then(data => {
-                    data.sort((a, b) => a.name.localeCompare(b.name));
-                    data.forEach(r => regionSelect.append(`<option value="${r.code}">${r.name}</option>`));
+            document.querySelectorAll('input[type="text"], input[type="tel"]').forEach(el => {
+                el.addEventListener('paste', function(e) {
+                    const pasted = (e.clipboardData || window.clipboardData).getData('text');
+                    if (/<[^>]+>/.test(pasted)) e.preventDefault();
                 });
-
-            regionSelect.on('change', function() {
-                const regionCode = $(this).val();
-                const regionName = $(this).find('option:selected').text();
-                provinceSelect.empty().append('<option value="">Select Province/District</option>');
-                citySelect.empty().append('<option value="">Select City</option>');
-                brgySelect.empty().append('<option value="">Select Barangay</option>');
-                if (!regionCode) return;
-                const endpoint = regionName.includes("National Capital Region") ? 'districts' : 'provinces';
-                fetch(`https://psgc.gitlab.io/api/regions/${regionCode}/${endpoint}/`)
-                    .then(res => res.json())
-                    .then(data => {
-                        data.sort((a, b) => a.name.localeCompare(b.name));
-                        data.forEach(p => provinceSelect.append(`<option value="${p.code}">${p.name}</option>`));
-                    });
             });
 
-            provinceSelect.on('change', function() {
-                const code = $(this).val();
-                citySelect.empty().append('<option value="">Select City</option>');
-                brgySelect.empty().append('<option value="">Select Barangay</option>');
-                checkRizalRestriction(); 
-                if (!code) return;
-                const isNCR = $("#region option:selected").text().includes("National Capital Region");
-                const type = isNCR ? 'districts' : 'provinces';
-                fetch(`https://psgc.gitlab.io/api/${type}/${code}/cities-municipalities/`)
-                    .then(res => res.json())
-                    .then(data => {
-                        data.sort((a, b) => a.name.localeCompare(b.name));
-                        data.forEach(c => citySelect.append(`<option value="${c.code}">${c.name}</option>`));
-                    });
-            });
-
-            citySelect.on('change', function() {
-                const cityCode = $(this).val();
-                if (!cityCode) return;
-                fetch(`https://psgc.gitlab.io/api/cities-municipalities/${cityCode}/barangays/`)
-                    .then(res => res.json())
-                    .then(data => {
-                        data.sort((a, b) => a.name.localeCompare(b.name));
-                        data.forEach(b => brgySelect.append(`<option value="${b.code}">${b.name}</option>`));
-                    });
+            document.getElementById('zip-code').addEventListener('click', function() {
+                if (!this.value) { this.removeAttribute('readonly'); this.focus(); }
             });
         });
 
+        /* ════════════════════════════════════════
+           ZIP FALLBACK MAP
+        ════════════════════════════════════════ */
+        const ZIP_FALLBACK = {
+            // Metro Manila
+            '137601000': '1000', '137402000': '1100', '137404000': '1300',
+            '137405000': '1400', '137406000': '1400', '137407000': '1440',
+            '137408000': '1800', '137409000': '1550', '137410000': '1600',
+            '137411000': '1200', '137412000': '1700', '137413000': '1300',
+            '137414000': '1750', '137415000': '1740', '137416000': '1770',
+            '137417000': '1900', '137418000': '1500', '137419000': '1660',
+            // Rizal
+            '045801000': '1900', '045802000': '1860', '045803000': '1850',
+            '045804000': '1870', '045805000': '1880', '045806000': '1890',
+            '045807000': '1910', '045808000': '1920', '045809000': '1930',
+            '045810000': '1940', '045811000': '1950', '045812000': '1960',
+            '045813000': '1970', '045814000': '1980',
+            // Cavite
+            '042101000': '4100', '042102000': '4107', '042103000': '4103',
+            '042104000': '4115', '042105000': '4105', '042106000': '4114',
+            '042107000': '4104',
+        };
+
+        async function fetchZip(cityCode, cityName) {
+            if (ZIP_FALLBACK[cityCode]) return ZIP_FALLBACK[cityCode];
+            try {
+                const res = await fetch(`https://ph-zip-api.vercel.app/api?city=${encodeURIComponent(cityName)}`);
+                if (res.ok) { const d = await res.json(); if (d && d.zip) return d.zip; }
+            } catch(_) {}
+            return '';
+        }
+
+        /* ════════════════════════════════════════
+           DROPDOWN HELPERS
+        ════════════════════════════════════════ */
+        function setDropdown(selectEl, options, valueKey, labelKey, placeholder) {
+            selectEl.innerHTML = `<option value="">${placeholder}</option>`;
+            options.sort((a, b) => a[labelKey].localeCompare(b[labelKey]));
+            options.forEach(o => {
+                const opt = document.createElement('option');
+                opt.value = o[valueKey];
+                opt.textContent = o[labelKey];
+                selectEl.appendChild(opt);
+            });
+            // Both are needed — some browsers honour the attribute, others the property
+            selectEl.disabled = false;
+            selectEl.removeAttribute('disabled');
+        }
+
+        function disableDropdown(selectEl, placeholder) {
+            selectEl.innerHTML = `<option value="">${placeholder}</option>`;
+            selectEl.disabled = true;
+        }
+
+        /* Track whether current region is NCR so province change can use correct endpoint */
+        let isNCRSelected = false;
+
+        /* ════════════════════════════════════════
+           CASCADING ADDRESS LOGIC
+        ════════════════════════════════════════ */
+        async function onRegionChange() {
+            const regionSel  = document.getElementById('region');
+            const regionCode = regionSel.value;
+            const regionName = regionSel.options[regionSel.selectedIndex]?.text || '';
+
+            // Reset everything below region
+            disableDropdown(document.getElementById('province'), 'Select Province / District');
+            disableDropdown(document.getElementById('city'),     'Select Province first');
+            disableDropdown(document.getElementById('barangay'), 'Select City first');
+            document.getElementById('zip-code').value = '';
+
+            if (!regionCode) { isNCRSelected = false; checkRizalRestriction(); return; }
+
+            isNCRSelected = regionName.includes('National Capital Region');
+
+            /* ── NCR FIX ──────────────────────────────────────────────
+               For NCR, districts live at:
+                 /api/regions/{code}/districts/
+               Each district then has cities-municipalities underneath it.
+               We load districts into the "Province / District" dropdown,
+               and the label already says "Province / District" so it fits.
+            ─────────────────────────────────────────────────────── */
+            const endpoint = isNCRSelected
+                ? `https://psgc.gitlab.io/api/regions/${regionCode}/districts/`
+                : `https://psgc.gitlab.io/api/regions/${regionCode}/provinces/`;
+
+            try {
+                const res  = await fetch(endpoint);
+                const data = await res.json();
+                setDropdown(
+                    document.getElementById('province'),
+                    data, 'code', 'name',
+                    isNCRSelected ? 'Select District' : 'Select Province'
+                );
+            } catch(e) {
+                console.error('Region fetch error:', e);
+                disableDropdown(document.getElementById('province'), 'Failed to load — try again');
+            }
+
+            checkRizalRestriction();
+        }
+
+        async function onProvinceChange() {
+            const provSel  = document.getElementById('province');
+            const provCode = provSel.value;
+
+            // Reset below province
+            disableDropdown(document.getElementById('city'),     'Select City / Municipality');
+            disableDropdown(document.getElementById('barangay'), 'Select City first');
+            document.getElementById('zip-code').value = '';
+
+            checkRizalRestriction();
+            if (!provCode) return;
+
+            /* ── NCR FIX ──────────────────────────────────────────────
+               For NCR, cities-municipalities are under districts:
+                 /api/districts/{code}/cities-municipalities/
+               For everywhere else they're under provinces:
+                 /api/provinces/{code}/cities-municipalities/
+            ─────────────────────────────────────────────────────── */
+            const endpoint = isNCRSelected
+                ? `https://psgc.gitlab.io/api/districts/${provCode}/cities-municipalities/`
+                : `https://psgc.gitlab.io/api/provinces/${provCode}/cities-municipalities/`;
+
+            try {
+                const res  = await fetch(endpoint);
+                const data = await res.json();
+                setDropdown(document.getElementById('city'), data, 'code', 'name', 'Select City / Municipality');
+            } catch(e) {
+                console.error('Province fetch error:', e);
+                disableDropdown(document.getElementById('city'), 'Failed to load — try again');
+            }
+        }
+
+        async function onCityChange() {
+            const citySel  = document.getElementById('city');
+            const cityCode = citySel.value;
+            const cityName = citySel.options[citySel.selectedIndex]?.text || '';
+
+            disableDropdown(document.getElementById('barangay'), 'Loading barangays…');
+            document.getElementById('zip-code').value = 'Loading…';
+
+            if (!cityCode) { document.getElementById('zip-code').value = ''; return; }
+
+            try {
+                const [barangays, zip] = await Promise.all([
+                    fetch(`https://psgc.gitlab.io/api/cities-municipalities/${cityCode}/barangays/`)
+                        .then(r => r.json()).catch(() => []),
+                    fetchZip(cityCode, cityName)
+                ]);
+
+                setDropdown(document.getElementById('barangay'), barangays, 'code', 'name', 'Select Barangay');
+
+                const zipEl = document.getElementById('zip-code');
+                zipEl.value = zip || '';
+                zipEl.placeholder = zip ? 'Auto-filled' : 'Not found — tap to enter manually';
+            } catch(e) {
+                console.error('City fetch error:', e);
+                disableDropdown(document.getElementById('barangay'), 'Failed to load — try again');
+                document.getElementById('zip-code').value = '';
+            }
+        }
+
+        /* ════════════════════════════════════════
+           COURIER / PAYMENT LOGIC
+        ════════════════════════════════════════ */
         function checkRizalRestriction() {
-            const provinceName = $("#province option:selected").text().toLowerCase();
-            const isRizal = provinceName.includes("rizal");
-            const sellerOpt = $('#seller-delivery-opt');
-            
+            const provName = (document.getElementById('province').options[document.getElementById('province').selectedIndex]?.text || '').toLowerCase();
+            const isRizal  = provName.includes('rizal');
+            const sellerOpt   = document.getElementById('seller-delivery-opt');
+            const courierNote = document.getElementById('courier-note');
+
             if (isRizal) {
-                sellerOpt.prop('disabled', false).show();
-                $('#courier-note').hide();
+                sellerOpt.disabled = false;
+                courierNote.style.display = 'none';
             } else {
-                sellerOpt.prop('disabled', true).hide();
-                if ($('#courier-select').val() === 'seller') $('#courier-select').val('');
-                $('#courier-note').show();
+                sellerOpt.disabled = true;
+                if (document.getElementById('courier-select').value === 'seller')
+                    document.getElementById('courier-select').value = '';
+                courierNote.style.display = provName ? 'block' : 'none';
             }
             handleCourierChange();
         }
 
         function handleCourierChange() {
-            const courier = $('#courier-select').val();
-            const codOption = $('#cod-option');
-            const paymentSelect = $('#payment-method');
+            const courier      = document.getElementById('courier-select').value;
+            const codOption    = document.getElementById('cod-option');
+            const paymentSelect = document.getElementById('payment-method');
 
-            $('#lbc-branch-info').css('display', (courier === 'lbc') ? 'block' : 'none');
+            document.getElementById('lbc-branch-info').style.display = courier === 'lbc' ? 'block' : 'none';
 
             if (courier === 'seller') {
-                codOption.prop('disabled', false).text("Cash on Delivery (COD)");
+                codOption.disabled = false;
+                codOption.textContent = 'Cash on Delivery (COD)';
             } else {
-                codOption.prop('disabled', true).text("COD (Rizal Seller Delivery Only)");
-                if (paymentSelect.val() === 'cod') paymentSelect.val('');
+                codOption.disabled = true;
+                codOption.textContent = 'COD (Rizal Seller Delivery Only)';
+                if (paymentSelect.value === 'cod') paymentSelect.value = '';
             }
             calculateTotal();
             togglePaymentFields();
         }
 
         function togglePaymentFields() {
-            const method = $('#payment-method').val();
-            const showOnline = (method === 'gcash' || method === 'maya');
-            
-            $('#proof-section').css('display', showOnline ? 'block' : 'none');
-            $('#payment-instr').css('display', showOnline ? 'block' : 'none');
-            $('#method-name').text(method === 'gcash' ? 'GCash' : 'Maya');
-            
+            const method     = document.getElementById('payment-method').value;
+            const showOnline = method === 'gcash' || method === 'maya';
+            document.getElementById('proof-section').style.display    = showOnline ? 'block' : 'none';
+            document.getElementById('payment-instr').style.display    = showOnline ? 'block' : 'none';
+            document.getElementById('method-name').textContent        = method === 'gcash' ? 'GCash' : 'Maya';
             calculateTotal();
         }
 
+        let baseTotal = 0;
+        const codFee  = 60;
+
         function calculateTotal() {
-            const paymentMethod = $('#payment-method').val();
-            let finalTotal = baseTotal;
-            if (paymentMethod === 'cod') {
-                finalTotal += codFee;
-                $('#fee-note').show();
-            } else {
-                $('#fee-note').hide();
-            }
-            $('#final-price').text(finalTotal.toLocaleString());
+            const method  = document.getElementById('payment-method').value;
+            const feeNote = document.getElementById('fee-note');
+            let total     = baseTotal;
+            if (method === 'cod') { total += codFee; feeNote.style.display = 'block'; }
+            else { feeNote.style.display = 'none'; }
+            document.getElementById('final-price').textContent = total.toLocaleString();
         }
 
+        /* ════════════════════════════════════════
+           IMAGE PREVIEW
+        ════════════════════════════════════════ */
+        function previewImage(input) {
+            if (!input.files || !input.files[0]) return;
+            const file = input.files[0];
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Image too large. Please upload under 5MB.');
+                input.value = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('payment-preview').src = e.target.result;
+                document.getElementById('image-preview-container').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            document.getElementById('payment-img').value = '';
+            document.getElementById('image-preview-container').style.display = 'none';
+            document.getElementById('payment-preview').src = '#';
+        }
+
+        /* ════════════════════════════════════════
+           FORM VALIDATION
+        ════════════════════════════════════════ */
+        function validateForm() {
+            const errors = [];
+
+            if (sanitize(document.getElementById('check-name').value).length < 2)
+                errors.push('Full name is required.');
+
+            if (!isValidPHPhone(sanitize(document.getElementById('contact-number').value)))
+                errors.push('Enter a valid PH mobile number (e.g. 09XX XXX XXXX).');
+
+            if (!document.getElementById('region').value)   errors.push('Please select a Region.');
+            if (!document.getElementById('province').value) errors.push('Please select a Province / District.');
+            if (!document.getElementById('city').value)     errors.push('Please select a City / Municipality.');
+            if (!document.getElementById('barangay').value) errors.push('Please select a Barangay.');
+
+            if (sanitize(document.getElementById('check-address').value).length < 5)
+                errors.push('Please enter your full street address.');
+
+            const courier = document.getElementById('courier-select').value;
+            if (!courier) errors.push('Please select a courier.');
+            if (courier === 'lbc' && !sanitize(document.getElementById('lbc-branch').value))
+                errors.push('Please enter the LBC branch name.');
+
+            const payment = document.getElementById('payment-method').value;
+            if (!payment) errors.push('Please select a payment method.');
+
+            if (payment === 'gcash' || payment === 'maya') {
+                if (!document.getElementById('payment-img').value)
+                    errors.push('Please upload your payment screenshot.');
+                if (!/^\d{4}$/.test(document.getElementById('ref-code').value))
+                    errors.push('Please enter the last 4 digits of your reference number.');
+            }
+
+            if (errors.length) { alert('Please fix the following:\n\n• ' + errors.join('\n• ')); return false; }
+            return true;
+        }
+
+        /* ════════════════════════════════════════
+           PLACE ORDER
+        ════════════════════════════════════════ */
         function startFinalProcess() {
-            const courier = $('#courier-select').val();
-            const payment = $('#payment-method').val();
-            const lbcBranch = $('#lbc-branch').val().trim();
-            const region = $('#region').val();
+            if (!validateForm()) return;
 
-            if (!courier || !payment || !region) {
-                alert("Please complete the Delivery and Payment details.");
-                return;
-            }
+            document.getElementById('placeOrderBtn').disabled = true;
+            document.getElementById('payment-verify-overlay').classList.add('active');
 
-            if (courier === 'lbc' && lbcBranch === "") {
-                alert("Please enter the LBC Branch Name.");
-                return;
-            }
-
-            if ((payment === 'gcash' || payment === 'maya') && !$('#payment-img').val()) {
-                alert("Please upload your payment proof.");
-                return;
-            }
-
-            // Logic for Taglish workflow: Save as "Pending Approval"
-            $('#payment-verify-overlay').css('display', 'flex');
-            
             setTimeout(() => {
-                $('#status-text').text("Submitting Request...");
-                $('#sub-status').text("Waiting for seller to approve payment.");
+                document.getElementById('status-text').textContent = 'Submitting Request…';
+                document.getElementById('sub-status').textContent  = 'Waiting for seller to approve your order.';
 
-                // Create Order Object for Admin Page
+                const get = id => document.getElementById(id);
+                const selectedText = id => get(id).options[get(id).selectedIndex]?.text || '';
+
                 const newOrder = {
-                    orderID: "ORD-" + Math.floor(1000 + Math.random() * 9000),
-                    user: $('#check-name').val(),
-                    total: $('#final-price').text(),
-                    status: "Pending", // Seller will change this later
-                    date: new Date().toLocaleDateString()
+                    orderID:  'ORD-' + Math.floor(1000 + Math.random() * 9000),
+                    user:     sanitize(get('check-name').value),
+                    contact:  sanitize(get('contact-number').value),
+                    address:  [
+                        sanitize(get('check-address').value),
+                        selectedText('barangay'),
+                        selectedText('city'),
+                        get('zip-code').value,
+                        selectedText('province'),
+                        selectedText('region')
+                    ].filter(Boolean).join(', '),
+                    courier:  get('courier-select').value,
+                    lbcBranch: sanitize(get('lbc-branch').value),
+                    payment:  get('payment-method').value,
+                    total:    get('final-price').textContent,
+                    status:   'Pending',
+                    date:     new Date().toLocaleDateString('en-PH')
                 };
 
-                // Store in localStorage for the Admin to see
-                let orders = JSON.parse(localStorage.getItem('allOrders')) || [];
+                // Ref code & image intentionally excluded from localStorage (sensitive)
+                const orders = JSON.parse(localStorage.getItem('allOrders')) || [];
                 orders.push(newOrder);
                 localStorage.setItem('allOrders', JSON.stringify(orders));
 
                 setTimeout(() => {
-                    $('#loader-icon').hide();
-                    $('#success-icon').show();
-                    $('#status-text').text("Request Sent!");
-                    
+                    document.getElementById('loader-icon').style.display = 'none';
+                    document.getElementById('success-icon').style.display = 'block';
+                    document.getElementById('status-text').textContent = 'Request Sent!';
+                    document.getElementById('sub-status').textContent  = 'The seller will review your order shortly.';
+
                     setTimeout(() => {
                         localStorage.removeItem('cart');
-                        window.location.href = 'success.html'; // Create a page saying "Waiting for Approval"
+                        window.location.href = 'success.html';
                     }, 2000);
                 }, 2000);
             }, 2000);
         }
 
-        window.onload = function() {
+        /* ════════════════════════════════════════
+           ON LOAD
+        ════════════════════════════════════════ */
+        window.onload = async function() {
             const storageUser = localStorage.getItem('user') || localStorage.getItem('currentUser');
             if (!storageUser) { window.location.href = 'login.html'; return; }
-            
+
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            baseTotal = 0;
+            baseTotal  = 0;
             cart.forEach(item => {
-                let priceVal = String(item.price).replace(/[^0-9]/g, '');
-                baseTotal += parseInt(priceVal || 0);
+                baseTotal += parseInt(String(item.price).replace(/[^0-9]/g, '') || 0);
             });
             calculateTotal();
-            
-            const user = JSON.parse(storageUser);
-            $('#check-name').val(user.fullname || user.username || "");
+
+            try {
+                const user = JSON.parse(storageUser);
+                document.getElementById('check-name').value = sanitize(user.fullname || user.username || '');
+            } catch(_) {}
+
+            // Load regions into dropdown
+            try {
+                const res  = await fetch('https://psgc.gitlab.io/api/regions/');
+                const data = await res.json();
+                setDropdown(document.getElementById('region'), data, 'code', 'name', 'Select Region');
+            } catch(e) {
+                document.getElementById('region').innerHTML = '<option value="">Failed to load — refresh page</option>';
+            }
         };
     </script>
 </body>

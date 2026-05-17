@@ -3,184 +3,459 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join the Pit | Pits Stop Collectibles</title>
+    <title>Create Account | Pits Stops Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
+        /* ── SIGNUP PAGE ──────────────────────────────────────── */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 60px;
+            background: var(--bg);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Grid overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Red glow */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 40%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 400px;
+            background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* ── CARD ── */
         .signup-container {
-            max-width: 500px;
-            margin: 60px auto;
-            padding: 40px;
-            background: rgba(0, 0, 0, 0.95);
-            border-radius: 20px;
-            color: white;
-            border: 1px solid #e60000;
-            box-shadow: 0 10px 40px rgba(230, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+            max-width: 520px;
+            width: 100%;
+            padding: 44px 40px;
+            background: var(--surface);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 0 40px var(--accent-glow);
+            animation: fadeUp 0.7s ease both;
         }
 
-        h1 { font-family: 'Orbitron', sans-serif; text-align: center; color: #e60000; margin-bottom: 30px; letter-spacing: 2px; }
-        
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; margin-bottom: 8px; font-size: 0.85rem; color: #aaa; text-transform: uppercase; }
-        
-        input {
-            width: 100%;
-            padding: 12px;
-            background: #111;
-            border: 1px solid #333;
-            color: white;
-            border-radius: 5px;
-            outline: none;
-            font-family: 'Inter', sans-serif;
-            transition: 0.3s;
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        input:focus { border-color: #e60000; box-shadow: 0 0 5px rgba(230, 0, 0, 0.5); }
-
-        .signup-btn {
-            width: 100%;
-            padding: 18px;
-            background: #e60000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: 0.3s;
+        /* ── HEADER ── */
+        .form-eyebrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 10px;
+        }
+        .eyebrow-line { display: block; width: 32px; height: 1px; background: var(--accent); }
+        .eyebrow-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            background: rgba(230,0,0,0.08);
+            border: 1px solid rgba(230,0,0,0.25);
+            padding: 5px 14px;
+            border-radius: 2px;
             text-transform: uppercase;
         }
 
-        .signup-btn:hover { background: #ff1a1a; transform: translateY(-2px); }
+        .form-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 7vw, 2.8rem);
+            letter-spacing: 5px;
+            color: var(--text);
+            text-align: center;
+            margin-bottom: 32px;
+        }
 
-        .login-link { text-align: center; margin-top: 25px; font-size: 0.9rem; color: #888; }
-        .login-link a { color: #e60000; text-decoration: none; font-weight: bold; }
+        /* ── FORM FIELDS ── */
+        .input-group { margin-bottom: 18px; }
 
-        #password-strength { height: 5px; width: 0%; transition: 0.3s; margin-top: 5px; border-radius: 5px; }
-        #strength-text { font-size: 12px; display: block; margin-top: 5px; }
+        .input-group label {
+            display: block;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.63rem;
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .input-group label .required { color: var(--accent); }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 5px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .input-group input::placeholder { color: var(--text-muted); font-weight: 400; }
+
+        /* Facebook field special styling */
+        .input-group input.fb-input:focus {
+            border-color: #1877f2;
+            box-shadow: 0 0 0 3px rgba(24,119,242,0.2);
+        }
+
+        .fb-hint {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+        .fb-hint a { color: #1877f2; text-decoration: none; }
+        .fb-hint a:hover { text-decoration: underline; }
+
+        /* ── PASSWORD STRENGTH ── */
+        #password-strength {
+            height: 4px;
+            width: 0%;
+            transition: width 0.3s, background-color 0.3s;
+            margin-top: 8px;
+            border-radius: 4px;
+        }
+
+        #strength-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* ── DIVIDER ── */
+        .field-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 24px 0 20px;
+            position: relative;
+        }
+        .field-divider span {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--surface);
+            padding: 0 12px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* ── SUBMIT BUTTON ── */
+        .signup-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 16px var(--accent-glow);
+            text-transform: uppercase;
+        }
+
+        .signup-btn:hover {
+            background: #ff1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--accent-glow);
+        }
+
+        /* ── LOGIN LINK ── */
+        .login-link {
+            text-align: center;
+            margin-top: 24px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.92rem;
+            color: var(--text-muted);
+        }
+
+        .login-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .login-link a:hover { text-decoration: underline; }
+
+        @media (max-width: 480px) {
+            .signup-container { padding: 28px 20px; }
+        }
     </style>
 </head>
 <body>
+
+    <!-- ══ HEADER ══ -->
+    <header>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hot Wheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Hot Wheels Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="login.html" class="nav-button">Login</a></li>
+            </ul>
+            <div class="nav-right">
+                <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hamburger Drawer -->
+    <div class="hamburger-overlay" id="drawerOverlay"></div>
+    <nav class="hamburger-drawer" id="hamburgerDrawer">
+        <button class="drawer-close" id="drawerClose">✕</button>
+        <div class="drawer-greeting">Pits Stops Collectibles</div>
+        <span class="drawer-label">Navigation</span>
+        <a href="index.html" class="drawer-link">Home</a>
+        <span class="drawer-label">Brands</span>
+        <a href="hotwheels.html" class="drawer-link">Hot Wheels</a>
+        <a href="premium.html" class="drawer-link">Hot Wheels Premium</a>
+        <a href="matchbox.html" class="drawer-link">Matchbox</a>
+        <div class="drawer-divider"></div>
+        <a href="aboutUs.html" class="drawer-link">About Us</a>
+        <a href="login.html" class="drawer-link drawer-link--accent">Login</a>
+    </nav>
+
+    <!-- ══ SIGNUP FORM ══ -->
     <div class="signup-container">
-        <h1>CREATE ACCOUNT</h1>
-        <form id="signupForm">
+
+        <div class="form-eyebrow">
+            <span class="eyebrow-line"></span>
+            <span class="eyebrow-text">New Member</span>
+            <span class="eyebrow-line"></span>
+        </div>
+        <h1 class="form-title">Create Account</h1>
+
+        <form id="signupForm" novalidate>
+
+            <!-- Basic Info -->
             <div class="input-group">
-                <label>Full Name</label>
-                <input type="text" id="fullname" placeholder="e.g. Juan Dela Cruz" required>
-            </div>
-            
-            <div class="input-group">
-                <label>Email Address</label>
-                <input type="email" id="email" placeholder="juan@example.com" required>
+                <label>Full Name <span class="required">*</span></label>
+                <input type="text" id="fullname" placeholder="e.g. Juan Dela Cruz" required autocomplete="name">
             </div>
 
             <div class="input-group">
-                <label>Username</label>
-                <input type="text" id="username" required>
+                <label>Email Address <span class="required">*</span></label>
+                <input type="email" id="email" placeholder="juan@example.com" required autocomplete="email">
             </div>
 
             <div class="input-group">
-                <label>Contact Number</label>
-                <input type="tel" id="contact" placeholder="09123456789" required>
+                <label>Username <span class="required">*</span></label>
+                <input type="text" id="username" placeholder="e.g. juanracer64" required autocomplete="username">
             </div>
 
             <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="password" required>
+                <label>Contact Number <span class="required">*</span></label>
+                <input type="tel" id="contact" placeholder="09XXXXXXXXX" required autocomplete="tel">
+            </div>
+
+            <div class="input-group">
+                <label>Password <span class="required">*</span></label>
+                <input type="password" id="password" placeholder="Min. 8 chars, uppercase, number, symbol" required autocomplete="new-password">
                 <div id="password-strength"></div>
                 <span id="strength-text"></span>
             </div>
 
-            <button type="submit" class="signup-btn">REGISTER ACCOUNT</button>
+            <!-- Divider -->
+            <div class="field-divider"><span>FOR ORDER UPDATES</span></div>
+
+            <!-- Facebook -->
+            <div class="input-group">
+                <label>Facebook Name or Profile Link <span class="required">*</span></label>
+                <input type="text" id="facebook" class="fb-input" placeholder="e.g. Juan Dela Cruz or facebook.com/juan" required autocomplete="off">
+                <p class="fb-hint">
+                    📬 The seller will contact you here after you place an order to confirm payment and give shipping updates.
+                    Make sure this matches your real Facebook account so we can reach you.
+                    Not sure? <a href="https://www.facebook.com" target="_blank">Open Facebook</a> and copy your name or profile link.
+                </p>
+            </div>
+
+            <button type="submit" class="signup-btn">Register Account →</button>
         </form>
-        <div class="login-link">Member already? <a href="login.html">LOGIN HERE</a></div>
+
+        <div class="login-link">Already a member? <a href="login.html">Login here</a></div>
     </div>
 
     <script>
-        const fullNameInput = document.getElementById('fullname');
-        const contactInput = document.getElementById('contact');
-        const passwordInput = document.getElementById('password');
-        const strengthBar = document.getElementById('password-strength');
-        const strengthText = document.getElementById('strength-text');
-
-        fullNameInput.addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+        /* ── THEME + DRAWER ── */
+        const themeBtn = document.getElementById('themeBtn');
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') { document.documentElement.setAttribute('data-theme','light'); themeBtn.textContent = '☀️'; }
+        themeBtn.addEventListener('click', () => {
+            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+            document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            themeBtn.textContent = isLight ? '🌙' : '☀️';
         });
 
-        contactInput.addEventListener('input', (e) => {
-            let value = e.target.value.replace(/\D/g, "");
-            if (value.length > 11) value = value.slice(0, 11);
-            e.target.value = value;
+        const hamburgerBtn    = document.getElementById('hamburgerBtn');
+        const hamburgerDrawer = document.getElementById('hamburgerDrawer');
+        const drawerOverlay   = document.getElementById('drawerOverlay');
+        const drawerClose     = document.getElementById('drawerClose');
+        function openDrawer()  { hamburgerDrawer.classList.add('open'); drawerOverlay.classList.add('open'); hamburgerBtn.classList.add('active'); }
+        function closeDrawer() { hamburgerDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); hamburgerBtn.classList.remove('active'); }
+        hamburgerBtn.addEventListener('click', openDrawer);
+        drawerClose.addEventListener('click', closeDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        /* ── INPUT GUARDS ── */
+        // Full name: letters and spaces only
+        document.getElementById('fullname').addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
         });
 
-        passwordInput.addEventListener('input', () => {
-            const val = passwordInput.value;
-            let strength = 0;
-            if (val.length >= 8) strength++;
-            if (/[A-Z]/.test(val)) strength++;
-            if (/[0-9]/.test(val)) strength++;
-            if (/[^A-Za-z0-9]/.test(val)) strength++;
-
-            if (val === "") {
-                strengthBar.style.width = "0";
-                strengthText.innerText = "";
-            } else if (strength <= 2) {
-                strengthBar.style.width = "33%";
-                strengthBar.style.backgroundColor = "#ff4d4d";
-                strengthText.innerText = "Weak";
-                strengthText.style.color = "#ff4d4d";
-            } else if (strength === 3) {
-                strengthBar.style.width = "66%";
-                strengthBar.style.backgroundColor = "#ffd93d";
-                strengthText.innerText = "Medium";
-                strengthText.style.color = "#ffd93d";
-            } else {
-                strengthBar.style.width = "100%";
-                strengthBar.style.backgroundColor = "#6bc167";
-                strengthText.innerText = "Strong";
-                strengthText.style.color = "#6bc167";
-            }
+        // Contact: digits only, max 11
+        document.getElementById('contact').addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').slice(0, 11);
         });
 
+        // Paste guard on all text inputs
+        document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]').forEach(el => {
+            el.addEventListener('paste', function(e) {
+                const pasted = (e.clipboardData || window.clipboardData).getData('text');
+                if (/<[^>]+>/.test(pasted)) e.preventDefault();
+            });
+        });
+
+        /* ── PASSWORD STRENGTH ── */
+        document.getElementById('password').addEventListener('input', function() {
+            const val = this.value;
+            const bar = document.getElementById('password-strength');
+            const txt = document.getElementById('strength-text');
+            if (!val) { bar.style.width = '0'; txt.textContent = ''; return; }
+
+            let score = 0;
+            if (val.length >= 8)           score++;
+            if (/[A-Z]/.test(val))         score++;
+            if (/[0-9]/.test(val))         score++;
+            if (/[^A-Za-z0-9]/.test(val))  score++;
+
+            const levels = [
+                { w: '25%', color: '#ff4444', label: 'Weak' },
+                { w: '50%', color: '#ff4444', label: 'Weak' },
+                { w: '66%', color: '#ffd93d', label: 'Medium' },
+                { w: '100%', color: '#00cc66', label: 'Strong' },
+            ];
+            const lvl = levels[Math.max(0, score - 1)];
+            bar.style.width           = lvl.w;
+            bar.style.backgroundColor = lvl.color;
+            txt.textContent           = lvl.label;
+            txt.style.color           = lvl.color;
+        });
+
+        /* ── SANITIZE ── */
+        function sanitize(str) {
+            return String(str).replace(/<[^>]*>/g, '').trim();
+        }
+
+        /* ── FORM SUBMIT ── */
         document.getElementById('signupForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const nameValue = fullNameInput.value;
-            const contactValue = contactInput.value;
-            const passValue = passwordInput.value;
-            
-            if (!/^09\d{9}$/.test(contactValue)) {
-                alert("Please enter a valid 11-digit PH mobile number starting with 09.");
+            const fullname = sanitize(document.getElementById('fullname').value);
+            const email    = sanitize(document.getElementById('email').value);
+            const username = sanitize(document.getElementById('username').value);
+            const contact  = sanitize(document.getElementById('contact').value);
+            const password = document.getElementById('password').value;
+            const facebook = sanitize(document.getElementById('facebook').value);
+
+            const errors = [];
+
+            if (fullname.length < 2)
+                errors.push('Please enter your full name.');
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+                errors.push('Please enter a valid email address.');
+
+            if (username.length < 3)
+                errors.push('Username must be at least 3 characters.');
+
+            if (!/^09\d{9}$/.test(contact))
+                errors.push('Enter a valid 11-digit PH number starting with 09.');
+
+            if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password))
+                errors.push('Password must be 8+ characters with an uppercase letter, a number, and a symbol.');
+
+            if (facebook.length < 3)
+                errors.push('Please enter your Facebook name or profile link so the seller can contact you.');
+
+            if (errors.length) {
+                alert('Please fix the following:\n\n• ' + errors.join('\n• '));
                 return;
             }
 
-            if (passValue.length < 8 || !/[A-Z]/.test(passValue) || !/[0-9]/.test(passValue) || !/[^A-Za-z0-9]/.test(passValue)) {
-                alert("Password must be 8+ characters with an uppercase letter, a number, and a symbol.");
+            // Check for existing user
+            const users = JSON.parse(localStorage.getItem('allUsers')) || [];
+            if (users.some(u => u.username === username || u.email === email)) {
+                alert('That username or email is already taken. Please try another.');
                 return;
             }
 
-            const userData = {
-                fullname: nameValue,
-                email: document.getElementById('email').value,
-                username: document.getElementById('username').value,
-                password: passValue,
-                contact: contactValue
-            };
-
-            let users = JSON.parse(localStorage.getItem('allUsers')) || [];
-            
-            const userExists = users.some(u => u.username === userData.username || u.email === userData.email);
-            if (userExists) {
-                alert("Username or Email already taken!");
-                return;
-            }
-
-            users.push(userData);
+            // Save user — password stored as-is (plain text is a limitation of localStorage;
+            // in a real app this would be hashed server-side)
+            const newUser = { fullname, email, username, contact, facebook, password };
+            users.push(newUser);
             localStorage.setItem('allUsers', JSON.stringify(users));
-            
-            alert("Welcome! Account created successfully.");
+
+            alert('Account created! Welcome to Pits Stops Collectibles 🏁');
             window.location.href = 'login.html';
         });
     </script>

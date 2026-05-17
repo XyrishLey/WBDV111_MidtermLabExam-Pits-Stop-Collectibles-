@@ -244,6 +244,51 @@
             .shop-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; padding: 0 12px 80px; }
             .card-img-wrap { height: 150px; }
         }
+
+        /* ─── MOBILE ──────────────────────────────── */
+@media (max-width: 900px) {
+    /* Hide center nav, hamburger drawer takes over */
+    .nav-menu { display: none; }
+    .nav-bar { grid-template-columns: 50px 1fr 50px; padding: 0 16px; }
+}
+
+@media (max-width: 600px) {
+    /* Filter bar stacks vertically */
+    .filter-bar { flex-direction: column; align-items: flex-start; gap: 10px; padding: 0 16px 16px; }
+    .filter-bar input[type="text"] { max-width: 100%; width: 100%; }
+    .filter-bar select { width: 100%; }
+    .result-count { margin-left: 0; }
+
+    /* Grid goes 2 columns on phone */
+    .shop-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 0 12px 80px;
+    }
+
+    /* Smaller card images */
+    .card-img-wrap { height: 140px; }
+
+    /* Smaller card text */
+    .card-name { font-size: 0.95rem; }
+    .card-price { font-size: 0.9rem; }
+    .card-stock { font-size: 0.72rem; }
+
+    /* Stack action buttons */
+    .card-actions { flex-direction: column; padding: 10px 12px; gap: 6px; }
+    .btn-wish { width: 100%; height: 36px; }
+    .btn-buy, .btn-notify { height: 36px; font-size: 0.8rem; }
+
+    /* Hero text */
+    .page-title { font-size: clamp(2rem, 12vw, 3.5rem); letter-spacing: 3px; }
+    .page-sub { font-size: 0.85rem; }
+    .page-eyebrow-text { font-size: 0.6rem; letter-spacing: 2px; padding: 5px 10px; }
+}
+
+@media (max-width: 360px) {
+    /* Single column on very small phones */
+    .shop-grid { grid-template-columns: 1fr; }
+}
     </style>
 </head>
 <body>
@@ -268,7 +313,11 @@
                 </li>
                 <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
                 <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
-                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+               <li>
+                    <a href="cart.html" class="nav-button">
+                        🛒 Cart <span id="cart-count" style="display:none; background:var(--accent); color:#fff; border-radius:50%; padding:1px 6px; font-size:0.7rem; margin-left:4px;">0</span>
+                    </a>
+                </li>
             </ul>
             <div class="nav-right">
                 <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
@@ -628,6 +677,10 @@
             loadUser();
             seedInitialData();
         });
+
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const badge = document.getElementById('cart-count');
+        if (cart.length > 0) { badge.style.display = 'inline'; badge.textContent = cart.length; }
     </script>
 </body>
 </html>

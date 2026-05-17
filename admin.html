@@ -4,163 +4,475 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Pits Stop Collectibles</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-    body { font-family: 'Inter', sans-serif; background: #000; color: white; padding: 10px; margin: 0; }
-    h1, h2 { font-family: 'Orbitron', sans-serif; color: #e60000; text-align: center; }
-    h2 { text-align: left; font-size: 1.1rem; margin-top: 40px; border-left: 5px solid #e60000; padding-left: 15px; text-transform: uppercase; }
-    
-    .admin-container { max-width: 1100px; margin: 0 auto; background: rgba(20, 20, 20, 0.9); padding: 20px; border-radius: 15px; border: 1px solid #e60000; }
-    
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #111; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #333; font-size: 0.85rem; }
-    th { background: #e60000; color: white; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; }
-    tr:hover { background: #1a1a1a; }
-    
-    .btn { border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; font-family: 'Orbitron', sans-serif; transition: 0.3s; text-transform: uppercase; }
-    .delete-btn { background: #444; color: white; }
-    .delete-btn:hover { background: #e60000; }
-    .approve-btn { background: #008000; color: white; margin-right: 5px; }
-    .approve-btn:hover { background: #00ff00; color: black; }
-    
-    .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; }
-    .status-pending { background: #856404; color: #fff; }
-    .status-completed { background: #155724; color: #fff; }
-
-    .stats { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; }
-    .stat-card { background: #111; padding: 20px; border-radius: 10px; border-bottom: 4px solid #e60000; flex: 1; min-width: 150px; text-align: center; }
-    .stat-card h3 { font-size: 0.65rem; color: #888; margin-bottom: 5px; text-transform: uppercase; }
-    .stat-card p { font-size: 1.5rem; font-weight: bold; font-family: 'Orbitron', sans-serif; margin: 0; }
-
-    .inventory-inputs { display: flex; flex-wrap: wrap; gap: 10px; background: #111; padding: 20px; border-radius: 10px; border: 1px solid #333; margin-bottom: 30px; }
-    .inventory-inputs input, .inventory-inputs select { flex: 1; min-width: 120px; padding: 8px; background: #222; color: white; border: 1px solid #444; }
-
-    .logout-link { display: block; text-align: right; color: #888; text-decoration: none; font-size: 0.8rem; margin-bottom: 10px; cursor: pointer; }
-    .logout-link:hover { color: #e60000; }
-
-    /* --- MOBILE RESPONSIVE OVERRIDES --- */
-    @media (max-width: 768px) {
-        .admin-container { padding: 15px; border-radius: 0; border: none; }
-        
-        table, thead, tbody, th, td, tr { display: block; }
-        
-        thead tr { position: absolute; top: -9999px; left: -9999px; } 
-        
-        tr { border: 1px solid #333; margin-bottom: 10px; padding: 10px; background: #161616; }
-        
-        td { border: none; position: relative; padding-left: 50%; text-align: right; font-size: 0.9rem; border-bottom: 1px solid #222; }
-        
-        td::before {
-            content: attr(data-label);
-            position: absolute;
-            left: 10px;
-            width: 45%;
-            text-align: left;
-            font-weight: bold;
-            color: #e60000;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem;
+        /* ─── VARIABLES (matches site theme) ─── */
+        :root {
+            --bg:        #0e0e0e;
+            --bg-alt:    #141414;
+            --surface:   rgba(255,255,255,0.04);
+            --text:      #f0f0f0;
+            --text-muted:#888;
+            --accent:    #e60000;
+            --accent-glow: rgba(230,0,0,0.25);
+            --border:    rgba(255,255,255,0.08);
+            --green:     #00c864;
+            --orange:    #ff6b00;
         }
 
-        .inventory-inputs button { width: 100%; margin-top: 10px; }
-        .stat-card { flex: 1 1 100%; }
-    }
-</style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            padding: 0 0 60px;
+        }
+
+        /* ─── TOP BAR ─────────────────────────── */
+        .admin-topbar {
+            background: rgba(10,10,10,0.97);
+            border-bottom: 2px solid var(--accent);
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+
+        .admin-topbar-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            color: var(--text);
+        }
+
+        .admin-topbar-title span { color: var(--accent); }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid rgba(230,0,0,0.4);
+            color: var(--accent);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            padding: 8px 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.2s;
+        }
+        .logout-btn:hover { background: rgba(230,0,0,0.1); }
+
+        /* ─── MAIN WRAPPER ────────────────────── */
+        .admin-wrapper {
+            max-width: 1200px;
+            margin: 32px auto;
+            padding: 0 20px;
+        }
+
+        /* ─── STAT CARDS ──────────────────────── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-bottom: 3px solid var(--accent);
+            border-radius: 6px;
+            padding: 20px 24px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        /* ─── SECTION HEADING ─────────────────── */
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 36px 0 16px;
+        }
+
+        .section-heading h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            color: var(--text);
+        }
+
+        .section-heading::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 22px;
+            background: var(--accent);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* ─── ADD PRODUCT FORM ────────────────── */
+        .add-form {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .add-form-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+            min-width: 130px;
+        }
+
+        .form-field label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .form-field input,
+        .form-field select {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 9px 12px;
+            border-radius: 3px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus { border-color: var(--accent); }
+
+        .form-field.wide { flex: 2; min-width: 200px; }
+
+        .btn-add {
+            background: var(--green);
+            color: #000;
+            border: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            padding: 10px 24px;
+            border-radius: 3px;
+            cursor: pointer;
+            height: 40px;
+            align-self: flex-end;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+        }
+        .btn-add:hover { opacity: 0.85; }
+
+        /* ─── TABLE ───────────────────────────── */
+        .table-wrap {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            overflow-x: auto;
+            margin-bottom: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 560px;
+        }
+
+        thead th {
+            background: rgba(230,0,0,0.08);
+            border-bottom: 2px solid var(--accent);
+            padding: 12px 16px;
+            text-align: left;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--accent);
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text);
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+        .td-img img {
+            width: 44px; height: 36px;
+            object-fit: contain;
+            background: #1a1a1a;
+            border-radius: 3px;
+            padding: 2px;
+        }
+
+        .qty-input {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 8px;
+            border-radius: 3px;
+            width: 60px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .qty-input:focus { border-color: var(--accent); }
+
+        /* ─── ACTION BUTTONS ──────────────────── */
+        .btn {
+            border: none;
+            padding: 7px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: opacity 0.2s, transform 0.15s;
+            white-space: nowrap;
+        }
+        .btn:hover { opacity: 0.82; transform: translateY(-1px); }
+
+        .btn-approve { background: var(--green); color: #000; margin-right: 4px; }
+        .btn-delete  { background: #2a2a2a; color: var(--text-muted); border: 1px solid var(--border); }
+        .btn-delete:hover { background: rgba(230,0,0,0.15); color: var(--accent); border-color: var(--accent); }
+        .btn-update  { background: var(--accent); color: #fff; margin-right: 4px; }
+
+        /* ─── STATUS BADGE ────────────────────── */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 2px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .badge-pending   { background: rgba(200,140,0,0.15); color: #d4a017; border: 1px solid rgba(200,140,0,0.3); }
+        .badge-completed { background: rgba(0,200,100,0.12); color: var(--green); border: 1px solid rgba(0,200,100,0.25); }
+
+        /* ─── EMPTY ROW ───────────────────────── */
+        .empty-row td {
+            text-align: center;
+            padding: 32px;
+            color: var(--text-muted);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+        }
+
+        /* ─── MOBILE ──────────────────────────── */
+        @media (max-width: 700px) {
+            .admin-wrapper { padding: 0 12px; margin: 16px auto; }
+            .admin-topbar-title { font-size: 1rem; }
+            .form-row { flex-direction: column; }
+            .btn-add { width: 100%; justify-content: center; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 400px) {
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="admin-container">
-        <span class="logout-link" onclick="logoutAdmin()">Logout Admin</span>
-        <h1>ADMIN CONTROL PANEL</h1>
-
-        <div class="stats">
-            <div class="stat-card">
-                <h3>Pending Orders</h3>
-                <p id="pendingCount">0</p>
-            </div>
-            <div class="stat-card">
-                <h3>Total Sales</h3>
-                <p id="totalSales">₱0</p>
-            </div>
-            <div class="stat-card">
-                <h3>Registered Users</h3>
-                <p id="userCount">0</p>
-            </div>
-        </div>
-
-        <h2>Inventory Management</h2>
-        <div style="background: #111; padding: 20px; border-radius: 10px; border: 1px solid #333; margin-bottom: 30px;">
-            <h3 style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">ADD / UPDATE PRODUCT</h3>
-            <input type="text" id="prodName" placeholder="Product Name" style="width:20%; padding:8px; margin-right:5px; background:#222; color:white; border:1px solid #444;">
-            <input type="number" id="prodPrice" placeholder="Price" style="width:10%; padding:8px; margin-right:5px; background:#222; color:white; border:1px solid #444;">
-            <input type="number" id="prodQty" placeholder="Qty" style="width:10%; padding:8px; margin-right:5px; background:#222; color:white; border:1px solid #444;">
-            <select id="prodCategory" style="padding:8px; margin-right:5px; background:#222; color:white; border:1px solid #444;">
-                <option value="hotwheels">Hotwheels</option>
-                <option value="premium">Hotwheels Premium</option>
-                <option value="matchbox">Matchbox</option>
-            </select>
-            <input type="text" id="prodImg" placeholder="Image URL" style="width:20%; padding:8px; margin-right:5px; background:#222; color:white; border:1px solid #444;">
-            <button class="btn approve-btn" onclick="addProduct()">Add/Update Product</button>
-        </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Qty</th>
-                    <th>Category</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="inventoryTableBody"></tbody>
-        </table>
-
-        <h2>Order Requests</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Total</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="orderTableBody"></tbody>
-        </table>
-
-        <h2>Customer Inbox</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Sender</th>
-                    <th>Subject</th>
-                    <th>Message</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="inboxTableBody"></tbody>
-        </table>
-
-        <h2>Registered Accounts</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Full Name</th>
-                    <th>Username</th>
-                    <th>Contact</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="userTableBody"></tbody>
-        </table>
+    <!-- ═══ TOP BAR ═══════════════════════════════════════════ -->
+    <div class="admin-topbar">
+        <span class="admin-topbar-title">PITS STOP <span>ADMIN</span></span>
+        <button class="logout-btn" onclick="logoutAdmin()">⏻ Logout</button>
     </div>
 
+    <div class="admin-wrapper">
+
+        <!-- ─── STAT CARDS ─────────────────────────────────── -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <p class="stat-label">Pending Orders</p>
+                <p class="stat-value" id="pendingCount">0</p>
+            </div>
+            <div class="stat-card">
+                <p class="stat-label">Total Sales</p>
+                <p class="stat-value" id="totalSales">₱0</p>
+            </div>
+            <div class="stat-card">
+                <p class="stat-label">Registered Users</p>
+                <p class="stat-value" id="userCount">0</p>
+            </div>
+            <div class="stat-card">
+                <p class="stat-label">Total Products</p>
+                <p class="stat-value" id="productCount">0</p>
+            </div>
+        </div>
+
+        <!-- ─── INVENTORY ──────────────────────────────────── -->
+        <div class="section-heading"><h2>Inventory Management</h2></div>
+
+        <div class="add-form">
+            <span class="add-form-label">Add / Update Product</span>
+            <div class="form-row">
+                <div class="form-field wide">
+                    <label>Product Name</label>
+                    <input type="text" id="prodName" placeholder="e.g. Honda Civic EF">
+                </div>
+                <div class="form-field">
+                    <label>Price (₱)</label>
+                    <input type="number" id="prodPrice" placeholder="200">
+                </div>
+                <div class="form-field">
+                    <label>Quantity</label>
+                    <input type="number" id="prodQty" placeholder="5">
+                </div>
+                <div class="form-field">
+                    <label>Category</label>
+                    <select id="prodCategory">
+                        <option value="hotwheels">Hotwheels</option>
+                        <option value="premium">Premium</option>
+                        <option value="matchbox">Matchbox</option>
+                    </select>
+                </div>
+                <div class="form-field wide">
+                    <label>Image URL</label>
+                    <input type="text" id="prodImg" placeholder="https://...">
+                </div>
+                <button class="btn-add" onclick="addProduct()">+ Add / Update</button>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- ─── ORDERS ─────────────────────────────────────── -->
+        <div class="section-heading"><h2>Order Requests</h2></div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orderTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- ─── INBOX ──────────────────────────────────────── -->
+        <div class="section-heading"><h2>Customer Inbox</h2></div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Sender</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="inboxTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- ─── USERS ──────────────────────────────────────── -->
+        <div class="section-heading"><h2>Registered Accounts</h2></div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Username</th>
+                        <th>Contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody"></tbody>
+            </table>
+        </div>
+
+    </div><!-- /admin-wrapper -->
+
     <script>
+        // ─── Auth ────────────────────────────────────────────
         function checkAuth() {
             if (localStorage.getItem('isAdmin') !== 'true') {
                 window.location.replace('index.html');
@@ -172,152 +484,228 @@
             window.location.replace('index.html');
         }
 
+        // ─── Init ────────────────────────────────────────────
         window.onload = function() {
             checkAuth();
-            loadDashboard();
             loadInventory();
-        };
-
-        function loadDashboard() {
-            loadUsers();
             loadOrders();
             loadInbox();
-        }
-        
-function loadInventory() {
-    const products = JSON.parse(localStorage.getItem('allProducts')) || [];
-    const tableBody = document.getElementById('inventoryTableBody');
-    tableBody.innerHTML = "";
+            loadUsers();
+        };
 
-    products.forEach((p, index) => {
-        tableBody.innerHTML += `
-            <tr>
-                <td data-label="IMAGE"><img src="${p.image}" width="40" style="border-radius:4px;"></td>
-                <td data-label="NAME">${p.name}</td>
-                <td data-label="PRICE">₱${p.price}</td>
-                <td data-label="QTY">
-                    <input type="number" id="updateQty-${index}" value="${p.quantity}" style="width:50px; background:#222; color:white; border:1px solid #444; padding:5px;">
-                </td>
-                <td data-label="CATEGORY">${p.category}</td>
-                <td data-label="ACTION">
-                    <button class="btn approve-btn" onclick="updateStock(${index})">Update</button>
-                    <button class="btn delete-btn" onclick="deleteProduct(${index})">Remove</button>
-                </td>
-            </tr>`;
-    });
-}
+        // ─── Inventory ───────────────────────────────────────
+        function loadInventory() {
+            const products = JSON.parse(localStorage.getItem('allProducts')) || [];
+            const tbody = document.getElementById('inventoryTableBody');
+            document.getElementById('productCount').innerText = products.length;
+            tbody.innerHTML = '';
+
+            if (products.length === 0) {
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No products in inventory</td></tr>`;
+                return;
+            }
+
+            products.forEach((p, i) => {
+                const qty = parseInt(p.quantity);
+                const qtyColor = qty <= 0 ? 'color:#e60000' : qty <= 3 ? 'color:#ff6b00' : '';
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="td-img"><img src="${p.image}" alt="${p.name}" onerror="this.style.opacity='0.2'"></td>
+                        <td>${p.name}</td>
+                        <td>₱${p.price}</td>
+                        <td style="${qtyColor}">
+                            <input type="number" class="qty-input" id="updateQty-${i}" value="${p.quantity}" min="0">
+                        </td>
+                        <td>${p.category}</td>
+                        <td>
+                            <button class="btn btn-update" onclick="updateStock(${i})">Update</button>
+                            <button class="btn btn-delete" onclick="deleteProduct(${i})">Remove</button>
+                        </td>
+                    </tr>`;
+            });
+        }
 
         function updateStock(index) {
-        let products = JSON.parse(localStorage.getItem('allProducts')) || [];
-        const newQty = parseInt(document.getElementById(`updateQty-${index}`).value);
-        
-        if (isNaN(newQty)) return alert("Please enter a valid number");
+            let products = JSON.parse(localStorage.getItem('allProducts')) || [];
+            const newQty = parseInt(document.getElementById(`updateQty-${index}`).value);
+            if (isNaN(newQty) || newQty < 0) return alert("Please enter a valid number.");
 
-        // Logic: If it was out of stock (0) and we are adding items, notify the waitlist
-        if (products[index].quantity <= 0 && newQty > 0) {
-            sendRestockNotification(products[index].name);
+            if (products[index].quantity <= 0 && newQty > 0) {
+                sendRestockNotification(products[index].name);
+            }
+
+            products[index].quantity = newQty;
+            localStorage.setItem('allProducts', JSON.stringify(products));
+            alert(`✅ Stock updated for "${products[index].name}"`);
+            loadInventory();
         }
 
-        products[index].quantity = newQty;
-        localStorage.setItem('allProducts', JSON.stringify(products));
-        alert("Stock updated successfully!");
-        loadInventory();
-    }   
-
         function addProduct() {
-            const name = document.getElementById('prodName').value;
-            const price = document.getElementById('prodPrice').value;
+            const name     = document.getElementById('prodName').value.trim();
+            const price    = document.getElementById('prodPrice').value.trim();
             const category = document.getElementById('prodCategory').value;
-            const img = document.getElementById('prodImg').value;
-            const qty = parseInt(document.getElementById('prodQty').value) || 0;
+            const img      = document.getElementById('prodImg').value.trim();
+            const qty      = parseInt(document.getElementById('prodQty').value) || 0;
 
-            if(!name || !price || !img) return alert("Fill all fields!");
+            if (!name || !price || !img) return alert("Please fill in all fields.");
 
             let products = JSON.parse(localStorage.getItem('allProducts')) || [];
             const existingIndex = products.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
 
-            if(existingIndex !== -1) {
-                if(products[existingIndex].quantity <= 0 && qty > 0) sendRestockNotification(name);
+            if (existingIndex !== -1) {
+                if (products[existingIndex].quantity <= 0 && qty > 0) {
+                    sendRestockNotification(name);
+                }
                 products[existingIndex].quantity = qty;
                 products[existingIndex].price = price;
+                products[existingIndex].image = img;
+                alert(`✅ "${name}" updated.`);
             } else {
                 products.push({ id: Date.now(), name, price, category, image: img, quantity: qty });
+                alert(`✅ "${name}" added to inventory.`);
             }
 
             localStorage.setItem('allProducts', JSON.stringify(products));
-            location.reload();
-        }
 
-        function sendRestockNotification(prodName) {
-            let waitlist = JSON.parse(localStorage.getItem('restockWaitlist')) || [];
-            let notifications = JSON.parse(localStorage.getItem('userNotifications')) || [];
-            const interested = waitlist.filter(w => w.productName === prodName);
-            interested.forEach(user => {
-                notifications.push({ id: Date.now()+Math.random(), username: user.username, title: "RESTOCK!", message: `${prodName} is back!`, date: new Date().toLocaleString(), isRead: false });
-            });
-            localStorage.setItem('restockWaitlist', JSON.stringify(waitlist.filter(w => w.productName !== prodName)));
-            localStorage.setItem('userNotifications', JSON.stringify(notifications));
+            // Clear form
+            ['prodName','prodPrice','prodQty','prodImg'].forEach(id => document.getElementById(id).value = '');
+            loadInventory();
         }
 
         function deleteProduct(index) {
-            let products = JSON.parse(localStorage.getItem('allProducts'));
+            let products = JSON.parse(localStorage.getItem('allProducts')) || [];
+            if (!confirm(`Remove "${products[index].name}" from inventory?`)) return;
             products.splice(index, 1);
             localStorage.setItem('allProducts', JSON.stringify(products));
             loadInventory();
         }
 
-        function loadUsers() {
-            const users = JSON.parse(localStorage.getItem('allUsers')) || [];
-            const tableBody = document.getElementById('userTableBody');
-            tableBody.innerHTML = "";
-            users.forEach((u) => {
-                tableBody.innerHTML += `<tr><td>${u.fullname || 'N/A'}</td><td>${u.username}</td><td>${u.contact || 'N/A'}</td><td><button class="btn delete-btn" onclick="deleteUser('${u.username}')">Delete</button></td></tr>`;
+        function sendRestockNotification(prodName) {
+            let waitlist = JSON.parse(localStorage.getItem('restockWaitlist')) || [];
+            let notifications = JSON.parse(localStorage.getItem('userNotifications')) || [];
+            waitlist.filter(w => w.productName === prodName).forEach(user => {
+                notifications.push({
+                    id: Date.now() + Math.random(),
+                    username: user.username,
+                    title: "RESTOCK!",
+                    message: `${prodName} is back in stock!`,
+                    date: new Date().toLocaleString(),
+                    isRead: false
+                });
             });
-            document.getElementById('userCount').innerText = users.length;
+            localStorage.setItem('restockWaitlist', JSON.stringify(waitlist.filter(w => w.productName !== prodName)));
+            localStorage.setItem('userNotifications', JSON.stringify(notifications));
         }
 
+        // ─── Orders ──────────────────────────────────────────
         function loadOrders() {
             const orders = JSON.parse(localStorage.getItem('allOrders')) || [];
-            const tableBody = document.getElementById('orderTableBody');
-            let pendingCount = 0; let totalSales = 0;
-            tableBody.innerHTML = "";
-            orders.forEach((order, index) => {
-                if (order.status === "Pending") pendingCount++;
-                if (order.status === "Completed") totalSales += parseInt(order.total.toString().replace(/,/g, ''));
-                tableBody.innerHTML += `<tr><td>${order.orderID}</td><td>${order.user}</td><td>₱${order.total}</td><td>${order.date}</td><td><span class="status-badge ${order.status === 'Pending' ? 'status-pending' : 'status-completed'}">${order.status}</span></td><td>${order.status === 'Pending' ? `<button class="btn approve-btn" onclick="approveOrder(${index})">Approve</button>` : ''}<button class="btn delete-btn" onclick="deleteOrder(${index})">Remove</button></td></tr>`;
-            });
-            document.getElementById('pendingCount').innerText = pendingCount;
-            document.getElementById('totalSales').innerText = "₱" + totalSales.toLocaleString();
-        }
+            const tbody = document.getElementById('orderTableBody');
+            let pending = 0, sales = 0;
+            tbody.innerHTML = '';
 
-        function loadInbox() {
-            const inbox = JSON.parse(localStorage.getItem('adminInbox')) || [];
-            const tableBody = document.getElementById('inboxTableBody');
-            tableBody.innerHTML = "";
-            inbox.forEach((msg, index) => {
-                tableBody.innerHTML += `<tr><td>${msg.date}</td><td>${msg.sender}</td><td>${msg.subject}</td><td>${msg.message}</td><td><button class="btn delete-btn" onclick="deleteMessage(${index})">Clear</button></td></tr>`;
+            if (orders.length === 0) {
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No orders yet</td></tr>`;
+                document.getElementById('pendingCount').innerText = 0;
+                document.getElementById('totalSales').innerText = '₱0';
+                return;
+            }
+
+            orders.forEach((order, i) => {
+                if (order.status === 'Pending') pending++;
+                if (order.status === 'Completed') sales += parseInt(String(order.total).replace(/,/g, '')) || 0;
+                tbody.innerHTML += `
+                    <tr>
+                        <td><span style="font-family:'Share Tech Mono',monospace;font-size:0.78rem;color:var(--text-muted)">${order.orderID}</span></td>
+                        <td>${order.user}</td>
+                        <td>₱${order.total}</td>
+                        <td>${order.date}</td>
+                        <td><span class="badge ${order.status === 'Pending' ? 'badge-pending' : 'badge-completed'}">${order.status}</span></td>
+                        <td>
+                            ${order.status === 'Pending' ? `<button class="btn btn-approve" onclick="approveOrder(${i})">Approve</button>` : ''}
+                            <button class="btn btn-delete" onclick="deleteOrder(${i})">Remove</button>
+                        </td>
+                    </tr>`;
             });
+
+            document.getElementById('pendingCount').innerText = pending;
+            document.getElementById('totalSales').innerText = '₱' + sales.toLocaleString();
         }
 
         function approveOrder(index) {
-            let orders = JSON.parse(localStorage.getItem('allOrders'));
-            orders[index].status = "Completed";
+            let orders = JSON.parse(localStorage.getItem('allOrders')) || [];
+            orders[index].status = 'Completed';
             localStorage.setItem('allOrders', JSON.stringify(orders));
             loadOrders();
         }
 
         function deleteOrder(index) {
-            let orders = JSON.parse(localStorage.getItem('allOrders'));
+            let orders = JSON.parse(localStorage.getItem('allOrders')) || [];
+            if (!confirm('Remove this order record?')) return;
             orders.splice(index, 1);
             localStorage.setItem('allOrders', JSON.stringify(orders));
             loadOrders();
         }
 
+        // ─── Inbox ───────────────────────────────────────────
+        function loadInbox() {
+            const inbox = JSON.parse(localStorage.getItem('adminInbox')) || [];
+            const tbody = document.getElementById('inboxTableBody');
+            tbody.innerHTML = '';
+
+            if (inbox.length === 0) {
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="5">Inbox is empty</td></tr>`;
+                return;
+            }
+
+            inbox.forEach((msg, i) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="white-space:nowrap">${msg.date}</td>
+                        <td>${msg.sender}</td>
+                        <td>${msg.subject}</td>
+                        <td style="max-width:260px">${msg.message}</td>
+                        <td><button class="btn btn-delete" onclick="deleteMessage(${i})">Clear</button></td>
+                    </tr>`;
+            });
+        }
+
         function deleteMessage(index) {
-            let inbox = JSON.parse(localStorage.getItem('adminInbox'));
+            let inbox = JSON.parse(localStorage.getItem('adminInbox')) || [];
             inbox.splice(index, 1);
             localStorage.setItem('adminInbox', JSON.stringify(inbox));
             loadInbox();
+        }
+
+        // ─── Users ───────────────────────────────────────────
+        function loadUsers() {
+            const users = JSON.parse(localStorage.getItem('allUsers')) || [];
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = '';
+            document.getElementById('userCount').innerText = users.length;
+
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="4">No registered users</td></tr>`;
+                return;
+            }
+
+            users.forEach(u => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${u.fullname || 'N/A'}</td>
+                        <td>${u.username}</td>
+                        <td>${u.contact || 'N/A'}</td>
+                        <td><button class="btn btn-delete" onclick="deleteUser('${u.username}')">Delete</button></td>
+                    </tr>`;
+            });
+        }
+
+        function deleteUser(username) {
+            if (!confirm(`Delete account "${username}"? This cannot be undone.`)) return;
+            let users = JSON.parse(localStorage.getItem('allUsers')) || [];
+            users = users.filter(u => u.username !== username);
+            localStorage.setItem('allUsers', JSON.stringify(users));
+            loadUsers();
         }
     </script>
 </body>
