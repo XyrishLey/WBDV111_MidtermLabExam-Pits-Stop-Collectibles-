@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserve Slot | Pits Stops Collectibles</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── BREADCRUMB ── */
+        .breadcrumb {
+            max-width: 1100px;
+            margin: 100px auto 0;
+            padding: 14px 24px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+        .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--accent-2); }
+
+        /* ── MAIN LAYOUT ── */
+        .reserve-layout {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 24px 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        /* ── LEFT: IMAGE ── */
+        .product-image-side {
+            position: sticky;
+            top: 100px;
+        }
+
+        .image-frame {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: #fff;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+
+        .image-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+            max-height: 520px;
+            transition: transform 0.5s ease;
+            cursor: zoom-in;
+        }
+
+        .image-frame:hover img { transform: scale(1.04); }
+
+        /* Status pill under image */
+        .image-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .status-pill {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            padding: 6px 14px;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        .status-pill.open    { background: rgba(0,200,100,0.12); color: #00c864; border: 1px solid rgba(0,200,100,0.3); }
+        .status-pill.limited { background: rgba(230,0,0,0.1); color: var(--accent); border: 1px solid rgba(230,0,0,0.3); }
+
+        .slot-badge-large {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            padding: 6px 14px;
+            border-radius: 2px;
+            background: var(--accent-2);
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        /* ── RIGHT: INFO + FORM ── */
+        .product-info-side {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        /* Series label */
+        .series-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: var(--accent-2);
+            background: rgba(255,107,0,0.08);
+            border: 1px solid rgba(255,107,0,0.25);
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 2px;
+            margin-bottom: 14px;
+        }
+
+        .product-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            letter-spacing: 2px;
+            color: var(--text);
+            line-height: 1.1;
+            margin-bottom: 18px;
+        }
+
+        /* Meta pills */
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .meta-pill {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 4px 12px;
+            border-radius: 2px;
+        }
+
+        /* Description */
+        .product-desc {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            line-height: 1.8;
+            border-left: 3px solid var(--accent-2);
+            padding-left: 16px;
+            margin-bottom: 24px;
+        }
+
+        /* Pricing */
+        .pricing-row {
+            display: flex;
+            gap: 24px;
+            align-items: flex-end;
+            margin-bottom: 28px;
+            padding: 18px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        .pricing-block { display: flex; flex-direction: column; }
+        .pricing-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+        .pricing-amount {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            color: var(--accent-2);
+            line-height: 1;
+        }
+        .pricing-amount.full-price {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        .pricing-divider { width: 1px; background: var(--border); align-self: stretch; }
+
+        /* ── SECTION DIVIDER ── */
+        .form-section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            margin-top: 8px;
+        }
+
+        /* ── FORM FIELDS ── */
+        .field-group { margin-bottom: 14px; }
+
+        .field-group label {
+            display: block;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .field-group label .req { color: var(--accent-2); }
+
+        .field-group input,
+        .field-group select {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 4px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field-group input:focus,
+        .field-group select:focus {
+            border-color: var(--accent-2);
+            box-shadow: 0 0 0 3px rgba(255,107,0,0.15);
+        }
+
+        .field-group input::placeholder { color: var(--text-muted); font-weight: 400; }
+
+        /* Proof upload */
+        .proof-box {
+            background: var(--bg-alt);
+            border: 1px dashed var(--accent-2);
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+        .proof-box label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .proof-box input[type="file"] {
+            width: 100%;
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        #deposit-preview-container { display: none; margin-top: 8px; text-align: center; }
+        #deposit-preview { max-width: 100%; max-height: 180px; border: 1px solid var(--accent-2); border-radius: 4px; }
+        .remove-proof { font-family: 'Rajdhani', sans-serif; font-size: 0.8rem; color: var(--accent); cursor: pointer; text-decoration: underline; display: block; margin-top: 6px; }
+
+        /* Payment instructions */
+        .payment-instr {
+            display: none;
+            background: var(--bg-alt);
+            border: 1px solid var(--accent-2);
+            padding: 14px 18px;
+            border-radius: 6px;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+        .payment-instr p { font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; color: var(--text-muted); margin: 3px 0; }
+        .payment-instr .acct { font-family: 'Share Tech Mono', monospace; font-size: 1.1rem; color: var(--accent-2); letter-spacing: 2px; margin: 6px 0; }
+
+        /* Notice */
+        .form-notice {
+            background: rgba(255,107,0,0.06);
+            border: 1px solid rgba(255,107,0,0.2);
+            border-left: 3px solid var(--accent-2);
+            border-radius: 4px;
+            padding: 12px 16px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+        .form-notice strong { color: var(--accent-2); }
+
+        /* Submit button */
+        .submit-btn {
+            width: 100%;
+            padding: 17px;
+            background: linear-gradient(135deg, var(--accent-2) 0%, #e05a00 100%);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.15rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(255,107,0,0.35);
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,107,0,0.45); }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* ══════════════════════════════════════
+           SUCCESS SCREEN
+        ══════════════════════════════════════ */
+        #success-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+            flex: 1;
+        }
+
+        .success-check-circle {
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            background: rgba(255,107,0,0.1);
+            border: 2px solid var(--accent-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 24px;
+            animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both;
+        }
+
+        @keyframes popIn { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+        .success-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            color: var(--accent-2);
+            background: rgba(255,107,0,0.08);
+            border: 1px solid rgba(255,107,0,0.25);
+            padding: 5px 16px;
+            border-radius: 2px;
+            margin-bottom: 16px;
+        }
+
+        .success-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            letter-spacing: 6px;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+        .success-title span { color: transparent; -webkit-text-stroke: 2px var(--accent-2); }
+
+        .success-sub {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            line-height: 1.75;
+            margin-bottom: 36px;
+        }
+
+        /* Confirmation card */
+        .confirm-card {
+            width: 100%;
+            max-width: 520px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-top: 3px solid var(--accent-2);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 28px;
+            text-align: left;
+            animation: fadeUp 0.6s 0.2s ease both;
+        }
+        .confirm-card-header {
+            background: rgba(255,107,0,0.06);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .confirm-card-header span {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        .confirm-rsv-id {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            color: var(--accent-2);
+        }
+        .confirm-card-body { padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; }
+        .confirm-row { display: flex; justify-content: space-between; font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; }
+        .confirm-row .lbl { color: var(--text-muted); font-weight: 600; }
+        .confirm-row .val { color: var(--text); font-weight: 700; text-align: right; max-width: 55%; }
+        .confirm-row .val.orange { color: var(--accent-2); }
+
+        /* Next steps */
+        .next-steps {
+            width: 100%;
+            max-width: 520px;
+            background: rgba(255,107,0,0.05);
+            border: 1px solid rgba(255,107,0,0.2);
+            border-left: 4px solid var(--accent-2);
+            border-radius: 6px;
+            padding: 18px 22px;
+            text-align: left;
+            margin-bottom: 28px;
+            animation: fadeUp 0.6s 0.3s ease both;
+        }
+        .next-steps h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            color: var(--accent-2);
+            margin-bottom: 12px;
+        }
+        .next-steps ol {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 2;
+            padding-left: 18px;
+        }
+        .next-steps ol li strong { color: var(--text); }
+
+        .success-btns {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeUp 0.6s 0.4s ease both;
+        }
+        .btn-orange {
+            padding: 15px 32px;
+            background: linear-gradient(135deg, var(--accent-2) 0%, #e05a00 100%);
+            color: #fff; text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem; letter-spacing: 3px;
+            border-radius: 4px;
+            box-shadow: 0 4px 16px rgba(255,107,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-orange:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,0,0.45); }
+        .btn-ghost {
+            padding: 15px 32px;
+            background: transparent;
+            color: var(--text); text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem; letter-spacing: 3px;
+            border-radius: 4px;
+            border: 1.5px solid var(--border);
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .btn-ghost:hover { border-color: var(--accent-2); color: var(--accent-2); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 860px) {
+            .reserve-layout { grid-template-columns: 1fr; gap: 28px; }
+            .product-image-side { position: static; }
+        }
+        @media (max-width: 480px) {
+            .pricing-row { flex-direction: column; gap: 12px; }
+            .pricing-divider { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ══ HEADER ══ -->
+    <header>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hot Wheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="preorder.html" class="nav-button">Pre-Order</a></li>
+                <li>
+                    <a href="cart.html" class="nav-button">
+                        🛒 Cart <span id="cart-count" style="display:none; background:var(--accent); color:#fff; border-radius:50%; padding:1px 6px; font-size:0.7rem; margin-left:4px;">0</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="nav-right">
+                <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="hamburger-overlay" id="drawerOverlay"></div>
+    <nav class="hamburger-drawer" id="hamburgerDrawer">
+        <button class="drawer-close" id="drawerClose">✕</button>
+        <div class="drawer-greeting">Pits Stops Collectibles</div>
+        <span class="drawer-label">Navigation</span>
+        <a href="index.html" class="drawer-link">Home</a>
+        <a href="preorder.html" class="drawer-link">Pre-Order Vault</a>
+        <div class="drawer-divider"></div>
+        <a href="hotwheels.html" class="drawer-link">Hot Wheels</a>
+        <a href="premium.html" class="drawer-link">Premium</a>
+        <a href="matchbox.html" class="drawer-link">Matchbox</a>
+        <a href="cart.html" class="drawer-link drawer-link--accent">🛒 Cart</a>
+    </nav>
+
+    <!-- ══ MAIN PAGE (hidden when success shows) ══ -->
+    <div id="main-page">
+
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> /
+            <a href="preorder.html">Pre-Order Vault</a> /
+            <span id="bc-name">Reserve Slot</span>
+        </div>
+
+        <div class="reserve-layout">
+
+            <!-- LEFT: Image -->
+            <div class="product-image-side">
+                <div class="image-frame">
+                    <img id="prod-img" src="" alt="Product Image">
+                </div>
+                <div class="image-status">
+                    <span class="slot-badge-large" id="prod-badge">2026 Set</span>
+                    <span class="status-pill" id="prod-status-pill">Open</span>
+                </div>
+            </div>
+
+            <!-- RIGHT: Info + Form -->
+            <div class="product-info-side">
+                <span class="series-label" id="prod-series">Series</span>
+                <h1 class="product-name" id="prod-name">Loading…</h1>
+
+                <div class="meta-row" id="prod-meta"></div>
+
+                <p class="product-desc" id="prod-desc"></p>
+
+                <div class="pricing-row">
+                    <div class="pricing-block">
+                        <span class="pricing-label">Required Deposit</span>
+                        <span class="pricing-amount" id="prod-deposit">₱0</span>
+                    </div>
+                    <div class="pricing-divider"></div>
+                    <div class="pricing-block">
+                        <span class="pricing-label">Full Price (Upon Arrival)</span>
+                        <span class="pricing-amount" id="prod-price">₱0</span>
+                    </div>
+                </div>
+
+                <!-- FORM -->
+                <p class="form-section-title">Reserve Your Slot</p>
+
+                <div class="field-group">
+                    <label>Full Name <span class="req">*</span></label>
+                    <input type="text" id="f-name" placeholder="Your full name" maxlength="80">
+                </div>
+
+                <div class="field-group">
+                    <label>Contact Number <span class="req">*</span></label>
+                    <input type="tel" id="f-contact" placeholder="09XXXXXXXXX" maxlength="11">
+                </div>
+
+                <div class="field-group">
+                    <label>Facebook Name or Profile Link <span class="req">*</span></label>
+                    <input type="text" id="f-fb" placeholder="e.g. Juan Dela Cruz or facebook.com/juan">
+                </div>
+
+                <div class="field-group">
+                    <label>Payment Method for Deposit <span class="req">*</span></label>
+                    <select id="f-payment" onchange="togglePayment()">
+                        <option value="">Select method</option>
+                        <option value="GCash">GCash</option>
+                        <option value="Maya">Maya</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                    </select>
+                </div>
+
+                <div class="payment-instr" id="payment-instr">
+                    <p>Send deposit to:</p>
+                    <p><strong id="instr-method">GCash</strong></p>
+                    <p class="acct">0912 345 6789</p>
+                    <p>Account Name: <strong>K** J** B*M**A.</strong></p>
+                    <p style="font-size:0.75rem; margin-top:8px; color:var(--text-muted);">Send the exact deposit amount shown above.</p>
+                </div>
+
+                <div class="proof-box" id="proof-box" style="display:none;">
+                    <label>Upload Deposit Screenshot <span class="req">*</span></label>
+                    <input type="file" id="f-proof" accept="image/png,image/jpeg,image/jpg,image/webp" onchange="previewProof(this)">
+                    <div id="deposit-preview-container">
+                        <img id="deposit-preview" src="#" alt="Proof">
+                        <span class="remove-proof" onclick="removeProof()">✕ Remove</span>
+                    </div>
+                    <div class="field-group" style="margin-top:12px; margin-bottom:0;">
+                        <label>Last 4 Digits of Reference No. <span class="req">*</span></label>
+                        <input type="text" id="f-ref" maxlength="4" placeholder="e.g. 5678" inputmode="numeric">
+                    </div>
+                </div>
+
+                <div class="form-notice">
+                    📌 After submitting, the seller will contact you on <strong>Facebook</strong> to confirm your slot and provide further payment instructions.
+                    Pre-orders are <strong>non-refundable</strong> once confirmed.
+                </div>
+
+                <button class="submit-btn" id="submitBtn" onclick="submitReservation()">Confirm Reservation →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ SUCCESS SCREEN ══ -->
+    <div id="success-screen">
+        <div class="success-check-circle">🏁</div>
+        <span class="success-tag">Slot Secured</span>
+        <h1 class="success-title">Pre-Order <span>Confirmed!</span></h1>
+        <p class="success-sub">
+            Your reservation has been submitted! The seller will reach out to you on
+            <strong style="color:var(--text);">Facebook</strong> to confirm your deposit and finalize your slot.
+        </p>
+
+        <div class="confirm-card">
+            <div class="confirm-card-header">
+                <span>Reservation Reference</span>
+                <span class="confirm-rsv-id" id="conf-id">RSV-????</span>
+            </div>
+            <div class="confirm-card-body">
+                <div class="confirm-row">
+                    <span class="lbl">Item</span>
+                    <span class="val" id="conf-item">—</span>
+                </div>
+                <div class="confirm-row">
+                    <span class="lbl">Name</span>
+                    <span class="val" id="conf-name">—</span>
+                </div>
+                <div class="confirm-row">
+                    <span class="lbl">Contact</span>
+                    <span class="val" id="conf-contact">—</span>
+                </div>
+                <div class="confirm-row">
+                    <span class="lbl">Facebook</span>
+                    <span class="val" id="conf-fb">—</span>
+                </div>
+                <div class="confirm-row">
+                    <span class="lbl">Deposit Required</span>
+                    <span class="val orange" id="conf-deposit">—</span>
+                </div>
+                <div class="confirm-row">
+                    <span class="lbl">Payment Method</span>
+                    <span class="val" id="conf-payment">—</span>
+                </div>
+                <div class="confirm-row">
+                    <span class="lbl">Status</span>
+                    <span class="val" style="color:orange;">⏳ Pending Seller Confirmation</span>
+                </div>
+                <div class="confirm-row">
+                    <span class="lbl">Date</span>
+                    <span class="val" id="conf-date">—</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="next-steps">
+            <h4>What Happens Next</h4>
+            <ol>
+                <li><strong>Check your Facebook</strong> — the seller will message you to confirm your slot.</li>
+                <li><strong>Send the deposit</strong> via your chosen payment method once confirmed.</li>
+                <li><strong>Wait for ETA update</strong> — the seller will notify you when the item arrives.</li>
+                <li><strong>Pay the balance</strong> upon arrival, then your collectible ships out! 🚀</li>
+            </ol>
+        </div>
+
+        <div class="success-btns">
+            <a href="preorder.html" class="btn-orange">Back to Pre-Order Vault</a>
+            <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="btn-ghost">Message Seller →</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <h3>Pits Stops Collectibles</h3>
+            <p class="tagline">"Where Every Model Tells a Story"</p>
+            <p class="footer-info">📍 Cainta, Rizal &nbsp;|&nbsp; 📦 Nationwide Shipping Available</p>
+            <div class="social-links">
+                <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">Facebook Page →</a>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© 2025 Pits Stops Collectibles — All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* ── THEME ── */
+        const themeBtn = document.getElementById('themeBtn');
+        if (localStorage.getItem('theme') === 'light') { document.documentElement.setAttribute('data-theme','light'); themeBtn.textContent='☀️'; }
+        themeBtn.addEventListener('click', () => {
+            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+            document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            themeBtn.textContent = isLight ? '🌙' : '☀️';
+        });
+
+        /* ── DRAWER ── */
+        const hamburgerBtn    = document.getElementById('hamburgerBtn');
+        const hamburgerDrawer = document.getElementById('hamburgerDrawer');
+        const drawerOverlay   = document.getElementById('drawerOverlay');
+        const drawerClose     = document.getElementById('drawerClose');
+        function openDrawer()  { hamburgerDrawer.classList.add('open'); drawerOverlay.classList.add('open'); hamburgerBtn.classList.add('active'); }
+        function closeDrawer() { hamburgerDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); hamburgerBtn.classList.remove('active'); }
+        hamburgerBtn.addEventListener('click', openDrawer);
+        drawerClose.addEventListener('click', closeDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        /* ── CART BADGE ── */
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const badge = document.getElementById('cart-count');
+        if (cart.length > 0) { badge.style.display = 'inline'; badge.textContent = cart.length; }
+
+        /* ── SANITIZE ── */
+        function sanitize(str) { return String(str).replace(/<[^>]*>/g,'').trim(); }
+
+        /* ── LOAD PRODUCT FROM localStorage ── */
+        let currentItem = null;
+
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('id'));
+            const items = JSON.parse(localStorage.getItem('preorderItems')) || [];
+            currentItem = items.find(i => i.id === id);
+
+            if (!currentItem) {
+                document.getElementById('prod-name').textContent = 'Item not found.';
+                return;
+            }
+
+            // Populate page
+            document.title = currentItem.name + ' | Reserve Slot';
+            document.getElementById('bc-name').textContent = currentItem.name;
+            document.getElementById('prod-img').src = currentItem.image;
+            document.getElementById('prod-img').alt = currentItem.name;
+            document.getElementById('prod-series').textContent = currentItem.series;
+            document.getElementById('prod-name').textContent = currentItem.name;
+            document.getElementById('prod-desc').textContent = currentItem.desc;
+            document.getElementById('prod-deposit').textContent = currentItem.deposit;
+            document.getElementById('prod-price').textContent = currentItem.price;
+            document.getElementById('prod-badge').textContent = currentItem.badge;
+
+            // Status pill
+            const pill = document.getElementById('prod-status-pill');
+            const statusLabel = { open: 'Open', limited: 'Limited', closed: 'Slots Full' };
+            pill.textContent = statusLabel[currentItem.status] || currentItem.status;
+            pill.className = 'status-pill ' + currentItem.status;
+
+            // Meta pills
+            const metaRow = document.getElementById('prod-meta');
+            [currentItem.scale, currentItem.brand, currentItem.release, currentItem.eta]
+                .filter(Boolean).forEach(txt => {
+                    const span = document.createElement('span');
+                    span.className = 'meta-pill';
+                    span.textContent = txt;
+                    metaRow.appendChild(span);
+                });
+
+            // Pre-fill from logged in user
+            const user = JSON.parse(localStorage.getItem('currentUser') || localStorage.getItem('user') || 'null');
+            if (user) {
+                document.getElementById('f-name').value = sanitize(user.fullname || user.username || '');
+                document.getElementById('f-contact').value = sanitize(user.contact || '');
+                document.getElementById('f-fb').value = sanitize(user.facebook || '');
+            }
+
+            // Digits only for ref
+            document.getElementById('f-ref').addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g,'');
+            });
+
+            // Contact digits only
+            document.getElementById('f-contact').addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g,'').slice(0,11);
+            });
+        };
+
+        /* ── PAYMENT TOGGLE ── */
+        function togglePayment() {
+            const method = document.getElementById('f-payment').value;
+            const showOnline = method === 'GCash' || method === 'Maya';
+            document.getElementById('payment-instr').style.display = showOnline ? 'block' : 'none';
+            document.getElementById('proof-box').style.display = showOnline ? 'block' : 'none';
+            document.getElementById('instr-method').textContent = method;
+        }
+
+        /* ── PROOF PREVIEW ── */
+        function previewProof(input) {
+            if (!input.files || !input.files[0]) return;
+            if (input.files[0].size > 5 * 1024 * 1024) {
+                alert('Image too large. Please upload under 5MB.'); input.value = ''; return;
+            }
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('deposit-preview').src = e.target.result;
+                document.getElementById('deposit-preview-container').style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        function removeProof() {
+            document.getElementById('f-proof').value = '';
+            document.getElementById('deposit-preview-container').style.display = 'none';
+        }
+
+        /* ── SUBMIT ── */
+        function submitReservation() {
+            const name    = sanitize(document.getElementById('f-name').value);
+            const contact = sanitize(document.getElementById('f-contact').value);
+            const fb      = sanitize(document.getElementById('f-fb').value);
+            const payment = document.getElementById('f-payment').value;
+            const errors  = [];
+
+            if (name.length < 2)   errors.push('Please enter your full name.');
+            if (!/^09\d{9}$/.test(contact)) errors.push('Enter a valid 11-digit PH number (09XXXXXXXXX).');
+            if (fb.length < 3)     errors.push('Please enter your Facebook name or link.');
+            if (!payment)          errors.push('Please select a payment method.');
+
+            if (payment === 'GCash' || payment === 'Maya') {
+                if (!document.getElementById('f-proof').value)
+                    errors.push('Please upload your deposit screenshot.');
+                if (!/^\d{4}$/.test(document.getElementById('f-ref').value))
+                    errors.push('Please enter the last 4 digits of your reference number.');
+            }
+
+            if (errors.length) {
+                alert('Please fix the following:\n\n• ' + errors.join('\n• '));
+                return;
+            }
+
+            document.getElementById('submitBtn').disabled = true;
+
+            // Save reservation
+            const rsvId = 'RSV-' + Date.now();
+            const reservation = {
+                id: rsvId,
+                item: currentItem.name,
+                itemId: currentItem.id,
+                deposit: currentItem.deposit,
+                name, contact, fb, payment,
+                date: new Date().toLocaleDateString('en-PH'),
+                status: 'Pending'
+            };
+
+            const reservations = JSON.parse(localStorage.getItem('preorderRequests')) || [];
+            reservations.push(reservation);
+            localStorage.setItem('preorderRequests', JSON.stringify(reservations));
+
+            // Populate success screen
+            document.getElementById('conf-id').textContent      = rsvId;
+            document.getElementById('conf-item').textContent    = currentItem.name;
+            document.getElementById('conf-name').textContent    = name;
+            document.getElementById('conf-contact').textContent = contact;
+            document.getElementById('conf-fb').textContent      = fb;
+            document.getElementById('conf-deposit').textContent = currentItem.deposit;
+            document.getElementById('conf-payment').textContent = payment;
+            document.getElementById('conf-date').textContent    = reservation.date;
+
+            // Switch screens
+            document.getElementById('main-page').style.display = 'none';
+            const s = document.getElementById('success-screen');
+            s.style.display = 'flex';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
