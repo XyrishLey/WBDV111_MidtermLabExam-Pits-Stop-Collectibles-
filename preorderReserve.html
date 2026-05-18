@@ -530,6 +530,7 @@
         <a href="premium.html" class="drawer-link">Premium</a>
         <a href="matchbox.html" class="drawer-link">Matchbox</a>
         <a href="cart.html" class="drawer-link drawer-link--accent">🛒 Cart</a>
+        <a href="contactUs.html" class="drawer-link">✉️ Contact Us</a>
     </nav>
 
     <!-- ══ MAIN PAGE (hidden when success shows) ══ -->
@@ -626,10 +627,68 @@
 
                 <div class="form-notice">
                     📌 After submitting, the seller will contact you on <strong>Facebook</strong> to confirm your slot and provide further payment instructions.
-                    Pre-orders are <strong>non-refundable</strong> once confirmed.
                 </div>
 
-                <button class="submit-btn" id="submitBtn" onclick="submitReservation()">Confirm Reservation →</button>
+                <!-- ── TERMS & CONDITIONS ── -->
+                <div class="tnc-box">
+                    <div class="tnc-header">
+                        <span class="tnc-icon">📋</span>
+                        <span class="tnc-title">Pre-Order Terms & Conditions</span>
+                    </div>
+                    <div class="tnc-body">
+                        <div class="tnc-section">
+                            <p class="tnc-section-label">1. Deposit & Payment</p>
+                            <ul>
+                                <li>A <strong>non-refundable deposit</strong> is required to secure your slot.</li>
+                                <li>The remaining balance must be paid in full upon the item's arrival.</li>
+                                <li>Failure to pay the balance within <strong>3 days of arrival notice</strong> may result in slot forfeiture.</li>
+                            </ul>
+                        </div>
+                        <div class="tnc-section">
+                            <p class="tnc-section-label">2. Cancellation Policy</p>
+                            <ul>
+                                <li>Pre-orders are <strong>strictly non-refundable</strong> once the deposit has been confirmed by the seller.</li>
+                                <li>If you back out after confirmation, your deposit will <strong>not be returned</strong> under any circumstances.</li>
+                                <li>Cancellations before seller confirmation may be accommodated — message the seller immediately on Facebook.</li>
+                            </ul>
+                        </div>
+                        <div class="tnc-section">
+                            <p class="tnc-section-label">3. ETA & Delays</p>
+                            <ul>
+                                <li>Release dates and ETAs are estimates and may change due to supplier or shipping delays.</li>
+                                <li>Pits Stops Collectibles is <strong>not liable</strong> for delays caused by the manufacturer or courier.</li>
+                                <li>You will be notified via Facebook for any ETA updates.</li>
+                            </ul>
+                        </div>
+                        <div class="tnc-section">
+                            <p class="tnc-section-label">4. Item Condition</p>
+                            <ul>
+                                <li>All pre-order items are brand new and sealed <strong>Mint in Box (MIB)</strong> unless otherwise stated.</li>
+                                <li>Minor packaging imperfections from the manufacturer are not grounds for cancellation or refund.</li>
+                            </ul>
+                        </div>
+                        <div class="tnc-section">
+                            <p class="tnc-section-label">5. Contact & Communication</p>
+                            <ul>
+                                <li>All updates will be sent through <strong>Facebook Messenger</strong>. Ensure your Facebook details are correct.</li>
+                                <li>Unresponsive buyers for more than <strong>7 days</strong> after arrival notice risk losing their slot.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <label class="tnc-agree">
+                        <input type="checkbox" id="tnc-check" onchange="toggleSubmit()">
+                        <span class="tnc-checkmark"></span>
+                        <span class="tnc-agree-text">
+                            I have read and I fully agree to the <strong>Pre-Order Terms & Conditions</strong>.
+                            I understand that my deposit is <strong>non-refundable</strong> once confirmed by the seller.
+                        </span>
+                    </label>
+                </div>
+
+                <button class="submit-btn" id="submitBtn" onclick="submitReservation()" disabled>
+                    Agree & Confirm Reservation →
+                </button>
             </div>
         </div>
     </div>

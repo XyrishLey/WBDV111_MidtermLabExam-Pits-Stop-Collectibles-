@@ -225,7 +225,7 @@
             border-radius: 8px;
             text-align: center;
             border: 1px solid rgba(230,0,0,0.3);
-            margin-bottom: 6px;
+            margin-bottom: 18px;
         }
         .total-box h3 {
             font-family: 'Bebas Neue', sans-serif;
@@ -240,6 +240,39 @@
             letter-spacing: 2px;
             color: var(--text-muted);
             display: none;
+        }
+
+        /* ── CONFIRMATION CHECKBOX ── */
+        .confirm-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+        .confirm-wrapper input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        .confirm-wrapper label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            user-select: none;
+            line-height: 1.3;
+        }
+        .confirm-wrapper input[type="checkbox"]:checked + label {
+            color: var(--text);
         }
 
         /* ── PLACE ORDER BUTTON ── */
@@ -258,15 +291,16 @@
             transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 20px var(--accent-glow);
         }
-        .place-order-btn:hover {
+        .place-order-btn:hover:not(:disabled) {
             background: #ff1a1a;
             transform: translateY(-2px);
             box-shadow: 0 8px 28px var(--accent-glow);
         }
         .place-order-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
         /* ── SECURITY BADGE ── */
@@ -332,7 +366,6 @@
 </head>
 <body>
 
-    <!-- ══ VERIFY OVERLAY ══ -->
     <div id="payment-verify-overlay">
         <div id="loader-icon" class="loader"></div>
         <div id="success-icon">⌛</div>
@@ -340,7 +373,6 @@
         <p id="sub-status">Please wait while we submit your order request.</p>
     </div>
 
-    <!-- ══ HEADER ══ -->
     <header>
         <nav class="nav-bar">
             <div class="nav-left">
@@ -367,7 +399,6 @@
         </nav>
     </header>
 
-    <!-- Hamburger Drawer -->
     <div class="hamburger-overlay" id="drawerOverlay"></div>
     <nav class="hamburger-drawer" id="hamburgerDrawer">
         <button class="drawer-close" id="drawerClose">✕</button>
@@ -381,9 +412,9 @@
         <div class="drawer-divider"></div>
         <a href="aboutUs.html" class="drawer-link">About Us</a>
         <a href="cart.html" class="drawer-link drawer-link--accent">🛒 Cart</a>
+        <a href="contactUs.html" class="drawer-link">✉️ Contact Us</a>
     </nav>
 
-    <!-- ══ PAGE TITLE ══ -->
     <div class="checkout-eyebrow">
         <span class="eyebrow-line"></span>
         <span>Secure Checkout</span>
@@ -391,10 +422,8 @@
     </div>
     <h1 class="checkout-heading">Finalize Your Order</h1>
 
-    <!-- ══ CHECKOUT FORM ══ -->
     <div class="checkout-box">
 
-        <!-- STEP 1: Delivery -->
         <p class="section-title">1 — Delivery Method</p>
         <div class="input-group">
             <label>Courier</label>
@@ -414,7 +443,6 @@
             </div>
         </div>
 
-        <!-- STEP 2: Address -->
         <p class="section-title">2 — Shipping Address</p>
 
         <div class="input-group">
@@ -467,7 +495,6 @@
             <input type="tel" id="contact-number" placeholder="09XX XXX XXXX" maxlength="13" autocomplete="tel">
         </div>
 
-        <!-- STEP 3: Payment -->
         <p class="section-title">3 — Payment</p>
         <div class="input-group">
             <label>Payment Method <span style="color:var(--accent)">*</span></label>
@@ -498,13 +525,17 @@
             <input type="text" id="ref-code" maxlength="4" placeholder="e.g. 5678" inputmode="numeric" pattern="[0-9]{4}">
         </div>
 
-        <!-- TOTAL -->
         <div class="total-box">
             <h3>Total: ₱<span id="final-price">0</span></h3>
             <small id="fee-note">(Includes ₱60 Rizal COD Fee)</small>
         </div>
 
-        <button class="place-order-btn" id="placeOrderBtn" onclick="startFinalProcess()">
+        <div class="confirm-wrapper" onclick="toggleCheckbox(event)">
+            <input type="checkbox" id="confirm-info-check" onchange="handleCheckboxChange()">
+            <label for="confirm-info-check">I confirm that all my detailed information is correct and true.</label>
+        </div>
+
+        <button class="place-order-btn" id="placeOrderBtn" onclick="startFinalProcess()" disabled>
             Place Order Now →
         </button>
 
@@ -614,7 +645,6 @@
                 opt.textContent = o[labelKey];
                 selectEl.appendChild(opt);
             });
-            // Both are needed — some browsers honour the attribute, others the property
             selectEl.disabled = false;
             selectEl.removeAttribute('disabled');
         }
@@ -624,7 +654,6 @@
             selectEl.disabled = true;
         }
 
-        /* Track whether current region is NCR so province change can use correct endpoint */
         let isNCRSelected = false;
 
         /* ════════════════════════════════════════
@@ -635,7 +664,6 @@
             const regionCode = regionSel.value;
             const regionName = regionSel.options[regionSel.selectedIndex]?.text || '';
 
-            // Reset everything below region
             disableDropdown(document.getElementById('province'), 'Select Province / District');
             disableDropdown(document.getElementById('city'),     'Select Province first');
             disableDropdown(document.getElementById('barangay'), 'Select City first');
@@ -645,13 +673,6 @@
 
             isNCRSelected = regionName.includes('National Capital Region');
 
-            /* ── NCR FIX ──────────────────────────────────────────────
-               For NCR, districts live at:
-                 /api/regions/{code}/districts/
-               Each district then has cities-municipalities underneath it.
-               We load districts into the "Province / District" dropdown,
-               and the label already says "Province / District" so it fits.
-            ─────────────────────────────────────────────────────── */
             const endpoint = isNCRSelected
                 ? `https://psgc.gitlab.io/api/regions/${regionCode}/districts/`
                 : `https://psgc.gitlab.io/api/regions/${regionCode}/provinces/`;
@@ -676,7 +697,6 @@
             const provSel  = document.getElementById('province');
             const provCode = provSel.value;
 
-            // Reset below province
             disableDropdown(document.getElementById('city'),     'Select City / Municipality');
             disableDropdown(document.getElementById('barangay'), 'Select City first');
             document.getElementById('zip-code').value = '';
@@ -684,12 +704,6 @@
             checkRizalRestriction();
             if (!provCode) return;
 
-            /* ── NCR FIX ──────────────────────────────────────────────
-               For NCR, cities-municipalities are under districts:
-                 /api/districts/{code}/cities-municipalities/
-               For everywhere else they're under provinces:
-                 /api/provinces/{code}/cities-municipalities/
-            ─────────────────────────────────────────────────────── */
             const endpoint = isNCRSelected
                 ? `https://psgc.gitlab.io/api/districts/${provCode}/cities-municipalities/`
                 : `https://psgc.gitlab.io/api/provinces/${provCode}/cities-municipalities/`;
@@ -709,7 +723,7 @@
             const cityCode = citySel.value;
             const cityName = citySel.options[citySel.selectedIndex]?.text || '';
 
-            disableDropdown(document.getElementById('barangay'), 'Loading barangays…');
+            disableDropdown(document.getElementById('barangay'), 'Select Barangay');
             document.getElementById('zip-code').value = 'Loading…';
 
             if (!cityCode) { document.getElementById('zip-code').value = ''; return; }
@@ -820,6 +834,25 @@
         }
 
         /* ════════════════════════════════════════
+           CHECKBOX HANDLING LOGIC
+        ════════════════════════════════════════ */
+        function toggleCheckbox(event) {
+            // Prevent double-triggering when clicking directly on the input or its text label
+            if (event.target.id === 'confirm-info-check' || event.target.getAttribute('for') === 'confirm-info-check') {
+                return;
+            }
+            const checkbox = document.getElementById('confirm-info-check');
+            checkbox.checked = !checkbox.checked;
+            handleCheckboxChange();
+        }
+
+        function handleCheckboxChange() {
+            const checkbox = document.getElementById('confirm-info-check');
+            const orderBtn = document.getElementById('placeOrderBtn');
+            orderBtn.disabled = !checkbox.checked;
+        }
+
+        /* ════════════════════════════════════════
            FORM VALIDATION
         ════════════════════════════════════════ */
         function validateForm() {
@@ -852,6 +885,11 @@
                     errors.push('Please upload your payment screenshot.');
                 if (!/^\d{4}$/.test(document.getElementById('ref-code').value))
                     errors.push('Please enter the last 4 digits of your reference number.');
+            }
+
+            // Secondary security validation for the checkbox element
+            if (!document.getElementById('confirm-info-check').checked) {
+                errors.push('You must confirm that your detailed information is correct.');
             }
 
             if (errors.length) { alert('Please fix the following:\n\n• ' + errors.join('\n• ')); return false; }
@@ -894,7 +932,6 @@
                     date:     new Date().toLocaleDateString('en-PH')
                 };
 
-                // Ref code & image intentionally excluded from localStorage (sensitive)
                 const orders = JSON.parse(localStorage.getItem('allOrders')) || [];
                 orders.push(newOrder);
                 localStorage.setItem('allOrders', JSON.stringify(orders));
@@ -938,7 +975,7 @@
                 const data = await res.json();
                 setDropdown(document.getElementById('region'), data, 'code', 'name', 'Select Region');
             } catch(e) {
-                document.getElementById('region').innerHTML = '<option value="">Failed to load — refresh page</option>';
+                document.getElementById('region').innerHTML = '<option value=\"\">Failed to load — refresh page</option>';
             }
         };
     </script>

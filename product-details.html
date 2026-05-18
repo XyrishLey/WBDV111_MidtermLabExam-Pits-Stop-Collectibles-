@@ -3,26 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details | Pits Stops Collectibles</title>
+    <title>Product Details | Pits Stop Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
-    <!-- Same Google Fonts as style.css -->
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ── PRODUCT PAGE ONLY STYLES ─────────────────────────────
-           All colours reference the variables already defined in
-           style.css so light/dark theme toggling works for free.
-        ──────────────────────────────────────────────────────── */
-
-        /* Breadcrumb */
+        /* ─── BREADCRUMB ──────────────────────────── */
         .breadcrumb {
-            max-width: 1200px;
-            margin: 100px auto 12px;   /* 100px clears the 72px fixed header */
-            padding: 0 40px;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.85rem;
+            max-width: 1100px;
+            margin: 96px auto 0;
+            padding: 20px 24px 0;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
             color: var(--text-muted);
-            letter-spacing: 1px;
         }
         .breadcrumb a {
             color: var(--text-muted);
@@ -30,358 +24,571 @@
             transition: color 0.2s;
         }
         .breadcrumb a:hover { color: var(--accent); }
-        .breadcrumb span { color: var(--text); }
+        .breadcrumb span { color: var(--text-muted); opacity: 0.5; }
 
-        /* ── PRODUCT CONTAINER ── */
+        /* ─── MAIN CONTAINER ──────────────────────── */
         .product-container {
             display: flex;
-            max-width: 1200px;
-            margin: 0 auto 80px;
-            padding: 50px;
-            gap: 60px;
-            background: var(--surface);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+            max-width: 1100px;
+            margin: 24px auto 80px;
+            padding: 0 24px;
+            gap: 48px;
+            align-items: flex-start;
         }
 
-        /* ── IMAGE SIDE ── */
+        /* ─── IMAGE SIDE ──────────────────────────── */
         .product-image-side {
-            flex: 1.2;
+            flex: 1.1;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
             overflow: hidden;
-            border-radius: 12px;
-            background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: fit-content;
+            padding: 24px;
+            position: sticky;
+            top: 90px;
         }
 
         .product-image-side img {
             width: 100%;
             height: auto;
+            max-height: 420px;
+            object-fit: contain;
             transition: transform 0.5s ease;
             cursor: zoom-in;
-            object-fit: contain;
         }
+        .product-image-side:hover img { transform: scale(1.06); }
 
-        .product-image-side:hover img { transform: scale(1.08); }
-
-        /* ── INFO SIDE ── */
+        /* ─── INFO SIDE ───────────────────────────── */
         .product-info-side {
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            gap: 0;
         }
 
         .brand-label {
             font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 3px;
             color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 0.7rem;
-            margin-bottom: 12px;
-            background: rgba(230,0,0,0.08);
-            border: 1px solid rgba(230,0,0,0.25);
-            display: inline-block;
-            padding: 5px 14px;
-            border-radius: 2px;
+            margin-bottom: 10px;
         }
 
-        .product-info-side h1 {
+        .product-name {
             font-family: 'Bebas Neue', sans-serif;
             font-size: clamp(2rem, 4vw, 3rem);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--text);
-            line-height: 1.05;
-            margin-bottom: 18px;
-        }
-
-        .price-tag {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.2rem;
             letter-spacing: 2px;
+            line-height: 1.05;
             color: var(--text);
             margin-bottom: 20px;
+        }
+
+        /* ─── SPECS TABLE ─────────────────────────── */
+        .specs-table {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .spec-row {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+        }
+        .spec-row:last-child { border-bottom: none; }
+
+        .spec-key {
+            width: 140px;
+            flex-shrink: 0;
+            padding: 11px 16px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.02);
+            border-right: 1px solid var(--border);
+        }
+
+        .spec-val {
+            padding: 11px 16px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* ─── PRICE ROW ───────────────────────────── */
+        .price-row {
             display: flex;
             align-items: center;
             gap: 14px;
+            margin-bottom: 20px;
+            padding: 16px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
 
-        .stock-status {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.65rem;
+        .price-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.4rem;
             letter-spacing: 2px;
-            background: #1a7a45;
-            color: #fff;
-            padding: 5px 14px;
-            border-radius: 50px;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .stock-badge {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 2px;
+            padding: 5px 12px;
+            border-radius: 2px;
             text-transform: uppercase;
         }
-
-        /* Specs inserted dynamically */
-        .product-specs {
-            margin-bottom: 20px;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.92rem;
-            color: var(--text-muted);
-            line-height: 2;
+        .stock-badge.in-stock {
+            background: rgba(0,200,100,0.12);
+            color: #00c864;
+            border: 1px solid rgba(0,200,100,0.25);
         }
-        .product-specs strong { color: var(--text); font-weight: 700; }
+        .stock-badge.sold-out {
+            background: rgba(230,0,0,0.12);
+            color: var(--accent);
+            border: 1px solid rgba(230,0,0,0.25);
+        }
 
-        .description {
+        /* ─── DESCRIPTION ─────────────────────────── */
+        .product-desc {
             font-family: 'Rajdhani', sans-serif;
-            font-weight: 400;
             font-size: 0.95rem;
+            font-weight: 600;
             color: var(--text-muted);
-            line-height: 1.75;
+            line-height: 1.7;
             border-left: 3px solid var(--accent);
-            padding-left: 18px;
-            margin-bottom: 36px;
+            padding-left: 16px;
+            margin-bottom: 24px;
         }
 
-        /* ── PURCHASE ACTIONS ── */
+        /* ─── ACTIONS ─────────────────────────────── */
         .purchase-actions {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        /* Re-use the .cta-button already defined in style.css;
-           override font only since style.css uses Bebas Neue which is correct */
-        .purchase-actions .cta-button {
+        .purchase-actions-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Buy Now — full width, primary */
+        .btn-buynow {
+            width: 100%;
+            background: var(--accent);
+            color: #fff;
             border: none;
-            font-size: 1rem;
-            padding: 16px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.05rem;
+            letter-spacing: 3px;
+            padding: 16px 24px;
+            border-radius: 3px;
             cursor: pointer;
-            border-radius: 4px;
-            /* rest inherits from style.css .cta-button */
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px var(--accent-glow);
         }
+        .btn-buynow:hover { transform: translateY(-2px); box-shadow: 0 8px 28px var(--accent-glow); }
+        .btn-buynow:disabled { background: #333; color: #666; box-shadow: none; cursor: not-allowed; transform: none; }
 
-        .wishlist-btn {
+        /* Add to Cart — secondary outline */
+        .btn-cart {
+            flex: 1;
+            background: transparent;
+            color: var(--text);
+            border: 1.5px solid var(--border);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            padding: 13px 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+        }
+        .btn-cart:hover { border-color: var(--accent); color: var(--accent); background: rgba(230,0,0,0.06); }
+
+        /* Wishlist heart */
+        .btn-wish {
+            width: 50px; height: 50px;
             background: var(--surface);
             border: 1.5px solid var(--border);
-            color: var(--text);
-            padding: 16px;
-            border-radius: 4px;
+            color: var(--text-muted);
+            border-radius: 3px;
             cursor: pointer;
-            font-size: 1.2rem;
-            transition: background 0.2s, border-color 0.2s, color 0.2s;
+            font-size: 1.1rem;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
         }
-        .wishlist-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(230,0,0,0.06);
+        .btn-wish:hover { background: rgba(230,0,0,0.1); color: #ff4d6d; border-color: #ff4d6d; }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 28px; left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 12px 24px;
+            border-radius: 4px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            white-space: nowrap;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ─── NOT FOUND ───────────────────────────── */
+        .not-found {
+            text-align: center;
+            padding: 120px 24px;
+        }
+        .not-found h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        .not-found p {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            opacity: 0.5;
+            margin-bottom: 28px;
+        }
+        .not-found a {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 3px;
+            padding: 13px 30px;
+            border-radius: 3px;
         }
 
-        /* ── RESPONSIVE ── */
+        /* ─── MOBILE ──────────────────────────────── */
         @media (max-width: 900px) {
+            .nav-menu { display: none; }
+            .nav-bar { grid-template-columns: 50px 1fr 50px; padding: 0 16px; }
+        }
+
+        @media (max-width: 700px) {
             .product-container {
                 flex-direction: column;
-                margin: 0 20px 60px;
-                padding: 30px;
-                gap: 32px;
+                gap: 24px;
+                margin: 16px auto 60px;
             }
-            .purchase-actions { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 480px) {
-            .breadcrumb { margin-top: 90px; padding: 0 20px; }
-            .product-info-side h1 { font-size: 1.8rem; }
-            .price-tag { font-size: 1.6rem; }
+            .product-image-side { position: static; }
+            .product-name { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+            .price-value { font-size: 2rem; }
+            .purchase-actions { flex-direction: column; }
+            .btn-wish { width: 100%; height: 48px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ══ HEADER (matches index.html pattern exactly) ══ -->
     <header>
         <nav class="nav-bar">
-            <!-- Left: Hamburger -->
             <div class="nav-left">
-                <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleHamburger()" aria-label="Menu">
                     <span></span><span></span><span></span>
                 </button>
             </div>
-
-            <!-- Center: Nav links -->
-            <ul class="nav-menu">
+            <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-button">Home</a></li>
                 <li class="dropdown">
                     <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="hotwheels.html" class="nav-button">Hot Wheels</a></li>
-                        <li><a href="premium.html" class="nav-button">Hot Wheels Premium</a></li>
+                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Premium</a></li>
                         <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
                     </ul>
                 </li>
                 <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
-                <li>
-                    <a href="cart.html" class="nav-button">
-                        🛒 Cart <span id="cart-count" style="display:none; background:var(--accent); color:#fff; border-radius:50%; padding:1px 6px; font-size:0.7rem; margin-left:4px;">0</span>
-                    </a>
-                </li>
+                <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
             </ul>
-
-            <!-- Right: Theme toggle -->
             <div class="nav-right">
-                <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
             </div>
         </nav>
+
+        <div class="hamburger-overlay" id="hamburgerOverlay" onclick="closeHamburger()"></div>
+        <div class="hamburger-drawer" id="hamburgerDrawer">
+            <button class="drawer-close" onclick="closeHamburger()">✕</button>
+            <div id="drawerAuthSection" class="drawer-auth"></div>
+            <div class="drawer-divider"></div>
+            <p class="drawer-label">NAVIGATION</p>
+            <a href="index.html" class="drawer-link">Home</a>
+            <a href="hotwheels.html" class="drawer-link">Hotwheels</a>
+            <a href="premium.html" class="drawer-link">Premium</a>
+            <a href="matchbox.html" class="drawer-link">Matchbox</a>
+            <a href="aboutUs.html" class="drawer-link">About Us</a>
+            <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
+            <a href="cart.html" class="drawer-link">🛒 Cart</a>
+            <a href="contactUs.html" class="drawer-link">✉️ Contact Us</a>
+        </div>
     </header>
 
-    <!-- Hamburger Drawer (same as index.html) -->
-    <div class="hamburger-overlay" id="drawerOverlay"></div>
-    <nav class="hamburger-drawer" id="hamburgerDrawer">
-        <button class="drawer-close" id="drawerClose">✕</button>
-        <div class="drawer-greeting">Pits Stops Collectibles</div>
-        <span class="drawer-label">Navigation</span>
-        <a href="index.html" class="drawer-link">Home</a>
-        <span class="drawer-label">Brands</span>
-        <a href="hotwheels.html" class="drawer-link">Hot Wheels</a>
-        <a href="premium.html" class="drawer-link">Hot Wheels Premium</a>
-        <a href="matchbox.html" class="drawer-link">Matchbox</a>
-        <div class="drawer-divider"></div>
-        <a href="aboutUs.html" class="drawer-link">About Us</a>
-        <a href="cart.html" class="drawer-link drawer-link--accent">🛒 Cart</a>
-    </nav>
-
-    <!-- ══ BREADCRUMB ══ -->
     <div class="breadcrumb">
-        <a href="index.html">Home</a> /
-        <span id="category-path">Collectibles</span> /
+        <a href="index.html">Home</a>
+        &nbsp;/&nbsp;
+        <a id="category-link" href="hotwheels.html">Collection</a>
+        &nbsp;/&nbsp;
         <span id="current-item-path">Details</span>
     </div>
 
-    <!-- ══ PRODUCT SECTION ══ -->
-    <section class="product-container">
-        <!-- Image -->
-        <div class="product-image-side">
-            <img id="product-img" src="" alt="Product Image">
-        </div>
+    <div id="pageContent"></div>
 
-        <!-- Info -->
-        <div class="product-info-side">
-            <span class="brand-label">Official Diecast</span>
-            <h1 id="product-name">Loading…</h1>
-
-            <div class="price-tag">
-                <span id="product-price">₱0.00</span>
-                <span class="stock-status">In Stock</span>
-            </div>
-
-            <!-- Specs injected here by JS -->
-
-            <p class="description">
-                Experience precision engineering in 1:64 scale. This collectible features a
-                die-cast metal body and authentic detailing for the ultimate display quality.
-            </p>
-
-            <div class="purchase-actions">
-                <button class="cta-button" onclick="addToCart()">Add to Cart →</button>
-                <button class="wishlist-btn" onclick="addToWishlist()" title="Add to Wishlist">❤</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══ FOOTER ══ -->
     <footer class="footer">
         <div class="footer-container">
-            <h3>Pits Stops Collectibles</h3>
-            <p class="tagline">"Where Every Model Tells a Story"</p>
-            <p class="footer-info">
-                📍 Imus, Cavite, Philippines<br>
-                📦 Nationwide Shipping Available
-            </p>
-            <div class="social-links">
-                <a href="https://www.facebook.com/PitsStopsCollectibles" target="_blank" class="fb-link">
-                    Facebook Page →
-                </a>
+            <div class="footer-brand">
+                <h3 class="logo-text">Pits Stop Collectibles</h3>
+                <p class="tagline">Not your ordinary pit stop 🤩🏁</p>
+            </div>
+            <div class="footer-info">
+                <p>📍 Cainta, Rizal</p>
+                <p>🛒 Your one-stop shop for diecast!</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">Follow us on Facebook</a>
+                </div>
             </div>
             <div class="footer-bottom">
-                <p class="copyright">© 2025 Pits Stops Collectibles — All Rights Reserved</p>
+                <p class="copyright">© 2025 Pits Stop Collectibles | All Rights Reserved</p>
             </div>
         </div>
     </footer>
 
     <script>
-        /* ── THEME TOGGLE (same logic as index.html) ── */
-        const themeBtn = document.getElementById('themeBtn');
-        const saved = localStorage.getItem('theme');
-        if (saved === 'light') { document.documentElement.setAttribute('data-theme','light'); themeBtn.textContent = '☀️'; }
-        themeBtn.addEventListener('click', () => {
-            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-            document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
-            localStorage.setItem('theme', isLight ? 'dark' : 'light');
-            themeBtn.textContent = isLight ? '🌙' : '☀️';
+        // ─── Hamburger ──────────────────────────────────────
+        function toggleHamburger() {
+            document.getElementById('hamburgerDrawer').classList.toggle('open');
+            document.getElementById('hamburgerOverlay').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+        }
+        function closeHamburger() {
+            document.getElementById('hamburgerDrawer').classList.remove('open');
+            document.getElementById('hamburgerOverlay').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
+        }
+
+        // ─── Theme ──────────────────────────────────────────
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
         });
 
-        /* ── HAMBURGER DRAWER ── */
-        const hamburgerBtn  = document.getElementById('hamburgerBtn');
-        const hamburgerDrawer = document.getElementById('hamburgerDrawer');
-        const drawerOverlay = document.getElementById('drawerOverlay');
-        const drawerClose   = document.getElementById('drawerClose');
-
-        function openDrawer()  { hamburgerDrawer.classList.add('open'); drawerOverlay.classList.add('open'); hamburgerBtn.classList.add('active'); }
-        function closeDrawer() { hamburgerDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); hamburgerBtn.classList.remove('active'); }
-
-        hamburgerBtn.addEventListener('click', openDrawer);
-        drawerClose.addEventListener('click', closeDrawer);
-        drawerOverlay.addEventListener('click', closeDrawer);
-
-        /* ── CART COUNT BADGE ── */
-        function updateCartBadge() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const badge = document.getElementById('cart-count');
-            if (cart.length > 0) { badge.style.display = 'inline'; badge.textContent = cart.length; }
+        // ─── Auth Drawer ────────────────────────────────────
+        function loadUser() {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const drawer = document.getElementById("drawerAuthSection");
+            if (!drawer) return;
+            if (loggedIn === "true" && currentUser) {
+                drawer.innerHTML = `
+                    <p class="drawer-greeting">Hi, <strong>${currentUser.username}</strong> 👋</p>
+                    <a href="inbox.html" class="drawer-link drawer-link--green">📩 Inbox</a>
+                    <a href="account.html" class="drawer-link">👤 Account</a>
+                    <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>`;
+            } else {
+                drawer.innerHTML = `
+                    <a href="login.html" class="drawer-link drawer-link--accent">Login</a>
+                    <a href="signup.html" class="drawer-link">Sign Up</a>`;
+            }
         }
-        updateCartBadge();
+        function logout() {
+            if (confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem("loggedIn");
+                localStorage.removeItem("currentUser");
+                localStorage.removeItem("isAdmin");
+                window.location.reload();
+            }
+        }
 
-        /* ── LOAD PRODUCT ── */
+        // ─── Load Product ────────────────────────────────────
         let currentItem = null;
 
-        window.onload = function () {
-            const params    = new URLSearchParams(window.location.search);
+        function loadProduct() {
+            const params = new URLSearchParams(window.location.search);
             const productId = params.get('id');
+            const pageContent = document.getElementById('pageContent');
 
-            if (productId) {
-                const allProducts = JSON.parse(localStorage.getItem('allProducts')) || [];
-                currentItem = allProducts.find(p => p.id == productId);
-
-                if (currentItem) {
-                    document.title = currentItem.name + ' | Pits Stops Collectibles';
-                    document.getElementById('product-name').innerText  = currentItem.name;
-                    document.getElementById('product-price').innerText = '₱' + currentItem.price;
-                    document.getElementById('product-img').src          = currentItem.image;
-                    document.getElementById('product-img').alt          = currentItem.name;
-                    document.getElementById('current-item-path').innerText = currentItem.name;
-                    if (currentItem.category) document.getElementById('category-path').innerText = currentItem.category;
-
-                    const specsHtml = `
-                        <div class="product-specs">
-                            <p><strong>Manufacturer:</strong> ${currentItem.manufacturer || 'Mattel'}</p>
-                            <p><strong>Release Year:</strong> ${currentItem.year || '2024'}</p>
-                            <p><strong>Series:</strong> ${currentItem.series || 'Mainline'}</p>
-                            <p><strong>Condition:</strong> Mint in Blister (MIB)</p>
-                        </div>`;
-                    document.querySelector('.description').insertAdjacentHTML('beforebegin', specsHtml);
-                }
+            if (!productId) {
+                showNotFound(pageContent);
+                return;
             }
-            updateCartBadge();
-        };
 
-        /* ── CART / WISHLIST ── */
+            const allProducts = JSON.parse(localStorage.getItem('allProducts')) || [];
+            currentItem = allProducts.find(p => p.id == productId);
+
+            if (!currentItem) {
+                showNotFound(pageContent);
+                return;
+            }
+
+            // Update breadcrumb
+            const catMap = { hotwheels: 'Hotwheels', premium: 'Premium', matchbox: 'Matchbox' };
+            const catLink = { hotwheels: 'hotwheels.html', premium: 'premium.html', matchbox: 'matchbox.html' };
+            document.getElementById('category-link').textContent = catMap[currentItem.category] || 'Collection';
+            document.getElementById('category-link').href = catLink[currentItem.category] || 'hotwheels.html';
+            document.getElementById('current-item-path').textContent = currentItem.name;
+
+            const qty = parseInt(currentItem.quantity);
+            const isSoldOut = qty <= 0;
+            const isLow = !isSoldOut && qty <= 3;
+
+            pageContent.innerHTML = `
+                <section class="product-container">
+                    <div class="product-image-side">
+                        <img src="${currentItem.image}" alt="${currentItem.name}" onerror="this.style.opacity='0.3'">
+                    </div>
+                    <div class="product-info-side">
+                        <p class="brand-label">Official Diecast · 1:64 Scale</p>
+                        <h1 class="product-name">${currentItem.name}</h1>
+
+                        <div class="specs-table">
+                            <div class="spec-row">
+                                <span class="spec-key">Manufacturer</span>
+                                <span class="spec-val">${currentItem.manufacturer || 'Mattel'}</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-key">Release Year</span>
+                                <span class="spec-val">${currentItem.year || '2024'}</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-key">Series</span>
+                                <span class="spec-val">${currentItem.series || 'Mainline'}</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-key">Category</span>
+                                <span class="spec-val">${catMap[currentItem.category] || 'Collectible'}</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-key">Condition</span>
+                                <span class="spec-val">Mint in Blister (MIB)</span>
+                            </div>
+                            <div class="spec-row">
+                                <span class="spec-key">Stock</span>
+                                <span class="spec-val" style="${isSoldOut ? 'color:var(--accent)' : isLow ? 'color:#ff6b00' : 'color:#00c864'}">
+                                    ${isSoldOut ? 'Out of Stock' : isLow ? `Only ${qty} left` : `${qty} units available`}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="price-row">
+                            <span class="price-value">₱${currentItem.price}</span>
+                            <span class="stock-badge ${isSoldOut ? 'sold-out' : 'in-stock'}">
+                                ${isSoldOut ? 'Sold Out' : 'In Stock'}
+                            </span>
+                        </div>
+
+                        <p class="product-desc">
+                            Precision-engineered in 1:64 scale with an authentic die-cast metal body and detailed livery. Packaged mint in blister — perfect for display or adding to your collection.
+                        </p>
+
+                        <div class="purchase-actions">
+                            <button class="btn-buynow" onclick="buyNow()" ${isSoldOut ? 'disabled' : ''}>
+                                ${isSoldOut ? 'OUT OF STOCK' : 'BUY NOW →'}
+                            </button>
+                            <div class="purchase-actions-row">
+                                <button class="btn-cart" onclick="addToCart()" ${isSoldOut ? 'disabled' : ''}>
+                                    🛒 Add to Cart
+                                </button>
+                                <button class="btn-wish" onclick="addToWishlist()" title="Add to Wishlist">❤</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>`;
+        }
+
+        function showNotFound(el) {
+            el.innerHTML = `
+                <div class="not-found">
+                    <h2>Product Not Found</h2>
+                    <p>This item doesn't exist or may have been removed.</p>
+                    <a href="hotwheels.html">Browse the Shop →</a>
+                </div>`;
+        }
+
+        function showToast(msg) {
+            let toast = document.getElementById('siteToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'siteToast';
+                toast.className = 'toast';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 2800);
+        }
+
+        function buyNow() {
+            if (!currentItem) return;
+
+            // Security Check: Enforce user login session validation
+            const loggedIn = localStorage.getItem("loggedIn");
+            if (loggedIn !== "true") {
+                alert("🔒 You must be logged in to make a purchase.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            // Avoid duplicate in cart
+            if (!cart.find(i => i.id === currentItem.id)) {
+                cart.push(currentItem);
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+            window.location.href = 'checkout.html';
+        }
+
         function addToCart() {
             if (!currentItem) return;
+
+            // Security Check: Enforce user login session validation
+            const loggedIn = localStorage.getItem("loggedIn");
+            if (loggedIn !== "true") {
+                alert("🔒 You must be logged in to add items to your cart.");
+                window.location.href = 'login.html';
+                return;
+            }
+
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart.push(currentItem);
             localStorage.setItem('cart', JSON.stringify(cart));
-            alert(currentItem.name + ' added to cart!');
-            window.location.href = 'cart.html';
+            showToast(`🛒 "${currentItem.name}" added to cart!`);
         }
 
         function addToWishlist() {
@@ -390,14 +597,16 @@
             if (!wishlist.find(item => item.id === currentItem.id)) {
                 wishlist.push(currentItem);
                 localStorage.setItem('wishlist', JSON.stringify(wishlist));
-                alert(currentItem.name + ' added to wishlist!');
+                showToast(`❤️ "${currentItem.name}" added to wishlist!`);
+            } else {
+                showToast('Already in your wishlist.');
             }
-            window.location.href = 'wishlist.html';
         }
 
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const badge = document.getElementById('cart-count');
-        if (cart.length > 0) { badge.style.display = 'inline'; badge.textContent = cart.length; }
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUser();
+            loadProduct();
+        });
     </script>
 </body>
 </html>

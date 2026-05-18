@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | Pits Stops Collectibles</title>
+    <title>About Us | Pits Stop Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ── ABOUT PAGE ONLY STYLES ───────────────────────────────
-           All colours use CSS variables from style.css so light/dark
-           theme toggling works automatically.
-        ──────────────────────────────────────────────────────── */
 
         .about-hero {
             display: flex;
@@ -25,7 +21,6 @@
             overflow: hidden;
         }
 
-        /* Same subtle grid overlay as the main hero */
         .about-hero::after {
             content: '';
             position: absolute;
@@ -38,7 +33,6 @@
             pointer-events: none;
         }
 
-        /* Radial glow */
         .about-hero::before {
             content: '';
             position: absolute;
@@ -101,48 +95,6 @@
             -webkit-text-stroke: 2px var(--text);
         }
 
-        /* ── SOCIAL LINKS ── */
-        .social-container {
-            display: flex;
-            gap: 32px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .social-box {
-            text-decoration: none;
-            color: var(--text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            padding: 24px 32px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-        }
-
-        .social-box:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-            box-shadow: 0 8px 28px var(--accent-glow);
-        }
-
-        .social-box img {
-            width: 64px;
-            height: 64px;
-            object-fit: contain;
-        }
-
-        .social-box h3 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin: 0;
-        }
-
         /* ── DESCRIPTION CARD ── */
         .about-description {
             width: 100%;
@@ -169,9 +121,48 @@
             font-weight: 700;
         }
 
+        /* ── INFO CARDS ── */
+        .about-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .about-info-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .about-info-icon {
+            font-size: 1.4rem;
+        }
+
+        .about-info-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .about-info-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.45;
+        }
+
         @media (max-width: 600px) {
             .about-description { padding: 24px 22px; }
-            .social-box { padding: 20px 24px; }
+            .about-info-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -203,7 +194,6 @@
                         🛒 Cart <span id="cart-count" style="display:none; background:var(--accent); color:#fff; border-radius:50%; padding:1px 6px; font-size:0.7rem; margin-left:4px;">0</span>
                     </a>
                 </li>
-                <li><a href="https://www.facebook.com/profile.php?id=61572190615239" class="nav-button" target="_blank">Contact</a></li>
             </ul>
 
             <div class="nav-right">
@@ -216,7 +206,7 @@
     <div class="hamburger-overlay" id="drawerOverlay"></div>
     <nav class="hamburger-drawer" id="hamburgerDrawer">
         <button class="drawer-close" id="drawerClose">✕</button>
-        <div class="drawer-greeting">Pits Stops Collectibles</div>
+        <div class="drawer-greeting">Pits Stop Collectibles</div>
         <span class="drawer-label">Navigation</span>
         <a href="index.html" class="drawer-link">Home</a>
         <span class="drawer-label">Brands</span>
@@ -227,7 +217,6 @@
         <a href="aboutUs.html" class="drawer-link">About Us</a>
         <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
         <a href="cart.html" class="drawer-link drawer-link--accent">🛒 Cart</a>
-        <a href="https://www.facebook.com/profile.php?id=61572190615239" class="drawer-link" target="_blank">Contact</a>
     </nav>
 
     <!-- ══ ABOUT SECTION ══ -->
@@ -242,23 +231,38 @@
 
             <h1 class="about-title">About <span>Us</span></h1>
 
-            <div class="social-container">
-                <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="social-box">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/2023_Facebook_icon.svg" alt="Facebook">
-                    <h3>Facebook</h3>
-                </a>
-                <a href="https://www.instagram.com/pitsstopcollectibles/" target="_blank" class="social-box">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
-                    <h3>Instagram</h3>
-                </a>
-            </div>
-
             <div class="about-description">
                 <p>
-                    We are a <strong>toy collectibles reselling business</strong> which opened its doors to customers in
-                    <strong>October 2025</strong>. We provide collectors with special diecast car products which include
-                    <strong>Hot Wheels</strong>, <strong>Matchbox</strong>, and <strong>Tomica</strong>.
+                    <strong>Pits Stop Collectibles</strong> operates as a toy collectibles reselling business which
+                    opened its doors to customers in <strong>October 2025</strong>. The company provides collectors
+                    with special diecast car products which include <strong>Hot Wheels</strong>,
+                    <strong>Matchbox</strong>, and <strong>Tomica</strong>. The business operates its premises at
+                    <strong>Km. 23 Sumulong Highway, Brgy. Sta. Cruz, Antipolo City</strong> and maintains business
+                    hours from <strong>10:00 a.m. to 9:00 p.m.</strong>
                 </p>
+            </div>
+
+            <div class="about-info-grid">
+                <div class="about-info-card">
+                    <span class="about-info-icon">📍</span>
+                    <p class="about-info-label">Location</p>
+                    <p class="about-info-value">Km. 23 Sumulong Highway,<br>Brgy. Sta. Cruz, Antipolo City</p>
+                </div>
+                <div class="about-info-card">
+                    <span class="about-info-icon">🕙</span>
+                    <p class="about-info-label">Business Hours</p>
+                    <p class="about-info-value">10:00 AM – 9:00 PM<br>Daily</p>
+                </div>
+                <div class="about-info-card">
+                    <span class="about-info-icon">📦</span>
+                    <p class="about-info-label">Products</p>
+                    <p class="about-info-value">Hot Wheels · Matchbox · Tomica</p>
+                </div>
+                <div class="about-info-card">
+                    <span class="about-info-icon">🏁</span>
+                    <p class="about-info-label">Established</p>
+                    <p class="about-info-value">October 2025</p>
+                </div>
             </div>
 
         </div>
@@ -267,19 +271,16 @@
     <!-- ══ FOOTER ══ -->
     <footer class="footer">
         <div class="footer-container">
-            <h3>Pits Stops Collectibles</h3>
-            <p class="tagline">"Where Every Model Tells a Story"</p>
-            <p class="footer-info">
-                📍 Imus, Cavite, Philippines<br>
-                📦 Nationwide Shipping Available
-            </p>
-            <div class="social-links">
-                <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">
-                    Facebook Page →
-                </a>
+            <div class="footer-brand">
+                <h3 class="logo-text">Pits Stop Collectibles</h3>
+                <p class="tagline">Not your ordinary pit stop 🤩🏁</p>
+            </div>
+            <div class="footer-info">
+                <p>📍 Km. 23 Sumulong Highway, Brgy. Sta. Cruz, Antipolo City</p>
+                <p>🕙 Open daily, 10:00 AM – 9:00 PM</p>
             </div>
             <div class="footer-bottom">
-                <p class="copyright">© 2025 Pits Stops Collectibles — All Rights Reserved</p>
+                <p class="copyright">© 2026 Pits Stop Collectibles | All Rights Reserved</p>
             </div>
         </div>
     </footer>
@@ -287,8 +288,9 @@
     <script>
         /* ── THEME TOGGLE ── */
         const themeBtn = document.getElementById('themeBtn');
-        const saved = localStorage.getItem('theme');
-        if (saved === 'light') { document.documentElement.setAttribute('data-theme', 'light'); themeBtn.textContent = '☀️'; }
+        const saved = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', saved);
+        themeBtn.textContent = saved === 'dark' ? '☀️' : '🌙';
         themeBtn.addEventListener('click', () => {
             const isLight = document.documentElement.getAttribute('data-theme') === 'light';
             document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
