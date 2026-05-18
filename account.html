@@ -3,224 +3,596 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile | Pits Stop Collectibles</title>
+    <title>My Account | Pits Stop Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        body { background: #000; color: white; font-family: 'Inter', sans-serif; }
-        .account-container {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 40px;
-            background: rgba(20, 20, 20, 0.95);
-            border-radius: 20px;
-            border: 1px solid #e60000;
-            box-shadow: 0 0 30px rgba(230, 0, 0, 0.2);
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 110px 20px 60px;
+            background: var(--bg);
         }
-        h1 { font-family: 'Orbitron', sans-serif; color: #e60000; text-align: center; margin-bottom: 30px; }
-        
-        .info-card { background: #111; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #e60000; }
-        .info-label { font-size: 0.75rem; color: #888; text-transform: uppercase; margin-bottom: 5px; }
-        
-        .edit-input {
+
+        /* Eyebrow / heading */
+        .account-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        .account-eyebrow span.tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            background: rgba(230,0,0,0.08);
+            border: 1px solid rgba(230,0,0,0.25);
+            padding: 5px 14px;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        .eyebrow-line { display: block; width: 32px; height: 1px; background: var(--accent); }
+
+        .account-heading {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            letter-spacing: 5px;
+            color: var(--text);
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        /* Card */
+        .account-box {
+            max-width: 560px;
             width: 100%;
-            background: #222;
-            border: 1px solid #444;
-            color: white;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 1rem;
-            display: none;
-            margin-top: 5px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 44px 40px;
+            box-shadow: 0 0 40px var(--accent-glow);
         }
-        .info-value { font-size: 1.1rem; font-weight: bold; }
 
-        /* Password Strength UI */
-        #strength-container { display: none; margin-top: 10px; }
-        #password-strength { height: 5px; width: 0%; transition: 0.3s; border-radius: 5px; }
-        #strength-text { font-size: 12px; display: block; margin-top: 5px; }
+        /* Avatar / greeting row */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 28px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
 
-        .actions { display: flex; gap: 10px; margin-top: 30px; }
-        .btn { flex: 1; padding: 12px; border-radius: 5px; font-family: 'Orbitron', sans-serif; cursor: pointer; border: none; transition: 0.3s; text-decoration: none; text-align: center; color: white; }
-        
-        #editBtn { background: #333; }
-        #saveBtn { background: #28a745; display: none; } 
-        .btn-logout { background: #e60000; }
-        .btn:hover { opacity: 0.8; transform: translateY(-2px); }
+        .avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(230,0,0,0.12);
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .profile-meta h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            color: var(--text);
+            margin: 0 0 4px;
+        }
+
+        .profile-meta p {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Section headings */
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            margin: 24px 0 16px;
+            text-transform: uppercase;
+        }
+        .section-title:first-of-type { margin-top: 0; }
+
+        /* Form fields */
+        .input-group { margin-bottom: 14px; }
+
+        .input-group label {
+            display: block;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2.5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 5px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .input-group input::placeholder { color: var(--text-muted); font-weight: 400; }
+
+        /* Read-only / view mode */
+        .input-group input[readonly] {
+            background: rgba(255,255,255,0.03);
+            cursor: default;
+            color: var(--text);
+        }
+
+        /* Password strength */
+        .strength-bar-wrap {
+            height: 4px;
+            background: var(--border);
+            border-radius: 4px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .strength-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.3s, background 0.3s;
+        }
+        .strength-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 1.5px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Action buttons */
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn:hover { transform: translateY(-2px); }
+
+        .btn-edit {
+            background: var(--bg-alt);
+            color: var(--text);
+            border: 1.5px solid var(--border);
+        }
+        .btn-edit:hover { border-color: var(--accent); color: var(--accent); }
+
+        .btn-save {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 4px 16px var(--accent-glow);
+            display: none;
+        }
+        .btn-save:hover { box-shadow: 0 8px 24px var(--accent-glow); }
+
+        .btn-logout {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1.5px solid var(--border);
+            flex: 0 0 auto;
+            padding: 14px 20px;
+        }
+        .btn-logout:hover { color: var(--accent); border-color: var(--accent); background: rgba(230,0,0,0.06); }
+
+        /* Error message */
+        .form-error {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            color: #ff4444;
+            margin-top: 4px;
+            display: none;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 28px; left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 12px 24px;
+            border-radius: 4px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            white-space: nowrap;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* Footer link */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-decoration: none;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        .back-link:hover { opacity: 1; color: var(--accent); }
+
+        @media (max-width: 560px) {
+            .account-box { padding: 28px 20px; }
+            .btn-row { flex-wrap: wrap; }
+            .btn-logout { flex: 1 1 100%; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="account-container">
-        <h1>YOUR PROFILE</h1>
-        
-        <form id="profileForm">
-            <div class="info-card">
-                <div class="info-label">Full Name</div>
-                <div class="info-value" id="val-fullname"></div>
-                <input type="text" id="edit-fullname" class="edit-input" required>
+    <!-- TOAST -->
+    <div class="toast" id="siteToast"></div>
+
+    <!-- HEADER -->
+    <header>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleHamburger()" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+            </ul>
+            <div class="nav-right">
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+            </div>
+        </nav>
+        <div class="hamburger-overlay" id="hamburgerOverlay" onclick="closeHamburger()"></div>
+        <div class="hamburger-drawer" id="hamburgerDrawer">
+            <button class="drawer-close" onclick="closeHamburger()">✕</button>
+            <div id="drawerAuthSection" class="drawer-auth"></div>
+            <div class="drawer-divider"></div>
+            <p class="drawer-label">NAVIGATION</p>
+            <a href="index.html" class="drawer-link">Home</a>
+            <a href="hotwheels.html" class="drawer-link">Hotwheels</a>
+            <a href="premium.html" class="drawer-link">Premium</a>
+            <a href="matchbox.html" class="drawer-link">Matchbox</a>
+            <a href="aboutUs.html" class="drawer-link">About Us</a>
+            <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
+            <a href="cart.html" class="drawer-link">🛒 Cart</a>
+            <a href="track.html" class="drawer-link" id="trackLinkDrawer" style="display:none;">📦 Track Order</a>
+            <a href="contactUs.html" class="drawer-link">✉️ Contact Us</a>
+        </div>
+    </header>
+
+    <!-- PAGE HEADER -->
+    <div class="account-eyebrow">
+        <span class="eyebrow-line"></span>
+        <span class="tag">Your Profile</span>
+        <span class="eyebrow-line"></span>
+    </div>
+    <h1 class="account-heading">My Account</h1>
+
+    <!-- ACCOUNT CARD -->
+    <div class="account-box">
+
+        <!-- Avatar row -->
+        <div class="profile-header">
+            <div class="avatar" id="avatarIcon">👤</div>
+            <div class="profile-meta">
+                <h2 id="headerUsername">Loading…</h2>
+                <p id="headerEmail">—</p>
+            </div>
+        </div>
+
+        <form id="profileForm" novalidate>
+
+            <p class="section-title">Personal Info</p>
+
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="field-fullname" placeholder="Juan Dela Cruz" maxlength="80" readonly>
             </div>
 
-            <div class="info-card">
-                <div class="info-label">Username</div>
-                <div class="info-value" id="val-username"></div>
-                <input type="text" id="edit-username" class="edit-input" required>
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="field-username" placeholder="juandc" maxlength="30" readonly>
             </div>
 
-            <div class="info-card">
-                <div class="info-label">Email Address</div>
-                <div class="info-value" id="val-email"></div>
-                <input type="email" id="edit-email" class="edit-input" required>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="field-email" placeholder="email@example.com" maxlength="100" readonly>
             </div>
 
-            <div class="info-card">
-                <div class="info-label">Contact Number</div>
-                <div class="info-value" id="val-contact"></div>
-                <input type="tel" id="edit-contact" class="edit-input" placeholder="09123456789" required>
+            <div class="input-group">
+                <label>Contact Number</label>
+                <input type="tel" id="field-contact" placeholder="09XXXXXXXXX" maxlength="11" readonly>
             </div>
 
-            <div class="info-card">
-                <div class="info-label">Password</div>
-                <div class="info-value">••••••••</div>
-                <input type="password" id="edit-password" class="edit-input" placeholder="Enter new password">
-                <div id="strength-container">
-                    <div id="password-strength"></div>
-                    <span id="strength-text"></span>
+            <p class="section-title">Change Password</p>
+
+            <div class="input-group">
+                <label>New Password <span style="color:var(--accent);font-size:0.55rem;">(leave blank to keep current)</span></label>
+                <input type="password" id="field-password" placeholder="Enter new password" readonly>
+                <div class="strength-bar-wrap" id="strength-wrap" style="display:none;">
+                    <div class="strength-bar-fill" id="strength-fill"></div>
                 </div>
+                <span class="strength-label" id="strength-text" style="display:none;"></span>
             </div>
 
-            <div class="actions">
-                <button type="button" id="editBtn" class="btn" onclick="toggleEdit()">EDIT INFO</button>
-                <button type="submit" id="saveBtn" class="btn">SAVE CHANGES</button>
-                <button type="button" onclick="logout()" class="btn btn-logout">LOGOUT</button>
+            <div class="btn-row">
+                <button type="button" class="btn btn-edit" id="editBtn" onclick="toggleEdit()">✏️ Edit Info</button>
+                <button type="submit" class="btn btn-save" id="saveBtn">✔ Save Changes</button>
+                <button type="button" class="btn btn-logout" onclick="logout()" title="Logout">⏻</button>
             </div>
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="index.html" style="color: #888; text-decoration: none; font-size: 0.8rem;">← Return to Home</a>
-            </div>
+
         </form>
+
+        <a href="index.html" class="back-link">← Back to Home</a>
     </div>
 
     <script>
-        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        const editPass = document.getElementById('edit-password');
-        const strengthBar = document.getElementById('password-strength');
-        const strengthText = document.getElementById('strength-text');
+        /* ── THEME ── */
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        themeToggle.addEventListener('click', () => {
+            const cur  = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+        });
 
-        function loadData() {
-            if (!localStorage.getItem("loggedIn") || !currentUser) {
-                window.location.href = "login.html";
-                return;
-            }
-            document.getElementById('val-fullname').innerText = currentUser.fullname;
-            document.getElementById('val-username').innerText = currentUser.username;
-            document.getElementById('val-email').innerText = currentUser.email;
-            document.getElementById('val-contact').innerText = currentUser.contact;
-
-            document.getElementById('edit-fullname').value = currentUser.fullname;
-            document.getElementById('edit-username').value = currentUser.username;
-            document.getElementById('edit-email').value = currentUser.email;
-            document.getElementById('edit-contact').value = currentUser.contact;
-            editPass.value = currentUser.password;
+        /* ── HAMBURGER ── */
+        function toggleHamburger() {
+            document.getElementById('hamburgerDrawer').classList.toggle('open');
+            document.getElementById('hamburgerOverlay').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+        }
+        function closeHamburger() {
+            document.getElementById('hamburgerDrawer').classList.remove('open');
+            document.getElementById('hamburgerOverlay').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
         }
 
-        // Input Restrictions
-        document.getElementById('edit-fullname').addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
-        });
+        /* ── TOAST ── */
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('siteToast');
+            toast.textContent = msg;
+            toast.style.borderLeftColor = isError ? '#ff4444' : 'var(--accent)';
+            toast.classList.add('show');
+            clearTimeout(toast._t);
+            toast._t = setTimeout(() => toast.classList.remove('show'), 3000);
+        }
 
-        document.getElementById('edit-contact').addEventListener('input', (e) => {
-            let value = e.target.value.replace(/\D/g, "");
-            if (value.length > 11) value = value.slice(0, 11);
-            e.target.value = value;
-        });
+        /* ── STATE ── */
+        let currentUser = null;
+        let isEditing   = false;
 
-        editPass.addEventListener('input', () => {
-            const val = editPass.value;
+        /* ── LOAD USER ── */
+        function loadUser() {
+            if (localStorage.getItem('loggedIn') !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) { window.location.href = 'login.html'; return; }
+
+            // Header
+            document.getElementById('headerUsername').textContent = currentUser.username || '—';
+            document.getElementById('headerEmail').textContent    = currentUser.email    || '—';
+
+            // Fields
+            document.getElementById('field-fullname').value = currentUser.fullname || '';
+            document.getElementById('field-username').value = currentUser.username || '';
+            document.getElementById('field-email').value    = currentUser.email    || '';
+            document.getElementById('field-contact').value  = currentUser.contact  || '';
+            document.getElementById('field-password').value = '';
+
+            // Drawer Track Order visibility
+            if (document.getElementById('trackLinkDrawer'))
+                document.getElementById('trackLinkDrawer').style.display = 'block';
+
+            // Drawer auth
+            const drawer = document.getElementById('drawerAuthSection');
+            if (drawer) {
+                drawer.innerHTML = `
+                    <p class="drawer-greeting">Hi, <strong>${currentUser.username}</strong> 👋</p>
+                    <a href="account.html" class="drawer-link">👤 Account</a>
+                    <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>`;
+            }
+        }
+
+        /* ── EDIT MODE TOGGLE ── */
+        function toggleEdit() {
+            isEditing = !isEditing;
+            const fields = ['field-fullname', 'field-username', 'field-email', 'field-contact', 'field-password'];
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (isEditing) el.removeAttribute('readonly');
+                else { el.setAttribute('readonly', ''); }
+            });
+
+            document.getElementById('strengthWrap') && (document.getElementById('strength-wrap').style.display = isEditing ? 'block' : 'none');
+            document.getElementById('strength-text').style.display = isEditing ? 'block' : 'none';
+            document.getElementById('saveBtn').style.display = isEditing ? 'inline-flex' : 'none';
+            document.getElementById('editBtn').textContent = isEditing ? '✕ Cancel' : '✏️ Edit Info';
+
+            if (!isEditing) {
+                // Restore original values on cancel
+                loadUser();
+            }
+        }
+
+        /* ── PASSWORD STRENGTH ── */
+        document.getElementById('field-password').addEventListener('input', function() {
+            const val = this.value;
+            const wrap = document.getElementById('strength-wrap');
+            const fill = document.getElementById('strength-fill');
+            const text = document.getElementById('strength-text');
+
+            if (!isEditing) return;
+            wrap.style.display = val.length ? 'block' : 'none';
+            text.style.display = val.length ? 'block' : 'none';
+
             let strength = 0;
             if (val.length >= 8) strength++;
             if (/[A-Z]/.test(val)) strength++;
             if (/[0-9]/.test(val)) strength++;
             if (/[^A-Za-z0-9]/.test(val)) strength++;
 
-            if (val === "") {
-                strengthBar.style.width = "0";
-                strengthText.innerText = "";
-            } else if (strength <= 2) {
-                strengthBar.style.width = "33%";
-                strengthBar.style.backgroundColor = "#ff4d4d";
-                strengthText.innerText = "Weak";
-                strengthText.style.color = "#ff4d4d";
-            } else if (strength === 3) {
-                strengthBar.style.width = "66%";
-                strengthBar.style.backgroundColor = "#ffd93d";
-                strengthText.innerText = "Medium";
-                strengthText.style.color = "#ffd93d";
-            } else {
-                strengthBar.style.width = "100%";
-                strengthBar.style.backgroundColor = "#6bc167";
-                strengthText.innerText = "Strong";
-                strengthText.style.color = "#6bc167";
-            }
+            const levels = [
+                { w: '25%', c: '#ff4444', l: 'Too Short' },
+                { w: '33%', c: '#ff4444', l: 'Weak' },
+                { w: '66%', c: '#ffd93d', l: 'Medium' },
+                { w: '100%',c: '#6bc167', l: 'Strong' }
+            ];
+            const lvl = levels[Math.min(strength, 3)];
+            fill.style.width      = lvl.w;
+            fill.style.background = lvl.c;
+            text.textContent      = lvl.l;
+            text.style.color      = lvl.c;
         });
 
-        function toggleEdit() {
-            const isEditing = document.getElementById('saveBtn').style.display === 'block';
-            document.querySelectorAll('.info-value').forEach(el => el.style.display = isEditing ? 'block' : 'none');
-            document.querySelectorAll('.edit-input').forEach(el => el.style.display = isEditing ? 'none' : 'block');
-            document.getElementById('strength-container').style.display = isEditing ? 'none' : 'block';
-            document.getElementById('saveBtn').style.display = isEditing ? 'none' : 'block';
-            document.getElementById('editBtn').innerText = isEditing ? 'EDIT INFO' : 'CANCEL';
-        }
+        /* ── INPUT RESTRICTIONS ── */
+        document.getElementById('field-fullname').addEventListener('input', e => {
+            e.target.value = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s\.\-]/g, '');
+        });
+        document.getElementById('field-contact').addEventListener('input', e => {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 11) v = v.slice(0, 11);
+            e.target.value = v;
+        });
 
+        /* ── FORM SUBMIT ── */
         document.getElementById('profileForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const contactValue = document.getElementById('edit-contact').value;
-            const passValue = editPass.value;
+            if (!isEditing) return;
 
-            // Strict Validation
-            if (!/^09\d{9}$/.test(contactValue)) {
-                alert("Contact number must be 11 digits and start with 09.");
-                return;
-            }
+            const fullname = document.getElementById('field-fullname').value.trim();
+            const username = document.getElementById('field-username').value.trim();
+            const email    = document.getElementById('field-email').value.trim();
+            const contact  = document.getElementById('field-contact').value.trim();
+            const password = document.getElementById('field-password').value;
 
-            if (passValue.length < 8 || !/[A-Z]/.test(passValue) || !/[0-9]/.test(passValue) || !/[^A-Za-z0-9]/.test(passValue)) {
-                alert("Password too weak! Must be 8+ characters with Uppercase, Number, and Symbol.");
-                return;
+            // Validation
+            if (fullname.length < 2)               { showToast('Full name is too short.', true); return; }
+            if (/[^a-zA-ZÀ-ÿ\s\.\-]/.test(fullname)) { showToast('Full name must contain letters only.', true); return; }
+            if (username.length < 3)               { showToast('Username must be at least 3 characters.', true); return; }
+            if (!/\S+@\S+\.\S+/.test(email))       { showToast('Please enter a valid email address.', true); return; }
+            if (!/^09\d{9}$/.test(contact))        { showToast('Contact must be 11 digits starting with 09.', true); return; }
+
+            // Password only validated if user types a new one
+            if (password) {
+                if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+                    showToast('Password must be 8+ chars with uppercase, number, and symbol.', true);
+                    return;
+                }
             }
 
             const updatedUser = {
-                fullname: document.getElementById('edit-fullname').value,
-                username: document.getElementById('edit-username').value,
-                email: document.getElementById('edit-email').value,
-                contact: contactValue,
-                password: passValue
+                fullname,
+                username,
+                email,
+                contact,
+                password: password || currentUser.password
             };
 
+            // Update allUsers
             let allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
-            const userIndex = allUsers.findIndex(u => u.username === currentUser.username);
-            
-            if (userIndex !== -1) {
-                allUsers[userIndex] = updatedUser;
-                localStorage.setItem('allUsers', JSON.stringify(allUsers));
-            }
+            const idx = allUsers.findIndex(u => u.username === currentUser.username);
+            if (idx !== -1) allUsers[idx] = updatedUser;
+            else allUsers.push(updatedUser);
+            localStorage.setItem('allUsers', JSON.stringify(allUsers));
 
             localStorage.setItem('currentUser', JSON.stringify(updatedUser));
             currentUser = updatedUser;
 
-            alert("Profile updated!");
-            toggleEdit();
-            loadData();
+            showToast('✅ Profile updated successfully!');
+            isEditing = false;
+            loadUser();
+            document.getElementById('saveBtn').style.display = 'none';
+            document.getElementById('editBtn').textContent = '✏️ Edit Info';
+            // Re-lock fields
+            ['field-fullname','field-username','field-email','field-contact','field-password'].forEach(id =>
+                document.getElementById(id).setAttribute('readonly',''));
         });
 
+        /* ── LOGOUT ── */
         function logout() {
-            localStorage.removeItem("loggedIn");
-            localStorage.removeItem("currentUser");
-            window.location.href = "index.html";
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('loggedIn');
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('isAdmin');
+                window.location.href = 'index.html';
+            }
         }
 
-        document.addEventListener("DOMContentLoaded", loadData);
+        /* ── INIT ── */
+        document.addEventListener('DOMContentLoaded', loadUser);
     </script>
 </body>
 </html>

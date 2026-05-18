@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | Pits Stop Collectibles</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .legal-page {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 120px 24px 100px;
+        }
+        .legal-eyebrow {
+            display: flex; align-items: center; gap: 14px;
+            margin-bottom: 20px;
+        }
+        .legal-eyebrow span {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem; letter-spacing: 3px;
+            color: var(--accent); text-transform: uppercase;
+            background: rgba(230,0,0,0.08);
+            border: 1px solid rgba(230,0,0,0.25);
+            padding: 5px 14px; border-radius: 2px;
+        }
+        .legal-eyebrow::before, .legal-eyebrow::after {
+            content: ''; display: block;
+            height: 1px; background: var(--accent);
+            flex: 0 0 30px;
+        }
+        .legal-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            letter-spacing: 5px; line-height: 1;
+            color: var(--text); margin-bottom: 8px;
+        }
+        .legal-title span { color: transparent; -webkit-text-stroke: 2px var(--accent); }
+        .legal-updated {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem; letter-spacing: 2px;
+            color: var(--text-muted); margin-bottom: 48px;
+            display: block;
+        }
+        .legal-section {
+            margin-bottom: 36px;
+            border-left: 3px solid var(--border);
+            padding-left: 24px;
+            transition: border-color 0.2s;
+        }
+        .legal-section:hover { border-left-color: var(--accent); }
+        .legal-section-num {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem; letter-spacing: 2.5px;
+            color: var(--accent); text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .legal-section h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem; letter-spacing: 2px;
+            color: var(--text); margin-bottom: 12px;
+        }
+        .legal-section p, .legal-section li {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem; font-weight: 600;
+            color: var(--text-muted); line-height: 1.8;
+        }
+        .legal-section ul {
+            padding-left: 20px;
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .legal-section li::marker { color: var(--accent); }
+        .legal-divider {
+            border: none; border-top: 1px solid var(--border);
+            margin: 40px 0;
+        }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.85rem; letter-spacing: 2px;
+            color: var(--text-muted); text-decoration: none;
+            margin-bottom: 40px;
+            transition: color 0.2s;
+        }
+        .back-btn:hover { color: var(--accent); }
+        .also-see {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 24px 28px;
+            display: flex; align-items: center;
+            justify-content: space-between; gap: 16px;
+            flex-wrap: wrap; margin-top: 48px;
+        }
+        .also-see p {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem; font-weight: 700;
+            color: var(--text-muted);
+        }
+        .also-see p strong { color: var(--text); }
+        .also-see a {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.8rem; letter-spacing: 2px;
+            text-decoration: none; padding: 9px 20px;
+            border-radius: 3px;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .also-see a:hover { border-color: var(--accent); color: var(--accent); }
+
+        @media (max-width: 900px) {
+            .nav-menu { display: none; }
+            .nav-bar { grid-template-columns: 50px 1fr 50px; padding: 0 16px; }
+        }
+        @media (max-width: 600px) {
+            .legal-page { padding: 100px 16px 80px; }
+            .also-see { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ HEADER ════════════════════════════════════════════ -->
+    <header>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleHamburger()" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+            </ul>
+            <div class="nav-right">
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+            </div>
+        </nav>
+        <div class="hamburger-overlay" id="hamburgerOverlay" onclick="closeHamburger()"></div>
+        <div class="hamburger-drawer" id="hamburgerDrawer">
+            <button class="drawer-close" onclick="closeHamburger()">✕</button>
+            <div id="drawerAuthSection" class="drawer-auth"></div>
+            <div class="drawer-divider"></div>
+            <p class="drawer-label">NAVIGATION</p>
+            <a href="index.html" class="drawer-link">Home</a>
+            <a href="hotwheels.html" class="drawer-link">Hotwheels</a>
+            <a href="premium.html" class="drawer-link">Premium</a>
+            <a href="matchbox.html" class="drawer-link">Matchbox</a>
+            <a href="aboutUs.html" class="drawer-link">About Us</a>
+            <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
+            <a href="cart.html" class="drawer-link">🛒 Cart</a>
+        </div>
+    </header>
+
+    <!-- ═══ CONTENT ══════════════════════════════════════════ -->
+    <div class="legal-page">
+
+        <a href="aboutUs.html" class="back-btn">← Back to About Us</a>
+
+        <div class="legal-eyebrow"><span>Legal Document</span></div>
+        <h1 class="legal-title">Privacy <span>Policy</span></h1>
+        <span class="legal-updated">Last updated: May 2026</span>
+
+        <div class="legal-section">
+            <p class="legal-section-num">01 — Overview</p>
+            <h2>Our Commitment to Privacy</h2>
+            <p>Pits Stop Collectibles is committed to protecting your personal information. This Privacy Policy explains what data we collect, how we use it, and your rights as a customer. By placing an order or using our website, you consent to the practices described in this policy.</p>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">02 — Data We Collect</p>
+            <h2>Information We Collect</h2>
+            <p>When you create an account or place an order, we may collect the following:</p>
+            <ul>
+                <li>Full name and username</li>
+                <li>Email address and contact number</li>
+                <li>Shipping address (region, province, city, barangay)</li>
+                <li>Payment reference numbers and transaction proof</li>
+                <li>Order history and wishlist data</li>
+            </ul>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">03 — How We Use Your Data</p>
+            <h2>Use of Information</h2>
+            <p>Your information is used solely for the purpose of processing and fulfilling your orders. Specifically, we use your data to:</p>
+            <ul>
+                <li>Process and confirm your orders and pre-orders.</li>
+                <li>Contact you regarding your order status via Facebook or SMS.</li>
+                <li>Coordinate shipping and delivery logistics.</li>
+                <li>Send restock notifications if you have requested them.</li>
+                <li>Maintain your account and order history on our platform.</li>
+            </ul>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">04 — Data Storage</p>
+            <h2>How Your Data is Stored</h2>
+            <p>Your account and order data is currently stored locally in your browser via localStorage — it is not transmitted to an external server. This means your data stays on your device unless you clear your browser data. We do not use cookies for tracking purposes.</p>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">05 — Data Sharing</p>
+            <h2>Third-Party Sharing</h2>
+            <p>We do not sell, trade, or rent your personal information to third parties. Your data is never shared with advertisers or marketing agencies. We only share relevant shipping information (name, address) with our chosen courier partners (LBC, Lalamove) strictly for delivery purposes.</p>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">06 — Your Rights</p>
+            <h2>Your Data Rights</h2>
+            <p>As a customer, you have the right to:</p>
+            <ul>
+                <li>Access the personal information we hold about you.</li>
+                <li>Request correction of inaccurate data via your Account settings.</li>
+                <li>Request deletion of your account and associated data.</li>
+                <li>Withdraw consent to data processing at any time.</li>
+            </ul>
+            <p>To exercise any of these rights, contact us via our Facebook page.</p>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">07 — Security</p>
+            <h2>Data Security</h2>
+            <p>We take reasonable steps to protect your information. However, as our platform currently uses browser-based localStorage for data storage, we recommend not sharing your device or browser with others, and logging out after each session using the Logout option in the menu.</p>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">08 — Changes</p>
+            <h2>Updates to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time. Any changes will be reflected on this page with an updated date. We encourage you to review this policy periodically to stay informed about how we protect your information.</p>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">09 — Contact</p>
+            <h2>Questions About Privacy?</h2>
+            <p>If you have any questions or concerns about this Privacy Policy or how your data is handled, please contact us via our <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 700;">Facebook page</a> or visit our store at Km. 23 Sumulong Highway, Brgy. Sta. Cruz, Antipolo City (10:00 AM – 9:00 PM daily).</p>
+        </div>
+
+        <!-- Also see -->
+        <div class="also-see">
+            <p><strong>Also read:</strong> Our Terms of Service covers orders, payments, returns, and shipping policies.</p>
+            <a href="terms.html">📄 Terms of Service →</a>
+        </div>
+
+    </div>
+
+    <!-- ═══ FOOTER ═══════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3 class="logo-text">Pits Stop Collectibles</h3>
+                <p class="tagline">Not your ordinary pit stop 🤩🏁</p>
+            </div>
+            <div class="footer-info">
+                <p>📍 Km. 23 Sumulong Highway, Brgy. Sta. Cruz, Antipolo City</p>
+                <p>🕙 Open daily, 10:00 AM – 9:00 PM</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">Follow us on Facebook</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 Pits Stop Collectibles | All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleHamburger() {
+            document.getElementById('hamburgerDrawer').classList.toggle('open');
+            document.getElementById('hamburgerOverlay').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+        }
+        function closeHamburger() {
+            document.getElementById('hamburgerDrawer').classList.remove('open');
+            document.getElementById('hamburgerOverlay').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
+        }
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+        });
+        function loadUser() {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const drawer = document.getElementById("drawerAuthSection");
+            if (!drawer) return;
+            if (loggedIn === "true" && currentUser) {
+                drawer.innerHTML = `
+                    <p class="drawer-greeting">Hi, <strong>${currentUser.username}</strong> 👋</p>
+                    <a href="inbox.html" class="drawer-link drawer-link--green">📩 Inbox</a>
+                    <a href="account.html" class="drawer-link">👤 Account</a>
+                    <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>`;
+            } else {
+                drawer.innerHTML = `
+                    <a href="login.html" class="drawer-link drawer-link--accent">Login</a>
+                    <a href="signup.html" class="drawer-link">Sign Up</a>`;
+            }
+        }
+        function logout() {
+            if (confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem("loggedIn");
+                localStorage.removeItem("currentUser");
+                localStorage.removeItem("isAdmin");
+                window.location.reload();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadUser);
+    </script>
+</body>
+</html>

@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-
         .about-hero {
             display: flex;
             flex-direction: column;
@@ -20,19 +19,15 @@
             position: relative;
             overflow: hidden;
         }
-
         .about-hero::after {
             content: '';
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             background-image:
                 linear-gradient(var(--border) 1px, transparent 1px),
                 linear-gradient(90deg, var(--border) 1px, transparent 1px);
             background-size: 60px 60px;
-            opacity: 0.35;
-            pointer-events: none;
+            opacity: 0.35; pointer-events: none;
         }
-
         .about-hero::before {
             content: '';
             position: absolute;
@@ -42,60 +37,33 @@
             background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
             pointer-events: none;
         }
-
         .about-inner {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 48px;
-            max-width: 860px;
-            width: 100%;
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 48px;
+            max-width: 860px; width: 100%;
             animation: fadeUp 0.9s ease both;
         }
 
-        /* ── EYEBROW ── */
-        .about-eyebrow {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .about-eyebrow .eyebrow-line {
-            display: block;
-            width: 40px; height: 1px;
-            background: var(--accent);
-        }
-
+        /* Eyebrow */
+        .about-eyebrow { display: flex; align-items: center; gap: 16px; }
+        .about-eyebrow .eyebrow-line { display: block; width: 40px; height: 1px; background: var(--accent); }
         .about-eyebrow .eyebrow-text {
             font-family: 'Share Tech Mono', monospace;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: var(--accent);
-            background: rgba(230,0,0,0.08);
-            border: 1px solid rgba(230,0,0,0.25);
-            padding: 6px 16px;
-            border-radius: 2px;
-            text-transform: uppercase;
+            font-size: 0.7rem; letter-spacing: 3px; color: var(--accent);
+            background: rgba(230,0,0,0.08); border: 1px solid rgba(230,0,0,0.25);
+            padding: 6px 16px; border-radius: 2px; text-transform: uppercase;
         }
 
-        /* ── PAGE TITLE ── */
+        /* Title */
         .about-title {
             font-family: 'Bebas Neue', sans-serif;
             font-size: clamp(3rem, 10vw, 6rem);
-            letter-spacing: 6px;
-            color: var(--text);
-            line-height: 1;
-            margin: 0;
+            letter-spacing: 6px; color: var(--text); line-height: 1; margin: 0;
         }
+        .about-title span { color: transparent; -webkit-text-stroke: 2px var(--text); }
 
-        .about-title span {
-            color: transparent;
-            -webkit-text-stroke: 2px var(--text);
-        }
-
-        /* ── DESCRIPTION CARD ── */
+        /* Description card */
         .about-description {
             width: 100%;
             background: var(--surface);
@@ -106,120 +74,169 @@
             box-shadow: 0 0 32px var(--accent-glow);
             text-align: left;
         }
-
         .about-description p {
             font-family: 'Rajdhani', sans-serif;
-            font-weight: 400;
-            line-height: 1.85;
-            font-size: 1.05rem;
-            color: var(--text-muted);
-            margin: 0;
+            font-weight: 400; line-height: 1.85;
+            font-size: 1.05rem; color: var(--text-muted); margin: 0;
         }
+        .about-description p strong { color: var(--text); font-weight: 700; }
 
-        .about-description p strong {
-            color: var(--text);
-            font-weight: 700;
-        }
-
-        /* ── INFO CARDS ── */
+        /* Info grid */
         .about-info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            width: 100%;
+            gap: 16px; width: 100%;
         }
-
         .about-info-card {
             background: var(--bg-alt);
             border: 1px solid var(--border);
             border-radius: 8px;
             padding: 22px 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            text-align: left;
+            display: flex; flex-direction: column; gap: 8px; text-align: left;
         }
-
-        .about-info-icon {
-            font-size: 1.4rem;
-        }
-
+        .about-info-icon { font-size: 1.4rem; }
         .about-info-label {
             font-family: 'Share Tech Mono', monospace;
-            font-size: 0.6rem;
-            letter-spacing: 3px;
-            color: var(--accent);
-            text-transform: uppercase;
+            font-size: 0.6rem; letter-spacing: 3px;
+            color: var(--accent); text-transform: uppercase;
         }
-
         .about-info-value {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text);
-            line-height: 1.45;
+            font-size: 0.95rem; font-weight: 700;
+            color: var(--text); line-height: 1.45;
         }
 
+        /* ── SOCIALS ── */
+        .about-socials {
+            display: flex; gap: 14px; flex-wrap: wrap;
+            justify-content: center; width: 100%;
+        }
+        .social-pill {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 12px 22px;
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700; font-size: 0.9rem;
+            color: var(--text); letter-spacing: 0.5px;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+        .social-pill:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230,0,0,0.1);
+        }
+        .social-pill img { width: 20px; height: 20px; object-fit: contain; }
+
+        /* ── LEGAL LINKS SECTION ── */
+        .about-legal {
+            width: 100%;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .about-legal-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.88rem; font-weight: 600;
+            color: var(--text-muted); line-height: 1.5;
+        }
+        .about-legal-text strong { color: var(--text); }
+        .about-legal-links {
+            display: flex; gap: 10px; flex-wrap: wrap; flex-shrink: 0;
+        }
+        .legal-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.8rem; letter-spacing: 2px;
+            text-decoration: none;
+            padding: 9px 18px; border-radius: 3px;
+            transition: background 0.2s, transform 0.2s;
+            white-space: nowrap;
+        }
+        .legal-btn.terms {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .legal-btn.terms:hover {
+            border-color: var(--accent); color: var(--accent);
+            background: rgba(230,0,0,0.06);
+        }
+        .legal-btn.policy {
+            background: var(--accent);
+            color: #fff; border: none;
+            box-shadow: 0 4px 14px var(--accent-glow);
+        }
+        .legal-btn.policy:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            .nav-menu { display: none; }
+            .nav-bar { grid-template-columns: 50px 1fr 50px; padding: 0 16px; }
+        }
         @media (max-width: 600px) {
             .about-description { padding: 24px 22px; }
             .about-info-grid { grid-template-columns: 1fr; }
+            .about-legal { flex-direction: column; align-items: flex-start; }
+            .about-legal-links { width: 100%; }
+            .legal-btn { flex: 1; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ══ HEADER ══ -->
+    <!-- ═══ HEADER ════════════════════════════════════════════ -->
     <header>
         <nav class="nav-bar">
             <div class="nav-left">
-                <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleHamburger()" aria-label="Menu">
                     <span></span><span></span><span></span>
                 </button>
             </div>
-
-            <ul class="nav-menu">
+            <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-button">Home</a></li>
                 <li class="dropdown">
                     <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="hotwheels.html" class="nav-button">Hot Wheels</a></li>
-                        <li><a href="premium.html" class="nav-button">Hot Wheels Premium</a></li>
+                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Premium</a></li>
                         <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
                     </ul>
                 </li>
                 <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
                 <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
-                <li>
-                    <a href="cart.html" class="nav-button">
-                        🛒 Cart <span id="cart-count" style="display:none; background:var(--accent); color:#fff; border-radius:50%; padding:1px 6px; font-size:0.7rem; margin-left:4px;">0</span>
-                    </a>
-                </li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
             </ul>
-
             <div class="nav-right">
-                <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">🌙</button>
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
             </div>
         </nav>
+
+        <div class="hamburger-overlay" id="hamburgerOverlay" onclick="closeHamburger()"></div>
+        <div class="hamburger-drawer" id="hamburgerDrawer">
+            <button class="drawer-close" onclick="closeHamburger()">✕</button>
+            <div id="drawerAuthSection" class="drawer-auth"></div>
+            <div class="drawer-divider"></div>
+            <p class="drawer-label">NAVIGATION</p>
+            <a href="index.html" class="drawer-link">Home</a>
+            <a href="hotwheels.html" class="drawer-link">Hotwheels</a>
+            <a href="premium.html" class="drawer-link">Premium</a>
+            <a href="matchbox.html" class="drawer-link">Matchbox</a>
+            <a href="aboutUs.html" class="drawer-link">About Us</a>
+            <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
+            <a href="cart.html" class="drawer-link">🛒 Cart</a>
+        </div>
     </header>
 
-    <!-- Hamburger Drawer -->
-    <div class="hamburger-overlay" id="drawerOverlay"></div>
-    <nav class="hamburger-drawer" id="hamburgerDrawer">
-        <button class="drawer-close" id="drawerClose">✕</button>
-        <div class="drawer-greeting">Pits Stop Collectibles</div>
-        <span class="drawer-label">Navigation</span>
-        <a href="index.html" class="drawer-link">Home</a>
-        <span class="drawer-label">Brands</span>
-        <a href="hotwheels.html" class="drawer-link">Hot Wheels</a>
-        <a href="premium.html" class="drawer-link">Hot Wheels Premium</a>
-        <a href="matchbox.html" class="drawer-link">Matchbox</a>
-        <div class="drawer-divider"></div>
-        <a href="aboutUs.html" class="drawer-link">About Us</a>
-        <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
-        <a href="cart.html" class="drawer-link drawer-link--accent">🛒 Cart</a>
-    </nav>
-
-    <!-- ══ ABOUT SECTION ══ -->
+    <!-- ═══ ABOUT SECTION ════════════════════════════════════ -->
     <section class="about-hero">
         <div class="about-inner">
 
@@ -265,10 +282,22 @@
                 </div>
             </div>
 
+            <!-- Legal Links -->
+            <div class="about-legal">
+                <p class="about-legal-text">
+                    <strong>Before purchasing</strong>, please read our Terms of Service and Privacy Policy
+                    so you know how we handle orders, payments, and your personal information.
+                </p>
+                <div class="about-legal-links">
+                    <a href="terms.html" class="legal-btn terms">📄 Terms of Service</a>
+                    <a href="policy.html" class="legal-btn policy">🔒 Privacy Policy</a>
+                </div>
+            </div>
+
         </div>
     </section>
 
-    <!-- ══ FOOTER ══ -->
+    <!-- ═══ FOOTER ═══════════════════════════════════════════ -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-brand">
@@ -278,6 +307,9 @@
             <div class="footer-info">
                 <p>📍 Km. 23 Sumulong Highway, Brgy. Sta. Cruz, Antipolo City</p>
                 <p>🕙 Open daily, 10:00 AM – 9:00 PM</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">Follow us on Facebook</a>
+                </div>
             </div>
             <div class="footer-bottom">
                 <p class="copyright">© 2026 Pits Stop Collectibles | All Rights Reserved</p>
@@ -286,35 +318,58 @@
     </footer>
 
     <script>
-        /* ── THEME TOGGLE ── */
-        const themeBtn = document.getElementById('themeBtn');
-        const saved = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', saved);
-        themeBtn.textContent = saved === 'dark' ? '☀️' : '🌙';
-        themeBtn.addEventListener('click', () => {
-            const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-            document.documentElement.setAttribute('data-theme', isLight ? 'dark' : 'light');
-            localStorage.setItem('theme', isLight ? 'dark' : 'light');
-            themeBtn.textContent = isLight ? '🌙' : '☀️';
+        // ─── Hamburger ──────────────────────────────────────
+        function toggleHamburger() {
+            document.getElementById('hamburgerDrawer').classList.toggle('open');
+            document.getElementById('hamburgerOverlay').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+        }
+        function closeHamburger() {
+            document.getElementById('hamburgerDrawer').classList.remove('open');
+            document.getElementById('hamburgerOverlay').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
+        }
+
+        // ─── Theme ──────────────────────────────────────────
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
         });
 
-        /* ── HAMBURGER DRAWER ── */
-        const hamburgerBtn    = document.getElementById('hamburgerBtn');
-        const hamburgerDrawer = document.getElementById('hamburgerDrawer');
-        const drawerOverlay   = document.getElementById('drawerOverlay');
-        const drawerClose     = document.getElementById('drawerClose');
-
-        function openDrawer()  { hamburgerDrawer.classList.add('open'); drawerOverlay.classList.add('open'); hamburgerBtn.classList.add('active'); }
-        function closeDrawer() { hamburgerDrawer.classList.remove('open'); drawerOverlay.classList.remove('open'); hamburgerBtn.classList.remove('active'); }
-
-        hamburgerBtn.addEventListener('click', openDrawer);
-        drawerClose.addEventListener('click', closeDrawer);
-        drawerOverlay.addEventListener('click', closeDrawer);
-
-        /* ── CART BADGE ── */
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const badge = document.getElementById('cart-count');
-        if (cart.length > 0) { badge.style.display = 'inline'; badge.textContent = cart.length; }
+        // ─── Auth ───────────────────────────────────────────
+        function loadUser() {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const drawer = document.getElementById("drawerAuthSection");
+            if (!drawer) return;
+            if (loggedIn === "true" && currentUser) {
+                drawer.innerHTML = `
+                    <p class="drawer-greeting">Hi, <strong>${currentUser.username}</strong> 👋</p>
+                    <a href="inbox.html" class="drawer-link drawer-link--green">📩 Inbox</a>
+                    <a href="account.html" class="drawer-link">👤 Account</a>
+                    <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>`;
+            } else {
+                drawer.innerHTML = `
+                    <a href="login.html" class="drawer-link drawer-link--accent">Login</a>
+                    <a href="signup.html" class="drawer-link">Sign Up</a>`;
+            }
+        }
+        function logout() {
+            if (confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem("loggedIn");
+                localStorage.removeItem("currentUser");
+                localStorage.removeItem("isAdmin");
+                window.location.reload();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadUser);
     </script>
 </body>
 </html>

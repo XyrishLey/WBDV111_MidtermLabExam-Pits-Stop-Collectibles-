@@ -8,10 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ── CHECKOUT PAGE STYLES ─────────────────────────────────
-           Uses style.css variables throughout for theme support.
-        ──────────────────────────────────────────────────────── */
-
         body {
             display: flex;
             flex-direction: column;
@@ -22,7 +18,6 @@
             background: var(--bg);
         }
 
-        /* ── PAGE TITLE ── */
         .checkout-eyebrow {
             display: flex;
             align-items: center;
@@ -51,7 +46,6 @@
             margin-bottom: 36px;
         }
 
-        /* ── CHECKOUT BOX ── */
         .checkout-box {
             max-width: 680px;
             width: 100%;
@@ -62,7 +56,6 @@
             box-shadow: 0 0 40px var(--accent-glow);
         }
 
-        /* Section titles */
         .section-title {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.1rem;
@@ -75,7 +68,6 @@
         }
         .section-title:first-child { margin-top: 0; }
 
-        /* ── FORM ELEMENTS ── */
         .input-group { margin-bottom: 14px; }
 
         .input-group label {
@@ -111,7 +103,6 @@
 
         .input-group input::placeholder { color: var(--text-muted); font-weight: 400; }
 
-        /* Readonly zip */
         .input-group input[readonly] {
             background: rgba(230,0,0,0.06);
             border-color: rgba(230,0,0,0.3);
@@ -132,7 +123,6 @@
             font-style: italic;
         }
 
-        /* ── CONDITIONAL BLOCKS ── */
         .conditional-info {
             display: none;
             background: rgba(230,0,0,0.04);
@@ -142,7 +132,6 @@
             margin-bottom: 14px;
         }
 
-        /* ── PAYMENT INSTRUCTIONS ── */
         .payment-instructions {
             display: none;
             background: var(--bg-alt);
@@ -162,7 +151,6 @@
             margin: 8px 0;
         }
 
-        /* ── PROOF UPLOAD ── */
         .proof-section {
             display: none;
             background: var(--bg-alt);
@@ -218,7 +206,6 @@
         #payment-preview { max-width: 100%; max-height: 200px; border: 1px solid var(--accent); border-radius: 5px; }
         .remove-img { color: var(--accent); cursor: pointer; font-size: 0.8rem; text-decoration: underline; display: block; margin-top: 6px; font-family: 'Rajdhani', sans-serif; }
 
-        /* ── TOTAL BOX ── */
         .total-box {
             background: rgba(230,0,0,0.07);
             padding: 18px;
@@ -242,7 +229,7 @@
             display: none;
         }
 
-        /* ── CONFIRMATION CHECKBOX ── */
+        /* ── CONFIRM CHECKBOXES ── */
         .confirm-wrapper {
             display: flex;
             align-items: flex-start;
@@ -251,9 +238,11 @@
             background: var(--bg-alt);
             border: 1px solid var(--border);
             border-radius: 6px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             cursor: pointer;
+            transition: border-color 0.2s;
         }
+        .confirm-wrapper:hover { border-color: rgba(230,0,0,0.4); }
         .confirm-wrapper input[type="checkbox"] {
             width: 16px;
             height: 16px;
@@ -269,13 +258,16 @@
             color: var(--text-muted);
             cursor: pointer;
             user-select: none;
-            line-height: 1.3;
+            line-height: 1.4;
         }
-        .confirm-wrapper input[type="checkbox"]:checked + label {
-            color: var(--text);
+        .confirm-wrapper label a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
         }
+        .confirm-wrapper label a:hover { opacity: 0.8; }
+        .confirm-wrapper input[type="checkbox"]:checked + label { color: var(--text); }
 
-        /* ── PLACE ORDER BUTTON ── */
         .place-order-btn {
             width: 100%;
             padding: 18px;
@@ -303,7 +295,6 @@
             box-shadow: none;
         }
 
-        /* ── SECURITY BADGE ── */
         .security-note {
             display: flex;
             align-items: center;
@@ -317,7 +308,6 @@
             opacity: 0.7;
         }
 
-        /* ── VERIFY OVERLAY ── */
         #payment-verify-overlay {
             display: none;
             position: fixed;
@@ -352,12 +342,10 @@
         }
         #sub-status { font-family: 'Rajdhani', sans-serif; color: var(--text-muted); font-size: 0.95rem; }
 
-        /* ── FIELD ERROR STATE ── */
         .input-group input.error,
         .input-group select.error { border-color: #ff4444; box-shadow: 0 0 0 3px rgba(255,68,68,0.2); }
         .field-error { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; color: #ff4444; letter-spacing: 1px; margin-top: 4px; display: none; }
 
-        /* ── RESPONSIVE ── */
         @media (max-width: 600px) {
             .checkout-box { padding: 28px 20px; }
             .grid-2 { grid-template-columns: 1fr; }
@@ -412,6 +400,7 @@
         <div class="drawer-divider"></div>
         <a href="aboutUs.html" class="drawer-link">About Us</a>
         <a href="cart.html" class="drawer-link drawer-link--accent">🛒 Cart</a>
+        <a href="track.html" class="drawer-link" id="trackLinkDrawer" style="display:none;">📦 Track Order</a>
         <a href="contactUs.html" class="drawer-link">✉️ Contact Us</a>
     </nav>
 
@@ -447,7 +436,7 @@
 
         <div class="input-group">
             <label>Receiver Full Name <span style="color:var(--accent)">*</span></label>
-            <input type="text" id="check-name" placeholder="Full Name" maxlength="80" autocomplete="name">
+            <input type="text" id="check-name" placeholder="Full Name (letters only)" maxlength="80" autocomplete="name">
         </div>
 
         <div class="grid-2">
@@ -530,9 +519,20 @@
             <small id="fee-note">(Includes ₱60 Rizal COD Fee)</small>
         </div>
 
-        <div class="confirm-wrapper" onclick="toggleCheckbox(event)">
+        <!-- Checkbox 1: Confirm info accuracy -->
+        <div class="confirm-wrapper" onclick="toggleCheckbox(event, 'confirm-info-check')">
             <input type="checkbox" id="confirm-info-check" onchange="handleCheckboxChange()">
             <label for="confirm-info-check">I confirm that all my detailed information is correct and true.</label>
+        </div>
+
+        <!-- Checkbox 2: Terms & Privacy Policy -->
+        <div class="confirm-wrapper" onclick="toggleCheckbox(event, 'confirm-terms-check')">
+            <input type="checkbox" id="confirm-terms-check" onchange="handleCheckboxChange()">
+            <label for="confirm-terms-check">I have read and agree to the
+                <a href="terms.html" target="_blank" onclick="event.stopPropagation()">Terms of Service</a>
+                and
+                <a href="policy.html" target="_blank" onclick="event.stopPropagation()">Privacy Policy</a>.
+            </label>
         </div>
 
         <button class="place-order-btn" id="placeOrderBtn" onclick="startFinalProcess()" disabled>
@@ -545,9 +545,7 @@
     </div>
 
     <script>
-        /* ════════════════════════════════════════
-           THEME + DRAWER
-        ════════════════════════════════════════ */
+        /* ════ THEME + DRAWER ════ */
         const themeBtn = document.getElementById('themeBtn');
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'light') { document.documentElement.setAttribute('data-theme','light'); themeBtn.textContent = '☀️'; }
@@ -568,23 +566,37 @@
         drawerClose.addEventListener('click', closeDrawer);
         drawerOverlay.addEventListener('click', closeDrawer);
 
+        // Show Track Order if logged in
+        if (localStorage.getItem('loggedIn') === 'true') {
+            const tl = document.getElementById('trackLinkDrawer');
+            if (tl) tl.style.display = 'block';
+        }
+
         /* Cart badge */
         const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
         const badge = document.getElementById('cart-count');
         if (cartItems.length > 0) { badge.style.display = 'inline'; badge.textContent = cartItems.length; }
 
-        /* ════════════════════════════════════════
-           SECURITY HELPERS
-        ════════════════════════════════════════ */
+        /* ════ SECURITY HELPERS ════ */
         function sanitize(str) {
             return String(str).replace(/<[^>]*>/g, '').trim();
         }
-
         function isValidPHPhone(num) {
             return /^(09|\+639)\d{9}$/.test(num.replace(/\s/g,''));
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Restrict receiver name: letters and spaces only
+            const nameField = document.getElementById('check-name');
+            nameField.addEventListener('input', function() {
+                this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s\.\-]/g, '');
+            });
+            nameField.addEventListener('keypress', function(e) {
+                if (!/[a-zA-ZÀ-ÿ\s\.\-]/.test(e.key)) {
+                    e.preventDefault();
+                }
+            });
+
             document.getElementById('ref-code').addEventListener('input', function() {
                 this.value = this.value.replace(/\D/g,'');
             });
@@ -601,24 +613,19 @@
             });
         });
 
-        /* ════════════════════════════════════════
-           ZIP FALLBACK MAP
-        ════════════════════════════════════════ */
+        /* ════ ZIP FALLBACK MAP ════ */
         const ZIP_FALLBACK = {
-            // Metro Manila
             '137601000': '1000', '137402000': '1100', '137404000': '1300',
             '137405000': '1400', '137406000': '1400', '137407000': '1440',
             '137408000': '1800', '137409000': '1550', '137410000': '1600',
             '137411000': '1200', '137412000': '1700', '137413000': '1300',
             '137414000': '1750', '137415000': '1740', '137416000': '1770',
             '137417000': '1900', '137418000': '1500', '137419000': '1660',
-            // Rizal
             '045801000': '1900', '045802000': '1860', '045803000': '1850',
             '045804000': '1870', '045805000': '1880', '045806000': '1890',
             '045807000': '1910', '045808000': '1920', '045809000': '1930',
             '045810000': '1940', '045811000': '1950', '045812000': '1960',
             '045813000': '1970', '045814000': '1980',
-            // Cavite
             '042101000': '4100', '042102000': '4107', '042103000': '4103',
             '042104000': '4115', '042105000': '4105', '042106000': '4114',
             '042107000': '4104',
@@ -633,9 +640,7 @@
             return '';
         }
 
-        /* ════════════════════════════════════════
-           DROPDOWN HELPERS
-        ════════════════════════════════════════ */
+        /* ════ DROPDOWN HELPERS ════ */
         function setDropdown(selectEl, options, valueKey, labelKey, placeholder) {
             selectEl.innerHTML = `<option value="">${placeholder}</option>`;
             options.sort((a, b) => a[labelKey].localeCompare(b[labelKey]));
@@ -646,7 +651,6 @@
                 selectEl.appendChild(opt);
             });
             selectEl.disabled = false;
-            selectEl.removeAttribute('disabled');
         }
 
         function disableDropdown(selectEl, placeholder) {
@@ -656,9 +660,7 @@
 
         let isNCRSelected = false;
 
-        /* ════════════════════════════════════════
-           CASCADING ADDRESS LOGIC
-        ════════════════════════════════════════ */
+        /* ════ CASCADING ADDRESS ════ */
         async function onRegionChange() {
             const regionSel  = document.getElementById('region');
             const regionCode = regionSel.value;
@@ -670,7 +672,6 @@
             document.getElementById('zip-code').value = '';
 
             if (!regionCode) { isNCRSelected = false; checkRizalRestriction(); return; }
-
             isNCRSelected = regionName.includes('National Capital Region');
 
             const endpoint = isNCRSelected
@@ -680,40 +681,31 @@
             try {
                 const res  = await fetch(endpoint);
                 const data = await res.json();
-                setDropdown(
-                    document.getElementById('province'),
-                    data, 'code', 'name',
-                    isNCRSelected ? 'Select District' : 'Select Province'
-                );
+                setDropdown(document.getElementById('province'), data, 'code', 'name',
+                    isNCRSelected ? 'Select District' : 'Select Province');
             } catch(e) {
-                console.error('Region fetch error:', e);
                 disableDropdown(document.getElementById('province'), 'Failed to load — try again');
             }
-
             checkRizalRestriction();
         }
 
         async function onProvinceChange() {
             const provSel  = document.getElementById('province');
             const provCode = provSel.value;
-
             disableDropdown(document.getElementById('city'),     'Select City / Municipality');
             disableDropdown(document.getElementById('barangay'), 'Select City first');
             document.getElementById('zip-code').value = '';
-
             checkRizalRestriction();
             if (!provCode) return;
 
             const endpoint = isNCRSelected
                 ? `https://psgc.gitlab.io/api/districts/${provCode}/cities-municipalities/`
                 : `https://psgc.gitlab.io/api/provinces/${provCode}/cities-municipalities/`;
-
             try {
                 const res  = await fetch(endpoint);
                 const data = await res.json();
                 setDropdown(document.getElementById('city'), data, 'code', 'name', 'Select City / Municipality');
             } catch(e) {
-                console.error('Province fetch error:', e);
                 disableDropdown(document.getElementById('city'), 'Failed to load — try again');
             }
         }
@@ -722,40 +714,30 @@
             const citySel  = document.getElementById('city');
             const cityCode = citySel.value;
             const cityName = citySel.options[citySel.selectedIndex]?.text || '';
-
             disableDropdown(document.getElementById('barangay'), 'Select Barangay');
             document.getElementById('zip-code').value = 'Loading…';
-
             if (!cityCode) { document.getElementById('zip-code').value = ''; return; }
-
             try {
                 const [barangays, zip] = await Promise.all([
-                    fetch(`https://psgc.gitlab.io/api/cities-municipalities/${cityCode}/barangays/`)
-                        .then(r => r.json()).catch(() => []),
+                    fetch(`https://psgc.gitlab.io/api/cities-municipalities/${cityCode}/barangays/`).then(r => r.json()).catch(() => []),
                     fetchZip(cityCode, cityName)
                 ]);
-
                 setDropdown(document.getElementById('barangay'), barangays, 'code', 'name', 'Select Barangay');
-
                 const zipEl = document.getElementById('zip-code');
                 zipEl.value = zip || '';
                 zipEl.placeholder = zip ? 'Auto-filled' : 'Not found — tap to enter manually';
             } catch(e) {
-                console.error('City fetch error:', e);
                 disableDropdown(document.getElementById('barangay'), 'Failed to load — try again');
                 document.getElementById('zip-code').value = '';
             }
         }
 
-        /* ════════════════════════════════════════
-           COURIER / PAYMENT LOGIC
-        ════════════════════════════════════════ */
+        /* ════ COURIER / PAYMENT LOGIC ════ */
         function checkRizalRestriction() {
             const provName = (document.getElementById('province').options[document.getElementById('province').selectedIndex]?.text || '').toLowerCase();
             const isRizal  = provName.includes('rizal');
             const sellerOpt   = document.getElementById('seller-delivery-opt');
             const courierNote = document.getElementById('courier-note');
-
             if (isRizal) {
                 sellerOpt.disabled = false;
                 courierNote.style.display = 'none';
@@ -772,9 +754,7 @@
             const courier      = document.getElementById('courier-select').value;
             const codOption    = document.getElementById('cod-option');
             const paymentSelect = document.getElementById('payment-method');
-
             document.getElementById('lbc-branch-info').style.display = courier === 'lbc' ? 'block' : 'none';
-
             if (courier === 'seller') {
                 codOption.disabled = false;
                 codOption.textContent = 'Cash on Delivery (COD)';
@@ -808,17 +788,11 @@
             document.getElementById('final-price').textContent = total.toLocaleString();
         }
 
-        /* ════════════════════════════════════════
-           IMAGE PREVIEW
-        ════════════════════════════════════════ */
+        /* ════ IMAGE PREVIEW ════ */
         function previewImage(input) {
             if (!input.files || !input.files[0]) return;
             const file = input.files[0];
-            if (file.size > 5 * 1024 * 1024) {
-                alert('Image too large. Please upload under 5MB.');
-                input.value = '';
-                return;
-            }
+            if (file.size > 5 * 1024 * 1024) { alert('Image too large. Please upload under 5MB.'); input.value = ''; return; }
             const reader = new FileReader();
             reader.onload = e => {
                 document.getElementById('payment-preview').src = e.target.result;
@@ -833,85 +807,65 @@
             document.getElementById('payment-preview').src = '#';
         }
 
-        /* ════════════════════════════════════════
-           CHECKBOX HANDLING LOGIC
-        ════════════════════════════════════════ */
-        function toggleCheckbox(event) {
-            // Prevent double-triggering when clicking directly on the input or its text label
-            if (event.target.id === 'confirm-info-check' || event.target.getAttribute('for') === 'confirm-info-check') {
-                return;
-            }
-            const checkbox = document.getElementById('confirm-info-check');
+        /* ════ CHECKBOX HANDLING ════ */
+        function toggleCheckbox(event, checkboxId) {
+            if (event.target.tagName === 'A') return; // let links open normally
+            if (event.target.id === checkboxId || event.target.getAttribute('for') === checkboxId) return;
+            const checkbox = document.getElementById(checkboxId);
             checkbox.checked = !checkbox.checked;
             handleCheckboxChange();
         }
 
         function handleCheckboxChange() {
-            const checkbox = document.getElementById('confirm-info-check');
-            const orderBtn = document.getElementById('placeOrderBtn');
-            orderBtn.disabled = !checkbox.checked;
+            const infoChecked  = document.getElementById('confirm-info-check').checked;
+            const termsChecked = document.getElementById('confirm-terms-check').checked;
+            document.getElementById('placeOrderBtn').disabled = !(infoChecked && termsChecked);
         }
 
-        /* ════════════════════════════════════════
-           FORM VALIDATION
-        ════════════════════════════════════════ */
+        /* ════ FORM VALIDATION ════ */
         function validateForm() {
             const errors = [];
-
-            if (sanitize(document.getElementById('check-name').value).length < 2)
-                errors.push('Full name is required.');
-
+            const nameVal = sanitize(document.getElementById('check-name').value);
+            if (nameVal.length < 2) errors.push('Full name is required.');
+            if (/[^a-zA-ZÀ-ÿ\s\.\-]/.test(nameVal)) errors.push('Receiver name must contain letters only.');
             if (!isValidPHPhone(sanitize(document.getElementById('contact-number').value)))
                 errors.push('Enter a valid PH mobile number (e.g. 09XX XXX XXXX).');
-
             if (!document.getElementById('region').value)   errors.push('Please select a Region.');
             if (!document.getElementById('province').value) errors.push('Please select a Province / District.');
             if (!document.getElementById('city').value)     errors.push('Please select a City / Municipality.');
             if (!document.getElementById('barangay').value) errors.push('Please select a Barangay.');
-
             if (sanitize(document.getElementById('check-address').value).length < 5)
                 errors.push('Please enter your full street address.');
-
             const courier = document.getElementById('courier-select').value;
             if (!courier) errors.push('Please select a courier.');
             if (courier === 'lbc' && !sanitize(document.getElementById('lbc-branch').value))
                 errors.push('Please enter the LBC branch name.');
-
             const payment = document.getElementById('payment-method').value;
             if (!payment) errors.push('Please select a payment method.');
-
             if (payment === 'gcash' || payment === 'maya') {
                 if (!document.getElementById('payment-img').value)
                     errors.push('Please upload your payment screenshot.');
                 if (!/^\d{4}$/.test(document.getElementById('ref-code').value))
                     errors.push('Please enter the last 4 digits of your reference number.');
             }
-
-            // Secondary security validation for the checkbox element
-            if (!document.getElementById('confirm-info-check').checked) {
-                errors.push('You must confirm that your detailed information is correct.');
-            }
-
+            if (!document.getElementById('confirm-info-check').checked)
+                errors.push('You must confirm that your information is correct.');
+            if (!document.getElementById('confirm-terms-check').checked)
+                errors.push('You must agree to the Terms of Service and Privacy Policy.');
             if (errors.length) { alert('Please fix the following:\n\n• ' + errors.join('\n• ')); return false; }
             return true;
         }
 
-        /* ════════════════════════════════════════
-           PLACE ORDER
-        ════════════════════════════════════════ */
+        /* ════ PLACE ORDER ════ */
         function startFinalProcess() {
             if (!validateForm()) return;
-
             document.getElementById('placeOrderBtn').disabled = true;
             document.getElementById('payment-verify-overlay').classList.add('active');
-
             setTimeout(() => {
                 document.getElementById('status-text').textContent = 'Submitting Request…';
                 document.getElementById('sub-status').textContent  = 'Waiting for seller to approve your order.';
-
                 const get = id => document.getElementById(id);
                 const selectedText = id => get(id).options[get(id).selectedIndex]?.text || '';
-
                 const newOrder = {
                     orderID:  'ORD-' + Math.floor(1000 + Math.random() * 9000),
                     user:     sanitize(get('check-name').value),
@@ -929,19 +883,26 @@
                     payment:  get('payment-method').value,
                     total:    get('final-price').textContent,
                     status:   'Pending',
-                    date:     new Date().toLocaleDateString('en-PH')
+                    date:     new Date().toLocaleDateString('en-PH'),
+                    items:    JSON.parse(localStorage.getItem('cart')) || []
                 };
-
                 const orders = JSON.parse(localStorage.getItem('allOrders')) || [];
                 orders.push(newOrder);
                 localStorage.setItem('allOrders', JSON.stringify(orders));
+
+                // Associate order with logged-in user
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                if (currentUser) {
+                    const userOrders = JSON.parse(localStorage.getItem('userOrders_' + currentUser.username)) || [];
+                    userOrders.push(newOrder);
+                    localStorage.setItem('userOrders_' + currentUser.username, JSON.stringify(userOrders));
+                }
 
                 setTimeout(() => {
                     document.getElementById('loader-icon').style.display = 'none';
                     document.getElementById('success-icon').style.display = 'block';
                     document.getElementById('status-text').textContent = 'Request Sent!';
                     document.getElementById('sub-status').textContent  = 'The seller will review your order shortly.';
-
                     setTimeout(() => {
                         localStorage.removeItem('cart');
                         window.location.href = 'success.html';
@@ -950,9 +911,7 @@
             }, 2000);
         }
 
-        /* ════════════════════════════════════════
-           ON LOAD
-        ════════════════════════════════════════ */
+        /* ════ ON LOAD ════ */
         window.onload = async function() {
             const storageUser = localStorage.getItem('user') || localStorage.getItem('currentUser');
             if (!storageUser) { window.location.href = 'login.html'; return; }
@@ -966,16 +925,16 @@
 
             try {
                 const user = JSON.parse(storageUser);
-                document.getElementById('check-name').value = sanitize(user.fullname || user.username || '');
+                const nameField = document.getElementById('check-name');
+                nameField.value = sanitize(user.fullname || user.username || '');
             } catch(_) {}
 
-            // Load regions into dropdown
             try {
                 const res  = await fetch('https://psgc.gitlab.io/api/regions/');
                 const data = await res.json();
                 setDropdown(document.getElementById('region'), data, 'code', 'name', 'Select Region');
             } catch(e) {
-                document.getElementById('region').innerHTML = '<option value=\"\">Failed to load — refresh page</option>';
+                document.getElementById('region').innerHTML = '<option value="">Failed to load — refresh page</option>';
             }
         };
     </script>

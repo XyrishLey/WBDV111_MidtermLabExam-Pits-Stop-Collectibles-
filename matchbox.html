@@ -318,6 +318,8 @@
             <a href="aboutUs.html" class="drawer-link">About Us</a>
             <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
             <a href="cart.html" class="drawer-link">🛒 Cart</a>
+            <a href="contactUs.html" class="drawer-link">✉️ Contact Us</a>
+            <a href="track.html" class="drawer-link" id="trackLinkDrawer" style="display:none;">📦 Track Order</a>
         </div>
     </header>
 
@@ -421,6 +423,12 @@
                     <a href="signup.html" class="drawer-link">Sign Up</a>`;
             }
         }
+
+         if (localStorage.getItem('loggedIn') === 'true') {
+        const tl = document.getElementById('trackLinkDrawer');
+        if (tl) tl.style.display = 'block';
+    }
+
         function logout() {
             if (confirm("Are you sure you want to log out?")) {
                 localStorage.removeItem("loggedIn");

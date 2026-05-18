@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track My Orders | Pits Stop Collectibles</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 110px 20px 60px;
+            background: var(--bg);
+        }
+
+        /* Eyebrow */
+        .track-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        .track-eyebrow span.tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            background: rgba(230,0,0,0.08);
+            border: 1px solid rgba(230,0,0,0.25);
+            padding: 5px 14px;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        .eyebrow-line { display: block; width: 32px; height: 1px; background: var(--accent); }
+
+        .track-heading {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            letter-spacing: 5px;
+            color: var(--text);
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .track-sub {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        /* Main content */
+        .track-container {
+            width: 100%;
+            max-width: 760px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+        .empty-state .empty-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.4; }
+        .empty-state h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .empty-state p {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            opacity: 0.5;
+            margin-bottom: 24px;
+        }
+        .empty-state a {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 3px;
+            padding: 13px 28px;
+            border-radius: 3px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+        .empty-state a:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--accent-glow); }
+
+        /* Order card */
+        .order-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        .order-card:hover { box-shadow: 0 4px 24px var(--accent-glow); }
+
+        /* Card header */
+        .order-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            background: rgba(230,0,0,0.06);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .order-card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .order-id-badge {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .order-date {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+        }
+
+        .status-pill {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 2px;
+            padding: 5px 12px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+        .status-pill.pending  { background: rgba(255,165,0,0.12); color: orange; border: 1px solid rgba(255,165,0,0.3); }
+        .status-pill.approved { background: rgba(0,200,100,0.12); color: #00c864; border: 1px solid rgba(0,200,100,0.3); }
+        .status-pill.shipped  { background: rgba(0,150,255,0.12); color: #3399ff; border: 1px solid rgba(0,150,255,0.3); }
+        .status-pill.delivered{ background: rgba(0,200,100,0.18); color: #00cc66; border: 1px solid rgba(0,200,100,0.4); }
+        .status-pill.cancelled{ background: rgba(230,0,0,0.12); color: var(--accent); border: 1px solid rgba(230,0,0,0.3); }
+
+        .expand-icon {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-left: 10px;
+            transition: transform 0.3s;
+        }
+        .order-card.open .expand-icon { transform: rotate(180deg); }
+
+        /* Card body (collapsible) */
+        .order-card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .order-card.open .order-card-body {
+            max-height: 900px;
+        }
+
+        .order-body-inner {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px 28px;
+        }
+
+        /* Details section */
+        .detail-block {}
+        .detail-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .detail-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.4;
+        }
+        .detail-value.accent { color: var(--accent); }
+
+        /* Full-width blocks */
+        .detail-full { grid-column: 1 / -1; }
+
+        /* Timeline inside card */
+        .mini-timeline {
+            grid-column: 1 / -1;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .mini-timeline-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+        .mini-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        .mini-steps::before {
+            content: '';
+            position: absolute;
+            top: 14px;
+            left: 0; right: 0;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+        .mini-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+        .mini-step-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+            color: var(--text-muted);
+        }
+        .mini-step.done .mini-step-dot {
+            background: rgba(0,204,102,0.15);
+            border-color: #00cc66;
+            color: #00cc66;
+        }
+        .mini-step.active .mini-step-dot {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+        .mini-step-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.52rem;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.3;
+        }
+        .mini-step.done .mini-step-label { color: var(--text); }
+        .mini-step.active .mini-step-label { color: var(--accent); }
+
+        /* Items list */
+        .items-list {
+            grid-column: 1 / -1;
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+        }
+        .items-list-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .item-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .item-row:last-child { border-bottom: none; }
+        .item-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background: var(--bg-alt);
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .item-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text);
+            flex: 1;
+        }
+        .item-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        /* FB message link */
+        .contact-seller-btn {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+        }
+        .contact-seller-btn a {
+            display: inline-block;
+            padding: 12px 28px;
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .contact-seller-btn a:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* Summary bar */
+        .summary-bar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .summary-stat {
+            text-align: center;
+        }
+        .summary-stat .s-num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+            color: var(--accent);
+            line-height: 1;
+        }
+        .summary-stat .s-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.55rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 520px) {
+            .order-body-inner { grid-template-columns: 1fr; }
+            .detail-full, .mini-timeline, .items-list, .contact-seller-btn { grid-column: 1; }
+            .mini-steps { flex-wrap: wrap; gap: 12px; }
+            .mini-steps::before { display: none; }
+            .summary-bar { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleHamburger()" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+            </ul>
+            <div class="nav-right">
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+            </div>
+        </nav>
+        <div class="hamburger-overlay" id="hamburgerOverlay" onclick="closeHamburger()"></div>
+        <div class="hamburger-drawer" id="hamburgerDrawer">
+            <button class="drawer-close" onclick="closeHamburger()">✕</button>
+            <div id="drawerAuthSection" class="drawer-auth"></div>
+            <div class="drawer-divider"></div>
+            <p class="drawer-label">NAVIGATION</p>
+            <a href="index.html" class="drawer-link">Home</a>
+            <a href="hotwheels.html" class="drawer-link">Hotwheels</a>
+            <a href="premium.html" class="drawer-link">Premium</a>
+            <a href="matchbox.html" class="drawer-link">Matchbox</a>
+            <a href="aboutUs.html" class="drawer-link">About Us</a>
+            <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
+            <a href="cart.html" class="drawer-link">🛒 Cart</a>
+            <a href="track.html" class="drawer-link drawer-link--accent">📦 Track Order</a>
+            <a href="contactUs.html" class="drawer-link">✉️ Contact Us</a>
+        </div>
+    </header>
+
+    <!-- PAGE HEADER -->
+    <div class="track-eyebrow">
+        <span class="eyebrow-line"></span>
+        <span class="tag">📦 Order Tracker</span>
+        <span class="eyebrow-line"></span>
+    </div>
+    <h1 class="track-heading">Track My Orders</h1>
+    <p class="track-sub">View the status and details of all your orders below.</p>
+
+    <!-- MAIN CONTENT -->
+    <div class="track-container" id="trackContainer">
+        <!-- Populated by JS -->
+    </div>
+
+    <script>
+        /* ── THEME ── */
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        themeToggle.addEventListener('click', () => {
+            const cur  = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+        });
+
+        /* ── HAMBURGER ── */
+        function toggleHamburger() {
+            document.getElementById('hamburgerDrawer').classList.toggle('open');
+            document.getElementById('hamburgerOverlay').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+        }
+        function closeHamburger() {
+            document.getElementById('hamburgerDrawer').classList.remove('open');
+            document.getElementById('hamburgerOverlay').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
+        }
+
+        /* ── STATUS HELPERS ── */
+        const STATUS_ORDER = ['Pending', 'Approved', 'Shipped', 'Delivered'];
+        const STATUS_ICONS  = { Pending: '⏳', Approved: '✅', Shipped: '🚚', Delivered: '🏁', Cancelled: '✕' };
+
+        function statusClass(s) {
+            const map = { Pending: 'pending', Approved: 'approved', Shipped: 'shipped', Delivered: 'delivered', Cancelled: 'cancelled' };
+            return map[s] || 'pending';
+        }
+
+        function courierLabel(c) {
+            const map = { lbc: 'LBC Express', lalamove: 'Lalamove', seller: 'Seller Delivery', cod: 'COD' };
+            return map[c] || c || '—';
+        }
+
+        function paymentLabel(p) {
+            const map = { gcash: 'GCash', maya: 'Maya', cod: 'Cash on Delivery' };
+            return map[p] || p || '—';
+        }
+
+        /* ── MINI TIMELINE ── */
+        function buildTimeline(status) {
+            const steps = [
+                { key: 'Pending',   icon: '📋', label: 'Order\nPlaced' },
+                { key: 'Approved',  icon: '✅', label: 'Seller\nApproved' },
+                { key: 'Shipped',   icon: '🚚', label: 'Handed\nto Courier' },
+                { key: 'Delivered', icon: '🏁', label: 'Delivered' },
+            ];
+            const currentIdx = STATUS_ORDER.indexOf(status);
+            const isCancelled = status === 'Cancelled';
+
+            return `
+                <div class="mini-timeline">
+                    <p class="mini-timeline-title">Parcel Journey</p>
+                    <div class="mini-steps">
+                        ${steps.map((step, i) => {
+                            let cls = '';
+                            if (isCancelled && i === 0) cls = 'done';
+                            else if (!isCancelled && i < currentIdx) cls = 'done';
+                            else if (!isCancelled && i === currentIdx) cls = 'active';
+                            return `
+                                <div class="mini-step ${cls}">
+                                    <div class="mini-step-dot">${isCancelled && i === 0 ? '✕' : (cls === 'done' ? '✓' : step.icon)}</div>
+                                    <span class="mini-step-label">${step.label.replace('\n','<br>')}</span>
+                                </div>`;
+                        }).join('')}
+                    </div>
+                </div>`;
+        }
+
+        /* ── ITEMS LIST ── */
+        function buildItems(items) {
+            if (!items || !items.length) return '';
+            return `
+                <div class="items-list">
+                    <p class="items-list-title">Items Ordered</p>
+                    ${items.map(item => `
+                        <div class="item-row">
+                            ${item.image ? `<img class="item-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">` : ''}
+                            <span class="item-name">${item.name || 'Unknown Item'}</span>
+                            <span class="item-price">₱${item.price || '—'}</span>
+                        </div>`).join('')}
+                </div>`;
+        }
+
+        /* ── TOGGLE CARD ── */
+        function toggleCard(cardEl) {
+            cardEl.classList.toggle('open');
+        }
+
+        /* ── RENDER ORDERS ── */
+        function renderOrders(orders) {
+            const container = document.getElementById('trackContainer');
+
+            if (!orders.length) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <h3>No Orders Yet</h3>
+                        <p>You haven't placed any orders. Start shopping!</p>
+                        <a href="hotwheels.html">Browse the Shop →</a>
+                    </div>`;
+                return;
+            }
+
+            // Summary stats
+            const totalSpent = orders.reduce((sum, o) => {
+                const t = parseInt(String(o.total || '0').replace(/[^0-9]/g, '')) || 0;
+                return sum + t;
+            }, 0);
+            const pending   = orders.filter(o => o.status === 'Pending').length;
+            const delivered = orders.filter(o => o.status === 'Delivered').length;
+
+            const summaryHTML = `
+                <div class="summary-bar">
+                    <div class="summary-stat">
+                        <div class="s-num">${orders.length}</div>
+                        <div class="s-label">Total Orders</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="s-num">${pending}</div>
+                        <div class="s-label">Pending</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="s-num">${delivered}</div>
+                        <div class="s-label">Delivered</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="s-num" style="font-size:1.1rem;">₱${totalSpent.toLocaleString()}</div>
+                        <div class="s-label">Total Spent</div>
+                    </div>
+                </div>`;
+
+            // Individual order cards (newest first)
+            const cardsHTML = [...orders].reverse().map((order, i) => {
+                const status = order.status || 'Pending';
+                return `
+                    <div class="order-card" id="card-${i}">
+                        <div class="order-card-header" onclick="toggleCard(document.getElementById('card-${i}'))">
+                            <div class="order-card-header-left">
+                                <span class="order-id-badge">${order.orderID || 'ORD-????'}</span>
+                                <span class="order-date">${order.date || '—'}</span>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <span class="status-pill ${statusClass(status)}">${status}</span>
+                                <span class="expand-icon">▼</span>
+                            </div>
+                        </div>
+                        <div class="order-card-body">
+                            <div class="order-body-inner">
+                                <div class="detail-block">
+                                    <div class="detail-label">Customer</div>
+                                    <div class="detail-value">${order.user || '—'}</div>
+                                </div>
+                                <div class="detail-block">
+                                    <div class="detail-label">Total Paid</div>
+                                    <div class="detail-value accent">₱${order.total || '—'}</div>
+                                </div>
+                                <div class="detail-block">
+                                    <div class="detail-label">Payment</div>
+                                    <div class="detail-value">${paymentLabel(order.payment)}</div>
+                                </div>
+                                <div class="detail-block">
+                                    <div class="detail-label">Courier</div>
+                                    <div class="detail-value">${courierLabel(order.courier)}</div>
+                                </div>
+                                ${order.lbcBranch ? `
+                                <div class="detail-block">
+                                    <div class="detail-label">LBC Branch</div>
+                                    <div class="detail-value">${order.lbcBranch}</div>
+                                </div>` : ''}
+                                <div class="detail-block">
+                                    <div class="detail-label">Contact</div>
+                                    <div class="detail-value">${order.contact || '—'}</div>
+                                </div>
+                                <div class="detail-full">
+                                    <div class="detail-label">Delivery Address</div>
+                                    <div class="detail-value">${order.address || '—'}</div>
+                                </div>
+                                ${buildTimeline(status)}
+                                ${buildItems(order.items)}
+                                <div class="contact-seller-btn">
+                                    <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank">
+                                        💬 Message Seller for Updates →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            }).join('');
+
+            container.innerHTML = summaryHTML + cardsHTML;
+        }
+
+        /* ── LOAD DRAWER AUTH ── */
+        function loadDrawer(user) {
+            const drawer = document.getElementById('drawerAuthSection');
+            if (!drawer) return;
+            drawer.innerHTML = `
+                <p class="drawer-greeting">Hi, <strong>${user.username}</strong> 👋</p>
+                <a href="account.html" class="drawer-link">👤 Account</a>
+                <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>`;
+        }
+
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('isAdmin');
+            window.location.href = 'index.html';
+        }
+
+        /* ── INIT ── */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Auth guard
+            if (localStorage.getItem('loggedIn') !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) { window.location.href = 'login.html'; return; }
+
+            loadDrawer(currentUser);
+
+            // Load user-specific orders
+            const userOrders = JSON.parse(localStorage.getItem('userOrders_' + currentUser.username)) || [];
+
+            renderOrders(userOrders);
+        });
+    </script>
+</body>
+</html>

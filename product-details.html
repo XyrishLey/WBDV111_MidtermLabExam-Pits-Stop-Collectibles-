@@ -288,24 +288,59 @@
             border-radius: 3px;
         }
 
-        /* ─── MOBILE ──────────────────────────────── */
-        @media (max-width: 900px) {
-            .nav-menu { display: none; }
-            .nav-bar { grid-template-columns: 50px 1fr 50px; padding: 0 16px; }
-        }
-
         @media (max-width: 700px) {
-            .product-container {
-                flex-direction: column;
-                gap: 24px;
-                margin: 16px auto 60px;
-            }
-            .product-image-side { position: static; }
-            .product-name { font-size: clamp(1.6rem, 7vw, 2.2rem); }
-            .price-value { font-size: 2rem; }
-            .purchase-actions { flex-direction: column; }
-            .btn-wish { width: 100%; height: 48px; }
-        }
+    .product-container {
+        flex-direction: column;
+        gap: 24px;
+        margin: 16px auto 60px;
+        padding: 0 16px;
+    }
+
+    .product-image-side {
+        position: static;
+        padding: 16px;
+    }
+
+    .product-name {
+        font-size: clamp(1.6rem, 7vw, 2.2rem);
+        line-height: 1.1;
+    }
+
+    .price-value {
+        font-size: 2rem;
+    }
+
+    .purchase-actions {
+        width: 100%;
+    }
+
+    .purchase-actions-row {
+        display: flex;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .btn-cart {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .btn-wish {
+        width: 48px;
+        min-width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+    }
+
+    .spec-key {
+        width: 110px;
+        font-size: 0.55rem;
+    }
+
+    .spec-val {
+        font-size: 0.82rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -350,6 +385,7 @@
             <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
             <a href="cart.html" class="drawer-link">🛒 Cart</a>
             <a href="contactUs.html" class="drawer-link">✉️ Contact Us</a>
+            <a href="track.html" class="drawer-link" id="trackLinkDrawer" style="display:none;">📦 Track Order</a>
         </div>
     </header>
 
@@ -426,6 +462,11 @@
                     <a href="signup.html" class="drawer-link">Sign Up</a>`;
             }
         }
+        if (localStorage.getItem('loggedIn') === 'true') {
+        const tl = document.getElementById('trackLinkDrawer');
+        if (tl) tl.style.display = 'block';
+    }
+        
         function logout() {
             if (confirm("Are you sure you want to log out?")) {
                 localStorage.removeItem("loggedIn");

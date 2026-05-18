@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service | Pits Stop Collectibles</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .legal-page {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 120px 24px 100px;
+        }
+
+        .legal-eyebrow {
+            display: flex; align-items: center; gap: 14px;
+            margin-bottom: 20px;
+        }
+        .legal-eyebrow span {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem; letter-spacing: 3px;
+            color: var(--accent); text-transform: uppercase;
+            background: rgba(230,0,0,0.08);
+            border: 1px solid rgba(230,0,0,0.25);
+            padding: 5px 14px; border-radius: 2px;
+        }
+        .legal-eyebrow::before, .legal-eyebrow::after {
+            content: ''; display: block;
+            height: 1px; background: var(--accent);
+            flex: 0 0 30px;
+        }
+
+        .legal-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            letter-spacing: 5px; line-height: 1;
+            color: var(--text); margin-bottom: 8px;
+        }
+        .legal-title span { color: transparent; -webkit-text-stroke: 2px var(--accent); }
+
+        .legal-updated {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem; letter-spacing: 2px;
+            color: var(--text-muted); margin-bottom: 48px;
+            display: block;
+        }
+
+        /* Section */
+        .legal-section {
+            margin-bottom: 36px;
+            border-left: 3px solid var(--border);
+            padding-left: 24px;
+            transition: border-color 0.2s;
+        }
+        .legal-section:hover { border-left-color: var(--accent); }
+
+        .legal-section-num {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem; letter-spacing: 2.5px;
+            color: var(--accent); text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .legal-section h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem; letter-spacing: 2px;
+            color: var(--text); margin-bottom: 12px;
+        }
+
+        .legal-section p, .legal-section li {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem; font-weight: 600;
+            color: var(--text-muted); line-height: 1.8;
+        }
+
+        .legal-section ul {
+            padding-left: 20px;
+            display: flex; flex-direction: column; gap: 4px;
+        }
+
+        .legal-section li::marker { color: var(--accent); }
+
+        .legal-divider {
+            border: none; border-top: 1px solid var(--border);
+            margin: 40px 0;
+        }
+
+        /* Back button */
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.85rem; letter-spacing: 2px;
+            color: var(--text-muted); text-decoration: none;
+            margin-bottom: 40px;
+            transition: color 0.2s;
+        }
+        .back-btn:hover { color: var(--accent); }
+
+        /* Also see box */
+        .also-see {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 24px 28px;
+            display: flex; align-items: center;
+            justify-content: space-between; gap: 16px;
+            flex-wrap: wrap; margin-top: 48px;
+        }
+        .also-see p {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem; font-weight: 700;
+            color: var(--text-muted);
+        }
+        .also-see p strong { color: var(--text); }
+        .also-see a {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--accent); color: #fff;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.8rem; letter-spacing: 2px;
+            text-decoration: none; padding: 9px 20px;
+            border-radius: 3px;
+            box-shadow: 0 4px 14px var(--accent-glow);
+            transition: transform 0.2s;
+        }
+        .also-see a:hover { transform: translateY(-1px); }
+
+        @media (max-width: 900px) {
+            .nav-menu { display: none; }
+            .nav-bar { grid-template-columns: 50px 1fr 50px; padding: 0 16px; }
+        }
+        @media (max-width: 600px) {
+            .legal-page { padding: 100px 16px 80px; }
+            .also-see { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ HEADER ════════════════════════════════════════════ -->
+    <header>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleHamburger()" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+            </ul>
+            <div class="nav-right">
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+            </div>
+        </nav>
+        <div class="hamburger-overlay" id="hamburgerOverlay" onclick="closeHamburger()"></div>
+        <div class="hamburger-drawer" id="hamburgerDrawer">
+            <button class="drawer-close" onclick="closeHamburger()">✕</button>
+            <div id="drawerAuthSection" class="drawer-auth"></div>
+            <div class="drawer-divider"></div>
+            <p class="drawer-label">NAVIGATION</p>
+            <a href="index.html" class="drawer-link">Home</a>
+            <a href="hotwheels.html" class="drawer-link">Hotwheels</a>
+            <a href="premium.html" class="drawer-link">Premium</a>
+            <a href="matchbox.html" class="drawer-link">Matchbox</a>
+            <a href="aboutUs.html" class="drawer-link">About Us</a>
+            <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
+            <a href="cart.html" class="drawer-link">🛒 Cart</a>
+        </div>
+    </header>
+
+    <!-- ═══ CONTENT ══════════════════════════════════════════ -->
+    <div class="legal-page">
+
+        <a href="aboutUs.html" class="back-btn">← Back to About Us</a>
+
+        <div class="legal-eyebrow"><span>Legal Document</span></div>
+        <h1 class="legal-title">Terms of <span>Service</span></h1>
+        <span class="legal-updated">Last updated: May 2026</span>
+
+        <div class="legal-section">
+            <p class="legal-section-num">01 — Acceptance</p>
+            <h2>Agreement to Terms</h2>
+            <p>By accessing or purchasing from Pits Stop Collectibles, you agree to be bound by these Terms of Service. If you do not agree with any part of these terms, you may not place an order or use our services.</p>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">02 — Orders & Payment</p>
+            <h2>Order Processing</h2>
+            <p>All orders are subject to availability and seller confirmation. We reserve the right to cancel any order at our discretion. The following payment terms apply:</p>
+            <ul>
+                <li>Full payment or required deposit must be completed before an order is confirmed.</li>
+                <li>Accepted payment methods include GCash and Maya. COD is available for Rizal Seller Delivery only.</li>
+                <li>Orders are only processed once payment has been verified by the seller.</li>
+                <li>Proof of payment must be submitted via the checkout form for online payments.</li>
+            </ul>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">03 — Pre-Orders</p>
+            <h2>Pre-Order Policy</h2>
+            <p>Pre-orders require a non-refundable deposit to secure your slot. Full payment is due upon the item's arrival. By placing a pre-order, you acknowledge the following:</p>
+            <ul>
+                <li>Deposits are strictly non-refundable once the pre-order is confirmed.</li>
+                <li>Estimated arrival dates are provided in good faith and may change due to supplier delays.</li>
+                <li>We will notify you via Facebook or SMS when your item is ready.</li>
+                <li>Unclaimed items after 14 days of arrival notice may be forfeited without refund.</li>
+            </ul>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">04 — Shipping & Delivery</p>
+            <h2>Shipping Terms</h2>
+            <p>We ship via LBC Express (branch pickup), Lalamove (Rizal/NCR only), and Seller Own Delivery (Rizal only). Please note:</p>
+            <ul>
+                <li>Shipping fees are the buyer's responsibility unless otherwise stated.</li>
+                <li>We are not liable for delays caused by third-party couriers.</li>
+                <li>Items lost or damaged in transit by the courier must be claimed directly with the courier service.</li>
+                <li>Seller Own Delivery is available within Rizal only and subject to schedule availability.</li>
+            </ul>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">05 — Returns & Refunds</p>
+            <h2>Return Policy</h2>
+            <p>All sales are final. We do not accept returns or exchanges unless the item received is significantly different from what was described or is defective upon arrival. To raise a concern:</p>
+            <ul>
+                <li>Contact us within 24 hours of receiving the item via Facebook Messenger.</li>
+                <li>Provide clear photos of the item and packaging as proof.</li>
+                <li>Approved returns must be shipped back at the buyer's expense.</li>
+                <li>Refunds, if approved, will be processed within 3–5 business days.</li>
+            </ul>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">06 — Product Authenticity</p>
+            <h2>Authenticity Guarantee</h2>
+            <p>All products sold by Pits Stop Collectibles are 100% authentic diecast collectibles sourced from legitimate suppliers. We do not sell counterfeit or replica items. Items are sold as described — Mint in Blister (MIB) unless otherwise stated.</p>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">07 — Changes to Terms</p>
+            <h2>Updates to This Policy</h2>
+            <p>We reserve the right to update these Terms of Service at any time without prior notice. Continued use of our services after changes constitutes your acceptance of the revised terms. We recommend reviewing this page periodically.</p>
+        </div>
+
+        <hr class="legal-divider">
+
+        <div class="legal-section">
+            <p class="legal-section-num">08 — Contact</p>
+            <h2>Questions?</h2>
+            <p>For any questions regarding these terms, please reach out to us via our <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 700;">Facebook page</a> or visit our store at Km. 23 Sumulong Highway, Brgy. Sta. Cruz, Antipolo City during business hours (10:00 AM – 9:00 PM daily).</p>
+        </div>
+
+        <!-- Also see -->
+        <div class="also-see">
+            <p><strong>Also read:</strong> Our Privacy Policy explains how we collect and handle your personal information.</p>
+            <a href="policy.html">🔒 Privacy Policy →</a>
+        </div>
+
+    </div>
+
+    <!-- ═══ FOOTER ═══════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3 class="logo-text">Pits Stop Collectibles</h3>
+                <p class="tagline">Not your ordinary pit stop 🤩🏁</p>
+            </div>
+            <div class="footer-info">
+                <p>📍 Km. 23 Sumulong Highway, Brgy. Sta. Cruz, Antipolo City</p>
+                <p>🕙 Open daily, 10:00 AM – 9:00 PM</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">Follow us on Facebook</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 Pits Stop Collectibles | All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleHamburger() {
+            document.getElementById('hamburgerDrawer').classList.toggle('open');
+            document.getElementById('hamburgerOverlay').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+        }
+        function closeHamburger() {
+            document.getElementById('hamburgerDrawer').classList.remove('open');
+            document.getElementById('hamburgerOverlay').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
+        }
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+        });
+        function loadUser() {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const drawer = document.getElementById("drawerAuthSection");
+            if (!drawer) return;
+            if (loggedIn === "true" && currentUser) {
+                drawer.innerHTML = `
+                    <p class="drawer-greeting">Hi, <strong>${currentUser.username}</strong> 👋</p>
+                    <a href="inbox.html" class="drawer-link drawer-link--green">📩 Inbox</a>
+                    <a href="account.html" class="drawer-link">👤 Account</a>
+                    <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>`;
+            } else {
+                drawer.innerHTML = `
+                    <a href="login.html" class="drawer-link drawer-link--accent">Login</a>
+                    <a href="signup.html" class="drawer-link">Sign Up</a>`;
+            }
+        }
+        function logout() {
+            if (confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem("loggedIn");
+                localStorage.removeItem("currentUser");
+                localStorage.removeItem("isAdmin");
+                window.location.reload();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadUser);
+    </script>
+</body>
+</html>

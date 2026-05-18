@@ -5,285 +5,574 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart | Pits Stop Collectibles</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            background: #0a0a0a;
-            color: #fff;
-            min-height: 100vh;
-        }
 
+        /* ─── PAGE HERO / HEADER AREA ─────────────── */
+        .page-hero {
+            position: relative;
+            text-align: center;
+            padding: 120px 24px 50px;
+            overflow: hidden;
+            background: var(--bg);
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: 40%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 350px;
+            background: radial-gradient(ellipse, rgba(230,0,0,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .page-hero-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.3; pointer-events: none;
+        }
+        .page-hero-inner { position: relative; z-index: 2; animation: fadeUp 0.8s ease both; }
+        .page-eyebrow {
+            display: flex; align-items: center; justify-content: center;
+            gap: 16px; margin-bottom: 18px;
+        }
+        .page-eyebrow-line { display: block; width: 40px; height: 1px; background: var(--accent); }
+        .page-eyebrow-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem; letter-spacing: 3px; color: var(--accent);
+            background: rgba(230,0,0,0.1); border: 1px solid rgba(230,0,0,0.3);
+            padding: 6px 16px; border-radius: 2px;
+        }
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 9vw, 5.5rem);
+            letter-spacing: 6px; line-height: 1;
+            color: var(--text); margin-bottom: 12px;
+        }
+        .page-title span { color: transparent; -webkit-text-stroke: 2px var(--accent); }
+
+        /* ─── CART LAYOUT ─────────────────────────── */
         .cart-wrapper {
             display: grid;
-            grid-template-columns: 1fr 350px;
-            max-width: 1200px;
-            margin: 120px auto;
-            gap: 30px;
-            padding: 0 20px;
+            grid-template-columns: 1fr 340px;
+            max-width: 1100px;
+            margin: 0 auto 100px;
+            gap: 24px;
+            padding: 0 24px;
         }
 
-        /* Glassmorphism Effect */
-        .cart-main, .cart-sidebar {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 30px;
-        }
-
-        .cart-header {
+        /* ─── CART MAIN ───────────────────────────── */
+        .cart-main {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(230, 0, 0, 0.3);
-            padding-bottom: 20px;
+            flex-direction: column;
+            gap: 0;
         }
 
-        .cart-header h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.2rem;
-            margin: 0;
-            text-shadow: 0 0 15px rgba(230, 0, 0, 0.5);
+        .cart-section-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem; letter-spacing: 3px;
+            color: var(--text-muted); text-transform: uppercase;
+            margin-bottom: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .cart-section-label::after {
+            content: ''; flex: 1; height: 1px; background: var(--border);
         }
 
-        .nav-links a {
-            color: #aaa;
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-left: 20px;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover { color: #e60000; }
-
-        /* Item Styling */
+        /* ─── CART ITEM ───────────────────────────── */
         .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 16px;
-            margin-bottom: 15px;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid transparent;
+            padding: 16px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s, transform 0.2s;
         }
-
         .cart-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(230, 0, 0, 0.4);
-            transform: scale(1.01);
+            border-color: var(--accent);
+            transform: translateX(3px);
         }
 
         .item-details {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
+            flex: 1;
         }
 
-        .cart-item img {
-            width: 100px;
-            height: 70px;
+        .cart-item-img {
+            width: 90px; height: 70px;
             object-fit: contain;
-            background: #1a1a1a;
-            padding: 5px;
-            border-radius: 12px;
+            background: #111;
+            border-radius: 4px;
+            padding: 6px;
+            flex-shrink: 0;
         }
 
-        .item-info h4 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            margin: 0 0 5px 0;
+        .item-info { flex: 1; }
+
+        .item-series {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.58rem; letter-spacing: 2px;
+            color: var(--text-muted); text-transform: uppercase;
+            margin-bottom: 4px;
         }
 
-        .item-info p {
-            color: #e60000;
-            font-weight: 700;
-            margin: 0;
+        .item-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem; letter-spacing: 1.5px;
+            color: var(--text); line-height: 1.2;
+            margin-bottom: 6px;
         }
 
-        /* Modern Buttons */
-        .item-actions { display: flex; gap: 10px; }
+        .item-price {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem; color: var(--accent);
+        }
+
+        .item-actions { display: flex; gap: 8px; flex-shrink: 0; }
 
         .icon-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: none;
-            color: #ccc;
-            padding: 10px;
-            border-radius: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            width: 36px; height: 36px;
+            border-radius: 3px;
             cursor: pointer;
-            transition: 0.3s;
+            font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .icon-btn.wish:hover { background: rgba(255,20,147,0.1); color: #ff4d6d; border-color: #ff4d6d; }
+        .icon-btn.remove:hover { background: rgba(230,0,0,0.1); color: var(--accent); border-color: var(--accent); }
+
+        /* ─── EMPTY STATE ─────────────────────────── */
+        .cart-empty {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        .cart-empty-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.3; }
+        .cart-empty-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem; letter-spacing: 4px;
+            color: var(--text-muted); margin-bottom: 8px;
+        }
+        .cart-empty-sub {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem; letter-spacing: 2px;
+            color: var(--text-muted); opacity: 0.5; margin-bottom: 24px;
+        }
+        .cart-empty a {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--accent); color: #fff;
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem; letter-spacing: 3px;
+            padding: 12px 28px; border-radius: 3px;
+            box-shadow: 0 4px 18px var(--accent-glow);
+            transition: transform 0.2s;
+        }
+        .cart-empty a:hover { transform: translateY(-2px); }
+
+        /* ─── SIDEBAR ─────────────────────────────── */
+        .cart-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            height: fit-content;
+            position: sticky;
+            top: 90px;
         }
 
-        .icon-btn.wish:hover { background: rgba(255, 20, 147, 0.2); color: #ff1493; }
-        .icon-btn.remove:hover { background: rgba(230, 0, 0, 0.2); color: #e60000; }
+        .sidebar-box {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
 
-        /* Sidebar Summary */
-        .cart-sidebar h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.4rem;
-            margin-top: 0;
+        .sidebar-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem; letter-spacing: 3px;
+            color: var(--text); margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
         }
 
         .summary-row {
             display: flex;
             justify-content: space-between;
-            margin: 15px 0;
-            color: #888;
+            align-items: center;
+            margin-bottom: 12px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem; font-weight: 600;
+            color: var(--text-muted);
         }
+
+        .summary-row span:last-child { color: var(--text); }
+
+        .summary-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 
         .total-row {
-            border-top: 1px solid #333;
-            padding-top: 20px;
-            margin-top: 20px;
-            font-size: 1.8rem;
-            font-family: 'Orbitron', sans-serif;
-            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .total-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem; letter-spacing: 2px;
+            color: var(--text-muted); text-transform: uppercase;
+        }
+        .total-amount {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem; letter-spacing: 2px;
+            color: var(--text);
         }
 
+        /* Checkout button */
         .checkout-btn {
             width: 100%;
-            padding: 20px;
-            background: linear-gradient(90deg, #e60000, #ff4d4d);
+            padding: 16px;
+            background: var(--accent);
             border: none;
-            border-radius: 12px;
+            border-radius: 3px;
             color: white;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem; letter-spacing: 3px;
             cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(230, 0, 0, 0.3);
-            transition: 0.3s;
+            box-shadow: 0 4px 20px var(--accent-glow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 16px;
         }
-
         .checkout-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(230, 0, 0, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px var(--accent-glow);
         }
 
+        /* Continue shopping link */
+        .continue-link {
+            display: flex; justify-content: center;
+            margin-top: 12px;
+        }
+        .continue-link a {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.82rem; font-weight: 600;
+            color: var(--text-muted); text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: color 0.2s;
+        }
+        .continue-link a:hover { color: var(--accent); }
+
+        /* SSL note */
+        .ssl-note {
+            text-align: center;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.58rem; letter-spacing: 1.5px;
+            color: var(--text-muted); opacity: 0.5;
+            margin-top: 12px;
+        }
+
+        /* Item count badge */
+        .item-count-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            background: var(--accent); color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem; letter-spacing: 1px;
+            width: 20px; height: 20px; border-radius: 50%;
+            margin-left: 6px; vertical-align: middle;
+        }
+
+        /* ─── MOBILE ──────────────────────────────── */
         @media (max-width: 900px) {
+            .nav-menu { display: none; }
+            .nav-bar { grid-template-columns: 50px 1fr 50px; padding: 0 16px; }
             .cart-wrapper { grid-template-columns: 1fr; }
+            .cart-sidebar { position: static; }
+        }
+        @media (max-width: 600px) {
+            .cart-wrapper { padding: 0 12px; }
+            .item-details { gap: 10px; }
+            .cart-item-img { width: 70px; height: 55px; }
+            .page-title { font-size: clamp(2.5rem, 12vw, 4rem); }
         }
     </style>
 </head>
 <body>
-    <div class="cart-wrapper">
-        <main class="cart-main">
-            <div class="cart-header">
-                <h1>YOUR CART</h1>
-                <div class="nav-links">
-                    <a href="index.html">← Home</a>
-                    <a href="wishlist.html">❤️ Wishlist</a>
-                </div>
-            </div>
 
-            <div id="cart-items-list">
-                <!-- Items injected here -->
+    <!-- ═══ HEADER ════════════════════════════════════════════ -->
+    <header>
+        <nav class="nav-bar">
+            <div class="nav-left">
+                <button class="hamburger" id="hamburgerBtn" onclick="toggleHamburger()" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
             </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-button">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-button">Brands <span class="chevron">▾</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html" class="nav-button">Hotwheels</a></li>
+                        <li><a href="premium.html" class="nav-button">Premium</a></li>
+                        <li><a href="matchbox.html" class="nav-button">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
+                <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
+                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+            </ul>
+            <div class="nav-right">
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+            </div>
+        </nav>
+
+        <div class="hamburger-overlay" id="hamburgerOverlay" onclick="closeHamburger()"></div>
+        <div class="hamburger-drawer" id="hamburgerDrawer">
+            <button class="drawer-close" onclick="closeHamburger()">✕</button>
+            <div id="drawerAuthSection" class="drawer-auth"></div>
+            <div class="drawer-divider"></div>
+            <p class="drawer-label">NAVIGATION</p>
+            <a href="index.html" class="drawer-link">Home</a>
+            <a href="hotwheels.html" class="drawer-link">Hotwheels</a>
+            <a href="premium.html" class="drawer-link">Premium</a>
+            <a href="matchbox.html" class="drawer-link">Matchbox</a>
+            <a href="aboutUs.html" class="drawer-link">About Us</a>
+            <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
+            <a href="cart.html" class="drawer-link">🛒 Cart</a>
+        </div>
+    </header>
+
+    <!-- ═══ PAGE HERO ════════════════════════════════════════ -->
+    <section class="page-hero">
+        <div class="page-hero-grid"></div>
+        <div class="page-hero-inner">
+            <div class="page-eyebrow">
+                <span class="page-eyebrow-line"></span>
+                <span class="page-eyebrow-text">Ready to Checkout</span>
+                <span class="page-eyebrow-line"></span>
+            </div>
+            <h1 class="page-title">YOUR <span>CART</span></h1>
+        </div>
+    </section>
+
+    <!-- ═══ CART CONTENT ══════════════════════════════════════ -->
+    <div class="cart-wrapper">
+
+        <!-- Left: Items -->
+        <main class="cart-main">
+            <p class="cart-section-label" id="cartItemLabel">Cart Items</p>
+            <div id="cart-items-list"></div>
         </main>
 
+        <!-- Right: Summary -->
         <aside class="cart-sidebar">
-            <h2>ORDER SUMMARY</h2>
-            <div class="summary-row">
-        <span>Standard Shipping</span>
-        <span>Calculated at checkout</span>
-    </div>
-    <div class="summary-row">
-        <!-- Revised formal message -->
-        <span id="nudge-msg" style="color: #aaa; font-size: 0.85rem; font-style: normal;">
-            Your selection is ready for processing.
-        </span>
-    </div>
-    
-    <div class="total-row">
-        ₱<span id="cart-total">0</span>
+            <div class="sidebar-box">
+                <h2 class="sidebar-title">Order Summary</h2>
+
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>₱<span id="cart-subtotal">0</span></span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>Calculated at checkout</span>
+                </div>
+
+                <hr class="summary-divider">
+
+                <div class="total-row">
+                    <span class="total-label">Total</span>
+                    <span class="total-amount">₱<span id="cart-total">0</span></span>
+                </div>
+
+                <button class="checkout-btn" onclick="checkAuthAndCheckout()">
+                    PROCEED TO CHECKOUT →
+                </button>
+
+                <div class="continue-link">
+                    <a href="hotwheels.html">← Continue Shopping</a>
+                </div>
+
+                <p class="ssl-note">🔒 SECURE SSL ENCRYPTION ACTIVE</p>
+            </div>
+        </aside>
+
     </div>
 
-    <button class="checkout-btn" onclick="checkAuthAndCheckout()">PROCEED TO CHECKOUT</button>
-    <div style="text-align: center; margin-top: 15px;">
-        <span style="font-size: 0.75rem; color: #666; letter-spacing: 1px;">
-            🔒 SECURE SSL ENCRYPTION ACTIVE
-        </span>
-    </div>
-</aside>
-    </div>
+    <!-- ═══ FOOTER ═══════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3 class="logo-text">Pits Stop Collectibles</h3>
+                <p class="tagline">Not your ordinary pit stop 🤩🏁</p>
+            </div>
+            <div class="footer-info">
+                <p>📍 Cainta, Rizal</p>
+                <p>🛒 Your one-stop shop for diecast!</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">Follow us on Facebook</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 Pits Stop Collectibles | All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-    function displayCart() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const list = document.getElementById('cart-items-list');
-        const nudge = document.getElementById('nudge-msg');
-        let total = 0;
-        
-        if (cart.length === 0) {
-            list.innerHTML = `<div style="text-align:center; padding: 60px;">
-                <p style="color: #666; font-size: 1.2rem;">Your garage is empty.</p>
-                <a href="hotwheels.html" style="color: #e60000; text-decoration: none; font-weight: bold;">Start Hunting →</a>
-            </div>`;
-            document.getElementById('cart-total').innerText = "0";
-            return;
+        // ─── Hamburger ──────────────────────────────────────
+        function toggleHamburger() {
+            document.getElementById('hamburgerDrawer').classList.toggle('open');
+            document.getElementById('hamburgerOverlay').classList.toggle('open');
+            document.getElementById('hamburgerBtn').classList.toggle('active');
+        }
+        function closeHamburger() {
+            document.getElementById('hamburgerDrawer').classList.remove('open');
+            document.getElementById('hamburgerOverlay').classList.remove('open');
+            document.getElementById('hamburgerBtn').classList.remove('active');
         }
 
-        nudge.innerText = cart.length === 1 ? "Your shelf looks a bit lonely!" : "Great collection started!";
-
-        list.innerHTML = '';
-        cart.forEach((item, index) => {
-            total += parseInt(item.price);
-            const imageSrc = item.img || item.image;
-
-            list.innerHTML += `
-                <div class="cart-item">
-                    <div class="item-details">
-                        <img src="${imageSrc}" alt="${item.name}">
-                        <div class="item-info">
-                            <h4>${item.name}</h4>
-                            <p>₱${item.price}</p>
-                        </div>
-                    </div>
-                    <div class="item-actions">
-                        <button class="icon-btn wish" title="Save to Wishlist" onclick="moveToWishlist(${index})">❤</button>
-                        <button class="icon-btn remove" title="Remove Item" onclick="removeItem(${index})">✕</button>
-                    </div>
-                </div>`;
+        // ─── Theme ──────────────────────────────────────────
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme');
+            const next = cur === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
         });
-        document.getElementById('cart-total').innerText = total.toLocaleString();
-    }
 
-    function removeItem(index) {
-        let cart = JSON.parse(localStorage.getItem('cart'));
-        cart.splice(index, 1);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        displayCart();
-    }
-
-    function moveToWishlist(index) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-        const item = cart[index];
-        
-        if (!wishlist.find(w => w.name === item.name)) {
-            wishlist.push(item);
-            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        // ─── Auth Drawer ────────────────────────────────────
+        function loadUser() {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const drawer = document.getElementById("drawerAuthSection");
+            if (!drawer) return;
+            if (loggedIn === "true" && currentUser) {
+                drawer.innerHTML = `
+                    <p class="drawer-greeting">Hi, <strong>${currentUser.username}</strong> 👋</p>
+                    <a href="inbox.html" class="drawer-link drawer-link--green">📩 Inbox</a>
+                    <a href="account.html" class="drawer-link">👤 Account</a>
+                    <a href="#" onclick="logout()" class="drawer-link drawer-link--red">⏻ Logout</a>`;
+            } else {
+                drawer.innerHTML = `
+                    <a href="login.html" class="drawer-link drawer-link--accent">Login</a>
+                    <a href="signup.html" class="drawer-link">Sign Up</a>`;
+            }
+        }
+        function logout() {
+            if (confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem("loggedIn");
+                localStorage.removeItem("currentUser");
+                localStorage.removeItem("isAdmin");
+                window.location.reload();
+            }
         }
 
-        cart.splice(index, 1);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        displayCart();
-    }
+        // ─── Cart ────────────────────────────────────────────
+        function displayCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const list = document.getElementById('cart-items-list');
+            const label = document.getElementById('cartItemLabel');
+            let total = 0;
 
-    function checkAuthAndCheckout() {
-        const loggedIn = localStorage.getItem("loggedIn");
-        if (loggedIn === "true") {
-            window.location.href = 'checkout.html';
-        } else {
-            alert("Please login first.");
-            window.location.href = 'login.html';
+            if (cart.length === 0) {
+                label.style.display = 'none';
+                list.innerHTML = `
+                    <div class="cart-empty">
+                        <div class="cart-empty-icon">🛒</div>
+                        <p class="cart-empty-title">Your Garage Is Empty</p>
+                        <p class="cart-empty-sub">Add some diecast to get started</p>
+                        <a href="hotwheels.html">Browse the Shop →</a>
+                    </div>`;
+                document.getElementById('cart-total').innerText = '0';
+                document.getElementById('cart-subtotal').innerText = '0';
+                return;
+            }
+
+            // Update label with count badge
+            label.innerHTML = `Cart Items <span class="item-count-badge">${cart.length}</span>`;
+
+            list.innerHTML = '';
+            cart.forEach((item, index) => {
+                const price = parseInt(item.price) || 0;
+                total += price;
+                const imgSrc = item.img || item.image || '';
+
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <div class="item-details">
+                            <img class="cart-item-img" src="${imgSrc}" alt="${item.name}" onerror="this.style.opacity='0.3'">
+                            <div class="item-info">
+                                <p class="item-series">${item.series || item.category || ''}</p>
+                                <h4 class="item-name">${item.name}</h4>
+                                <p class="item-price">₱${price.toLocaleString()}</p>
+                            </div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="icon-btn wish" title="Save to Wishlist" onclick="moveToWishlist(${index})">❤</button>
+                            <button class="icon-btn remove" title="Remove" onclick="removeItem(${index})">✕</button>
+                        </div>
+                    </div>`;
+            });
+
+            document.getElementById('cart-total').innerText = total.toLocaleString();
+            document.getElementById('cart-subtotal').innerText = total.toLocaleString();
         }
-    }
 
-    displayCart();
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        function moveToWishlist(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const item = cart[index];
+            if (!wishlist.find(w => w.name === item.name)) {
+                wishlist.push(item);
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            }
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        function checkAuthAndCheckout() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            const loggedIn = localStorage.getItem("loggedIn");
+            if (loggedIn === "true") {
+                window.location.href = 'checkout.html';
+            } else {
+                alert("Please log in to proceed to checkout.");
+                window.location.href = 'login.html';
+            }
+        }
+
+        // ─── Init ────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUser();
+            displayCart();
+        });
     </script>
 </body>
 </html>

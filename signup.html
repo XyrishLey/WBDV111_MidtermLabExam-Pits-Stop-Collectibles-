@@ -418,12 +418,19 @@
             const facebook = sanitize(document.getElementById('facebook').value);
 
             const errors = [];
+            const validEmail =
+
+            /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com|hotmail\.com)$/i;
 
             if (fullname.length < 2)
                 errors.push('Please enter your full name.');
 
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-                errors.push('Please enter a valid email address.');
+            if (!validEmail.test(email)) {
+
+            errors.push(
+            'Please enter a valid Gmail, Yahoo, Outlook, or Hotmail address.'
+            );
+            }
 
             if (username.length < 3)
                 errors.push('Username must be at least 3 characters.');

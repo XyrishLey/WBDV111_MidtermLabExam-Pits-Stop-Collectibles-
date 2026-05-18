@@ -627,146 +627,127 @@ header {
     opacity: 0.7;
     letter-spacing: 1px;
 }
-/* ─────────────────────────────────────────────
-   FIX PRODUCT CARD SIZES
-───────────────────────────────────────────── */
 
-.shop-grid{
-    align-items:stretch;
-}
+/* ══════════════════════════════════════════════
+   RESPONSIVE — Mobile First
+══════════════════════════════════════════════ */
 
-.product-card{
-    background: var(--surface);
-
-    border: 1px solid var(--border);
-
-    border-radius: 14px;
-
-    overflow: hidden;
-
-    backdrop-filter: blur(12px);
-
-    transition: 0.3s;
-
-    position: relative;
-
-    display: flex;
-    flex-direction: column;
-
-    height: 100%;
-    min-height: 520px;
-}
-
-.product-card:hover{
-    transform: translateY(-8px);
-
-    border-color: var(--accent);
-
-    box-shadow:
-    0 0 20px rgba(230,0,0,0.25),
-    0 0 40px rgba(230,0,0,0.15);
-}
-
-.card-img-wrap{
-    overflow:hidden;
-
-    background:#111;
-}
-
-.card-img-wrap img{
-    width: 100%;
-
-    height: 260px;
-
-    object-fit: cover;
-
-    transition: 0.4s;
-
-    display:block;
-}
-
-.product-card:hover img{
-    transform:scale(1.08);
-}
-
-.card-body{
-    padding:18px;
-
-    display:flex;
-    flex-direction:column;
-
-    flex-grow:1;
-}
-
-.card-name{
-    font-size:1.5rem;
-
-    margin-bottom:12px;
-
-    min-height:48px;
-
-    display:flex;
-    align-items:center;
-}
-
-.card-actions{
-    display:flex;
-
-    gap:10px;
-
-    padding:0 18px 18px;
-
-    margin-top:auto;
-}
-
-.products,
-.shop-grid{
-    width: 100%;
-    max-width: 1400px;
-    margin: auto;
-    padding: 30px;
-
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-
-    gap: 28px;
-    align-items: stretch;
-}
-
-@media (max-width: 1200px){
-    .products,
-    .shop-grid{
-        grid-template-columns: repeat(3,1fr);
-    }
-}
-
-@media (max-width: 900px){
-    .products,
-    .shop-grid{
-        grid-template-columns: repeat(2,1fr);
-    }
-}
-
-@media (max-width: 600px){
-    .products,
-    .shop-grid{
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ─── RESPONSIVE ──────────────────────────── */
+/* ─── Tablet & below (nav collapses) ─────── */
 @media (max-width: 900px) {
-    /* Hide center nav on mobile — use drawer instead */
     .nav-menu { display: none; }
-
     .nav-bar {
         grid-template-columns: 50px 1fr 50px;
         padding: 0 16px;
     }
 }
 
-@media (max-width: 480px) {
-    .title-collectibles { letter-spacing: 4px; }
-    .hero-btns { flex-direction: column; align-items: center; }
-    .cta-button, .cta-secondary { width: 260px; justify-content: center; }
+/* ─── Mobile (≤ 600px) ────────────────────── */
+@media (max-width: 600px) {
+
+    /* Nav */
+    .nav-bar { height: 60px; }
+
+    /* Hero */
+    .hero { padding: 100px 16px 70px; }
+
+    .hero-eyebrow { gap: 10px; }
+    .eyebrow-line { width: 24px; }
+    .eyebrow-text { font-size: 0.6rem; letter-spacing: 2px; padding: 5px 10px; }
+
+    .title-pits        { letter-spacing: 3px; }
+    .title-collectibles { letter-spacing: 2px; -webkit-text-stroke: 1.5px var(--text); }
+
+    .hero-sub { font-size: 0.85rem; }
+    .hero-tags { font-size: 0.7rem; }
+
+    .hero-btns {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 36px;
+    }
+    .cta-button,
+    .cta-secondary {
+        width: min(280px, 90vw);
+        justify-content: center;
+    }
+
+    .preorder-label { font-size: 0.58rem; }
+    .cta-preorder   { font-size: 0.8rem; padding: 11px 24px; }
+
+    /* Ticker */
+    .hero-strip { font-size: 0.55rem; }
+
+    /* Footer */
+    .footer { padding: 32px 16px 24px; }
+    .footer-container h3 { font-size: 1.3rem; }
+
+    /* Drawer — already full width on mobile */
+    .hamburger-drawer { padding: 70px 20px 32px; }
+}
+
+/* ─── Small mobile (≤ 380px) ─────────────── */
+@media (max-width: 380px) {
+    .title-pits { font-size: clamp(2.8rem, 18vw, 4rem); }
+    .title-collectibles { font-size: clamp(1.8rem, 11vw, 2.8rem); }
+    .cta-button, .cta-secondary { width: 100%; }
+}
+
+/* ─── HOMEPAGE FEATURED CARDS ─────────────
+   Global override so all 3 sections look
+   identical regardless of image aspect ratio.
+─────────────────────────────────────────── */
+.feat-img {
+    width: 100% !important;
+    height: 220px !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+}
+
+.feat-img img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    padding: 8px !important;
+    transition: transform 0.4s ease !important;
+}
+
+.feat-card {
+    background: var(--bg-alt) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    cursor: pointer !important;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s !important;
+    min-height: 320px !important;
+}
+
+.feat-card:hover {
+    transform: translateY(-5px) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 14px 36px rgba(230,0,0,0.12) !important;
+}
+
+.feat-card:hover .feat-img img { transform: scale(1.06) !important; }
+.feat-img img.grayscale { filter: grayscale(1) !important; opacity: 0.45 !important; }
+
+.featured-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 18px !important;
+}
+
+@media (max-width: 900px) {
+    .featured-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 600px) {
+    .featured-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+    .feat-img { height: 160px !important; }
 }

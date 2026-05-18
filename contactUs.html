@@ -1,80 +1,798 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us | Pits Stop Collectibles</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/XyrishLey/Pits-Stops-Collectibles-Website/refs/heads/main/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background: #000; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .contact-container { width: 100%; max-width: 500px; background: rgba(20, 20, 20, 0.95); padding: 40px; border-radius: 15px; border: 1px solid #e60000; box-shadow: 0 0 20px rgba(230, 0, 0, 0.2); }
-        h1 { font-family: 'Orbitron', sans-serif; color: #e60000; text-align: center; margin-bottom: 10px; }
-        p { text-align: center; color: #888; font-size: 0.9rem; margin-bottom: 30px; }
-        
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 0.75rem; color: #e60000; text-transform: uppercase; font-family: 'Orbitron'; margin-bottom: 8px; }
-        input, textarea { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; outline: none; }
-        input:focus, textarea:focus { border-color: #e60000; }
-        
-        .submit-btn { width: 100%; padding: 15px; background: #e60000; color: white; border: none; border-radius: 5px; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s; }
-        .submit-btn:hover { background: #ff1a1a; transform: translateY(-2px); }
-        .back-link { display: block; text-align: center; margin-top: 20px; color: #888; text-decoration: none; font-size: 0.8rem; }
+
+        /* ─── VARIABLES ───────────────────────────── */
+        :root {
+            --accent: #e60000;
+            --accent-glow: rgba(230,0,0,0.3);
+            --accent-dim: rgba(230,0,0,0.1);
+        }
+        [data-theme="dark"] {
+            --bg: #0a0a0b;
+            --bg-alt: #111114;
+            --surface: #18181c;
+            --border: rgba(255,255,255,0.07);
+            --border-hover: rgba(230,0,0,0.45);
+            --text: #f0f0f0;
+            --text-muted: #777;
+            --text-sub: #444;
+            --nav-bg: rgba(10,10,11,0.9);
+            --input-bg: #0e0e11;
+            --shadow: 0 4px 40px rgba(0,0,0,0.6);
+        }
+        [data-theme="light"] {
+            --bg: #f4f3f1;
+            --bg-alt: #ffffff;
+            --surface: #eaeae7;
+            --border: rgba(0,0,0,0.08);
+            --border-hover: rgba(230,0,0,0.45);
+            --text: #111;
+            --text-muted: #888;
+            --text-sub: #bbb;
+            --nav-bg: rgba(244,243,241,0.9);
+            --input-bg: #f0efed;
+            --shadow: 0 4px 40px rgba(0,0,0,0.1);
+        }
+
+        /* ─── BASE ────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ─── NAV ─────────────────────────────────── */
+        header {
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: var(--nav-bg);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            height: 64px; max-width: 1280px;
+            margin: 0 auto; padding: 0 24px;
+        }
+        .nav-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.35rem; letter-spacing: 3px;
+            color: var(--text); text-decoration: none;
+        }
+        .nav-logo span { color: var(--accent); }
+
+        .nav-menu {
+            display: flex; align-items: center;
+            gap: 4px; list-style: none;
+        }
+        .nav-menu a {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700; font-size: 0.8rem;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--text-muted); text-decoration: none;
+            padding: 8px 13px; border-radius: 3px;
+            transition: color 0.2s, background 0.2s;
+        }
+        .nav-menu a:hover, .nav-menu a.active {
+            color: var(--text); background: var(--surface);
+        }
+
+        .dropdown { position: relative; }
+        .dropdown-menu {
+            display: none; position: absolute;
+            top: calc(100% + 8px); left: 0;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px; min-width: 155px;
+            overflow: hidden; box-shadow: var(--shadow);
+            list-style: none;
+        }
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu a { display: block; padding: 10px 16px; border-radius: 0; }
+
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .theme-btn {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--surface); border: 1px solid var(--border);
+            color: var(--text); cursor: pointer; font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.25s, background 0.2s;
+        }
+        .theme-btn:hover { transform: rotate(20deg); background: var(--border); }
+
+        /* ─── HAMBURGER ───────────────────────────── */
+        .hamburger-btn {
+            display: none;
+            flex-direction: column; justify-content: center;
+            align-items: center; gap: 5px;
+            width: 40px; height: 40px;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 4px; cursor: pointer; padding: 0;
+            transition: background 0.2s;
+        }
+        .hamburger-btn:hover { background: var(--border); }
+        .hamburger-btn span {
+            display: block; width: 18px; height: 2px;
+            background: var(--text); border-radius: 2px;
+            transition: transform 0.3s, opacity 0.3s;
+            transform-origin: center;
+        }
+        .hamburger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* ─── DRAWER ──────────────────────────────── */
+        .drawer-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: 1100;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .drawer-overlay.open { display: block; opacity: 1; }
+
+        .side-drawer {
+            position: fixed; top: 0; left: 0;
+            width: 280px; height: 100vh;
+            background: var(--bg-alt); border-right: 1px solid var(--border);
+            z-index: 1200;
+            transform: translateX(-100%);
+            transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+            display: flex; flex-direction: column;
+            padding: 24px; overflow-y: auto;
+        }
+        .side-drawer.open { transform: translateX(0); }
+
+        .drawer-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 28px;
+        }
+        .drawer-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem; letter-spacing: 2px; color: var(--text);
+        }
+        .drawer-logo span { color: var(--accent); }
+        .drawer-close-btn {
+            width: 32px; height: 32px;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 4px; cursor: pointer;
+            color: var(--text-muted); font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, color 0.2s;
+        }
+        .drawer-close-btn:hover { background: var(--accent-dim); color: var(--accent); }
+
+        .drawer-auth {
+            padding: 14px; background: var(--surface);
+            border: 1px solid var(--border); border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .drawer-greeting {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.68rem; letter-spacing: 1px;
+            color: var(--text-muted); margin-bottom: 10px;
+        }
+        .drawer-greeting strong { color: var(--accent); }
+
+        .drawer-section-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.58rem; letter-spacing: 2.5px;
+            color: var(--text-sub); text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .drawer-divider { height: 1px; background: var(--border); margin: 16px 0; }
+        .drawer-nav { display: flex; flex-direction: column; gap: 2px; }
+        .drawer-link {
+            display: flex; align-items: center; gap: 10px;
+            padding: 11px 14px; border-radius: 4px;
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700; font-size: 0.9rem; letter-spacing: 0.5px;
+            color: var(--text-muted);
+            transition: background 0.2s, color 0.2s;
+        }
+        .drawer-link:hover { background: var(--surface); color: var(--text); }
+        .drawer-link.accent { color: var(--accent); }
+        .drawer-link.green  { color: #4dff91; }
+        .drawer-link.danger { color: #ff4d4d; }
+
+        /* ─── PAGE HERO ───────────────────────────── */
+        .page-hero {
+            position: relative; text-align: center;
+            padding: 148px 24px 64px; overflow: hidden;
+        }
+        .hero-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 48px 48px;
+            opacity: 0.5; pointer-events: none;
+        }
+        .hero-glow {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            width: 540px; height: 280px;
+            background: radial-gradient(ellipse, rgba(230,0,0,0.13) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-inner { position: relative; z-index: 2; animation: fadeUp 0.7s ease both; }
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(22px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+
+        .hero-eyebrow {
+            display: inline-flex; align-items: center; gap: 14px;
+            margin-bottom: 20px;
+        }
+        .eyebrow-line { width: 36px; height: 1px; background: var(--accent); }
+        .eyebrow-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem; letter-spacing: 3px; color: var(--accent);
+            background: var(--accent-dim);
+            border: 1px solid rgba(230,0,0,0.25);
+            padding: 5px 14px; border-radius: 2px;
+        }
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3.5rem, 10vw, 6rem);
+            letter-spacing: 8px; line-height: 1; color: var(--text);
+        }
+        .page-title .outline {
+            color: transparent; -webkit-text-stroke: 2px var(--accent);
+        }
+
+        /* ─── WRAPPER ─────────────────────────────── */
+        .page-wrapper {
+            max-width: 1200px; margin: 0 auto 100px;
+            padding: 0 24px;
+        }
+
+        /* ─── INFO CARDS ──────────────────────────── */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 16px; margin-bottom: 48px;
+        }
+        .info-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 8px; padding: 28px 20px;
+            text-align: center;
+            transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+            animation: fadeUp 0.5s ease both;
+        }
+        .info-card:nth-child(1) { animation-delay: 0.05s; }
+        .info-card:nth-child(2) { animation-delay: 0.1s; }
+        .info-card:nth-child(3) { animation-delay: 0.15s; }
+        .info-card:nth-child(4) { animation-delay: 0.2s; }
+        .info-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 28px rgba(230,0,0,0.1);
+        }
+        .info-icon { font-size: 2rem; margin-bottom: 14px; }
+        .info-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem; letter-spacing: 2px;
+            color: var(--text); margin-bottom: 8px;
+        }
+        .info-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem; line-height: 1.9;
+            color: var(--text-muted); letter-spacing: 0.5px;
+        }
+
+        /* ─── CONTENT GRID ────────────────────────── */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px; align-items: start;
+        }
+
+        /* ─── FORM BOX ────────────────────────────── */
+        .form-box {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 10px; padding: 36px;
+            animation: fadeUp 0.6s ease 0.1s both;
+        }
+        .form-box-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem; letter-spacing: 4px;
+            color: var(--text); margin-bottom: 28px;
+            padding-bottom: 16px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .form-box-title::before {
+            content: ''; display: block;
+            width: 4px; height: 22px;
+            background: var(--accent); border-radius: 2px;
+        }
+
+        .form-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+            margin-bottom: 16px;
+        }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group.full { grid-column: 1 / -1; }
+
+        label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem; letter-spacing: 2.5px;
+            color: var(--accent); text-transform: uppercase;
+        }
+        input, textarea {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 13px 16px; border-radius: 5px;
+            outline: none; font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem; font-weight: 600;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input::placeholder, textarea::placeholder {
+            color: var(--text-sub); font-weight: 400;
+        }
+        input:focus, textarea:focus {
+            border-color: var(--border-hover);
+            box-shadow: 0 0 0 3px rgba(230,0,0,0.08);
+        }
+        textarea { resize: vertical; min-height: 140px; }
+
+        .submit-btn {
+            width: 100%; padding: 15px;
+            background: var(--accent); border: none; border-radius: 5px;
+            color: #fff;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem; letter-spacing: 3px;
+            cursor: pointer; margin-top: 6px;
+            box-shadow: 0 4px 20px var(--accent-glow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+        .submit-btn:active { transform: translateY(0); }
+
+        /* ─── RIGHT SIDE ──────────────────────────── */
+        .contact-side {
+            display: flex; flex-direction: column; gap: 20px;
+            animation: fadeUp 0.6s ease 0.2s both;
+        }
+        .side-heading {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            letter-spacing: 4px; color: var(--text); line-height: 1.1;
+        }
+        .side-heading span { color: var(--accent); }
+        .side-text {
+            font-size: 0.95rem; line-height: 1.9;
+            color: var(--text-muted); font-weight: 600;
+        }
+
+        .side-box {
+            background: var(--bg-alt); border: 1px solid var(--border);
+            border-radius: 8px; padding: 24px;
+        }
+        .side-box-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.6rem; letter-spacing: 2.5px;
+            color: var(--text-muted); text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+        .brand-list {
+            display: flex; flex-wrap: wrap; gap: 10px;
+        }
+        .brand-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem; letter-spacing: 1px;
+            color: var(--text-muted);
+            border: 1px solid rgba(230,0,0,0.25);
+            background: var(--accent-dim);
+            padding: 8px 14px; border-radius: 3px;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .brand-tag:hover { border-color: var(--accent); color: var(--text); }
+
+        .socials { display: flex; gap: 10px; }
+        .social-btn {
+            width: 50px; height: 50px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border); border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; cursor: pointer;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+        }
+        .social-btn:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(230,0,0,0.15);
+        }
+
+        /* Status message */
+        .form-status {
+            margin-top: 12px; padding: 12px 16px;
+            border-radius: 5px; font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem; letter-spacing: 1.5px;
+            display: none;
+        }
+        .form-status.success {
+            background: rgba(0,200,80,0.1);
+            border: 1px solid rgba(0,200,80,0.3);
+            color: #00c850; display: block;
+        }
+        .form-status.error {
+            background: var(--accent-dim);
+            border: 1px solid rgba(230,0,0,0.3);
+            color: var(--accent); display: block;
+        }
+
+        /* ─── FOOTER ──────────────────────────────── */
+        .footer {
+            background: var(--bg-alt);
+            border-top: 1px solid var(--border);
+            padding: 40px 24px;
+        }
+        .footer-container {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;
+        }
+        .footer-brand { flex: 1; min-width: 200px; }
+        .footer-brand h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem; letter-spacing: 3px; margin-bottom: 6px;
+        }
+        .footer-brand p { font-size: 0.82rem; color: var(--text-muted); }
+        .footer-info {
+            flex: 1; min-width: 200px;
+            font-size: 0.82rem; color: var(--text-muted);
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .fb-link {
+            color: var(--accent); text-decoration: none;
+            font-weight: 700; font-size: 0.82rem;
+            transition: opacity 0.2s;
+        }
+        .fb-link:hover { opacity: 0.75; }
+        .footer-bottom {
+            width: 100%; padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.58rem; letter-spacing: 1.5px; color: var(--text-sub);
+        }
+
+        /* ─── RESPONSIVE ──────────────────────────── */
+        @media (max-width: 960px) {
+            .nav-menu { display: none; }
+            .hamburger-btn { display: flex; }
+            .info-grid { grid-template-columns: repeat(2,1fr); }
+            .contact-content { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .nav-bar { padding: 0 14px; }
+            .info-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .form-row { grid-template-columns: 1fr; }
+            .page-wrapper { padding: 0 14px; }
+            .form-box { padding: 24px 18px; }
+        }
+        @media (max-width: 420px) {
+            .info-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
-<div class="contact-container">
-    <h1>CONTACT STAFF</h1>
-    <p>Need help with your collectibles? Send us a message.</p>
-    
-    <div class="form-group">
-        <label>Subject</label>
-        <input type="text" id="subject" placeholder="e.g. Order Status, Item Inquiry">
+    <!-- ═══ HEADER ══════════════════════════════════════════ -->
+    <header>
+        <nav class="nav-bar">
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <a href="index.html" class="nav-logo">Pits Stop <span>Collectibles</span></a>
+
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li class="dropdown">
+                    <a href="#">Brands ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="hotwheels.html">Hotwheels</a></li>
+                        <li><a href="premium.html">Premium</a></li>
+                        <li><a href="matchbox.html">Matchbox</a></li>
+                    </ul>
+                </li>
+                <li><a href="aboutUs.html">About Us</a></li>
+                <li><a href="contactUs.html" class="active">Contact Us</a></li>
+                <li><a href="wishlist.html">❤️ Wishlist</a></li>
+                <li><a href="cart.html">🛒 Cart</a></li>
+            </ul>
+
+            <div class="nav-right">
+                <button id="themeToggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ═══ DRAWER OVERLAY ═══════════════════════════════════ -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <!-- ═══ SIDE DRAWER ══════════════════════════════════════ -->
+    <div class="side-drawer" id="sideDrawer">
+        <div class="drawer-header">
+            <span class="drawer-logo">Pits Stop <span>Collectibles</span></span>
+            <button class="drawer-close-btn" id="drawerCloseBtn" aria-label="Close menu">✕</button>
+        </div>
+        <div class="drawer-auth" id="drawerAuthSection"></div>
+        <div class="drawer-divider"></div>
+        <p class="drawer-section-label">Navigation</p>
+        <nav class="drawer-nav">
+            <a href="index.html"     class="drawer-link">🏠 Home</a>
+            <a href="hotwheels.html" class="drawer-link">🔥 Hotwheels</a>
+            <a href="premium.html"   class="drawer-link">⭐ Premium</a>
+            <a href="matchbox.html"  class="drawer-link">📦 Matchbox</a>
+            <a href="aboutUs.html"   class="drawer-link">ℹ️ About Us</a>
+            <a href="contactUs.html" class="drawer-link accent">📬 Contact Us</a>
+            <a href="wishlist.html"  class="drawer-link">❤️ Wishlist</a>
+            <a href="cart.html"      class="drawer-link">🛒 Cart</a>
+        </nav>
     </div>
 
-    <div class="form-group">
-        <label>Message</label>
-        <textarea id="message" rows="5" placeholder="Write your message here..."></textarea>
+    <!-- ═══ PAGE HERO ════════════════════════════════════════ -->
+    <section class="page-hero">
+        <div class="hero-grid"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-inner">
+            <div class="hero-eyebrow">
+                <span class="eyebrow-line"></span>
+                <span class="eyebrow-tag">Pits Stop Collectibles</span>
+                <span class="eyebrow-line"></span>
+            </div>
+            <h1 class="page-title">CONTACT <span class="outline">US</span></h1>
+        </div>
+    </section>
+
+    <!-- ═══ MAIN CONTENT ═════════════════════════════════════ -->
+    <div class="page-wrapper">
+
+        <!-- Info Cards -->
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-icon">🏁</div>
+                <div class="info-title">Main Store</div>
+                <div class="info-text">Pits Stop Collectibles<br>Philippines</div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">📞</div>
+                <div class="info-title">Phone</div>
+                <div class="info-text">+63 912 345 6789<br>Collector Support</div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">📦</div>
+                <div class="info-title">Order Help</div>
+                <div class="info-text">Tracking & Reservation<br>Assistance</div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">✉️</div>
+                <div class="info-title">Email</div>
+                <div class="info-text">pitsstop@gmail.com</div>
+            </div>
+        </div>
+
+        <!-- Contact Grid -->
+        <div class="contact-content">
+
+            <!-- Form -->
+            <div class="form-box">
+                <div class="form-box-title">Send a Message</div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullname">Full Name</label>
+                        <input type="text" id="fullname" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" placeholder="Item inquiry / reservation">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full">
+                        <label for="message">Message</label>
+                        <textarea id="message" placeholder="Write your message here..."></textarea>
+                    </div>
+                </div>
+
+                <button class="submit-btn" id="sendBtn">SEND MESSAGE →</button>
+                <div class="form-status" id="formStatus"></div>
+            </div>
+
+            <!-- Right Side -->
+            <div class="contact-side">
+                <h2 class="side-heading">Get in <span>Touch</span></h2>
+                <p class="side-text">
+                    Need help with your diecast collection, pre-orders,
+                    reservations, or item availability? Our team is ready
+                    to assist fellow collectors with Hot Wheels, Matchbox,
+                    and premium releases.
+                </p>
+
+                <div class="side-box">
+                    <p class="side-box-title">Available Brands</p>
+                    <div class="brand-list">
+                        <span class="brand-tag">Hot Wheels</span>
+                        <span class="brand-tag">Hot Wheels Premium</span>
+                        <span class="brand-tag">Matchbox</span>
+                    </div>
+                </div>
+
+                <div class="side-box">
+                    <p class="side-box-title">Follow Us</p>
+                    <div class="socials">
+                        <a href="https://www.facebook.com/profile.php?id=61572190615239"
+                           target="_blank" class="social-btn" title="Facebook">ⓕ</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <button class="submit-btn" onclick="sendToAdmin()">SEND MESSAGE</button>
-    <a href="index.html" class="back-link">← Return to Shop</a>
-</div>
+    <!-- ═══ FOOTER ═══════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>Pits Stop Collectibles</h3>
+                <p>Not your ordinary pit stop 🤩🏁</p>
+            </div>
+            <div class="footer-info">
+                <p>📍 Cainta, Rizal</p>
+                <p>🛒 Your one-stop shop for diecast!</p>
+                <a href="https://www.facebook.com/profile.php?id=61572190615239" target="_blank" class="fb-link">
+                    Follow us on Facebook
+                </a>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Pits Stop Collectibles | All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
 
-<script>
-    function sendToAdmin() {
-    const subject = document.getElementById('subject').value.trim();
-    const content = document.getElementById('message').value.trim();
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    <script>
+    // ─── THEME ─────────────────────────────────────────────
+    const themeToggle = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    themeToggle.textContent = saved === 'dark' ? '☀️' : '🌙';
+    themeToggle.addEventListener('click', () => {
+        const cur  = document.documentElement.getAttribute('data-theme');
+        const next = cur === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
 
-    if (!currentUser) {
-        alert("Please login first before sending a message.");
-        window.location.href = 'login.html';
-        return;
+    // ─── HAMBURGER / DRAWER ─────────────────────────────────
+    const hamburgerBtn   = document.getElementById('hamburgerBtn');
+    const drawerCloseBtn = document.getElementById('drawerCloseBtn');
+    const drawerOverlay  = document.getElementById('drawerOverlay');
+    const sideDrawer     = document.getElementById('sideDrawer');
+
+    function openDrawer() {
+        sideDrawer.classList.add('open');
+        drawerOverlay.classList.add('open');
+        hamburgerBtn.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+        sideDrawer.classList.remove('open');
+        drawerOverlay.classList.remove('open');
+        hamburgerBtn.classList.remove('open');
+        document.body.style.overflow = '';
     }
 
-    if (!subject || !content) {
-        alert("Please fill in all fields.");
-        return;
+    hamburgerBtn.addEventListener('click', () =>
+        sideDrawer.classList.contains('open') ? closeDrawer() : openDrawer()
+    );
+    drawerCloseBtn.addEventListener('click', closeDrawer);
+    drawerOverlay.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+    // ─── AUTH ───────────────────────────────────────────────
+    function loadUser() {
+        const loggedIn    = localStorage.getItem('loggedIn');
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const section     = document.getElementById('drawerAuthSection');
+        if (!section) return;
+
+        if (loggedIn === 'true' && currentUser) {
+            section.innerHTML = `
+                <p class="drawer-greeting">Hi, <strong>${currentUser.username}</strong> 👋</p>
+                <a href="inbox.html"   class="drawer-link green">📩 Inbox</a>
+                <a href="account.html" class="drawer-link">👤 Account</a>
+                <a href="#" id="logoutLink" class="drawer-link danger">⏻ Logout</a>`;
+            document.getElementById('logoutLink').addEventListener('click', e => {
+                e.preventDefault();
+                if (confirm('Are you sure you want to log out?')) {
+                    localStorage.removeItem('loggedIn');
+                    localStorage.removeItem('currentUser');
+                    localStorage.removeItem('isAdmin');
+                    window.location.reload();
+                }
+            });
+        } else {
+            section.innerHTML = `
+                <a href="login.html"  class="drawer-link accent">Login</a>
+                <a href="signup.html" class="drawer-link">Sign Up</a>`;
+        }
     }
 
-    const newMessage = {
-        sender: currentUser.fullname,
-        username: currentUser.username, // IMPORTANTE: Para sa filter ng Inbox
-        subject: subject,
-        message: content,
-        date: new Date().toLocaleString(),
-        reply: null // Empty reply at first
-    };
+    // ─── SEND MESSAGE ────────────────────────────────────────
+    document.getElementById('sendBtn').addEventListener('click', () => {
+        const fullname = document.getElementById('fullname').value.trim();
+        const subject  = document.getElementById('subject').value.trim();
+        const content  = document.getElementById('message').value.trim();
+        const status   = document.getElementById('formStatus');
 
-    let inbox = JSON.parse(localStorage.getItem('adminInbox')) || [];
-    inbox.push(newMessage);
-    localStorage.setItem('adminInbox', JSON.stringify(inbox));
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const loggedIn    = localStorage.getItem('loggedIn');
 
-    alert("Message sent! Check your Inbox page for our response later.");
-    window.location.href = 'index.html';
-}   
-</script>
+        status.className = 'form-status';
+        status.textContent = '';
 
+        if (loggedIn !== 'true' || !currentUser) {
+            status.className = 'form-status error';
+            status.textContent = '⚠ Please log in before sending a message.';
+            setTimeout(() => { window.location.href = 'login.html'; }, 1800);
+            return;
+        }
+
+        if (!fullname || !subject || !content) {
+            status.className = 'form-status error';
+            status.textContent = '⚠ Please fill in all fields.';
+            return;
+        }
+
+        const newMessage = {
+            sender:   fullname,
+            username: currentUser.username,
+            subject:  subject,
+            message:  content,
+            date:     new Date().toLocaleString(),
+            reply:    null
+        };
+
+        const inbox = JSON.parse(localStorage.getItem('adminInbox')) || [];
+        inbox.push(newMessage);
+        localStorage.setItem('adminInbox', JSON.stringify(inbox));
+
+        status.className = 'form-status success';
+        status.textContent = '✔ Message sent successfully! Redirecting...';
+
+        document.getElementById('fullname').value = '';
+        document.getElementById('subject').value  = '';
+        document.getElementById('message').value  = '';
+
+        setTimeout(() => { window.location.href = 'index.html'; }, 1800);
+    });
+
+    // ─── INIT ────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', loadUser);
+    </script>
 </body>
 </html>
