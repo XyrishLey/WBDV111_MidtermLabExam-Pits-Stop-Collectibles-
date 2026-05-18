@@ -80,7 +80,7 @@
         /* ══════════════════════════════════════════
            SHARED SECTION STYLES
         ══════════════════════════════════════════ */
-          .home-section {
+        .home-section {
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
@@ -88,66 +88,60 @@
             box-sizing: border-box;
         }
 
-          .section-header {
-            width:100%;
+        .section-header {
+            width: 100%;
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
             margin-bottom: 28px;
             padding-bottom: 16px;
-            padding-left:0;
-            padding-right:0;
             border-bottom: 1px solid var(--border);
         }
 
-        .section-header-left{
-            gap:10px;
+        .section-header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
-        
-        .section-header-left { display: flex; flex-direction: column; gap: 4px; }
+
         .section-tag {
             font-family: 'Share Tech Mono', monospace;
-
             font-size: 0.7rem;
-
             letter-spacing: 5px;
-
             color: var(--accent);
-
             text-transform: uppercase;
-
             margin-bottom: 8px;
         }
-        
+
         .section-title {
             font-family: 'Bebas Neue', sans-serif;
-
             font-size: 3.5rem;
-
             letter-spacing: 4px;
-
             color: var(--text);
-
             line-height: 1;
-
-            display:flex;
-            align-items:center;
-
-            gap:8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        
+
         .section-title span { color: transparent; -webkit-text-stroke: 1.5px var(--accent); }
 
         .view-all-btn {
-            display: inline-flex; align-items: center; gap: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 0.85rem; letter-spacing: 2px;
-            color: var(--accent); text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--accent);
+            text-decoration: none;
             border: 1px solid rgba(230,0,0,0.35);
-            padding: 8px 18px; border-radius: 3px;
-            transition: background 0.2s; white-space: nowrap;
+            padding: 8px 18px;
+            border-radius: 3px;
+            transition: background 0.2s;
+            white-space: nowrap;
         }
-        
+
         .view-all-btn:hover { background: rgba(230,0,0,0.1); }
 
         .section-divider {
@@ -157,34 +151,14 @@
             border-top: 1px solid var(--border);
         }
 
-        .featured-grid{
-            padding-left:0;
-            padding-right:0;
-        }
-
         /* ══════════════════════════════════════════
            NEWS / ANNOUNCEMENT BOARD
         ══════════════════════════════════════════ */
-         .news-grid {
+        .news-grid {
             display: grid;
-
-            grid-template-columns: repeat(4, minmax(450px, 1fr));
-
-            gap: 30px;
-
-            max-width: 1400px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
             width: 100%;
-
-            margin: 0 auto;
-
-            padding: 0 20px;
-
-            box-sizing: border-box;
-
-            justify-content: center;
-
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .news-card {
@@ -203,20 +177,21 @@
         }
 
         .news-img {
-            width: 100%; height: 200px;
+            width: 100%;
+            height: 200px;
             overflow: hidden;
             background: #111;
             position: relative;
         }
         .news-img img {
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
             display: block;
         }
         .news-card:hover .news-img img { transform: scale(1.05); }
 
-        /* Category tag on image */
         .news-cat {
             position: absolute; bottom: 10px; left: 10px;
             font-family: 'Share Tech Mono', monospace;
@@ -261,70 +236,54 @@
         .news-action:hover { opacity: 0.75; }
 
         /* ══════════════════════════════════════════
-           FEATURED PRODUCT GRID
+           FEATURED PRODUCT GRID  ← FIXED
         ══════════════════════════════════════════ */
         .featured-grid {
             display: grid;
-
-            grid-template-columns: repeat(4, minmax(450px, 1fr));
-
-            gap: 30px;
-
-            max-width: 1400px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
             width: 100%;
-
-            margin: 0 auto;
-
-            padding: 0 20px;
-
             box-sizing: border-box;
-
-            justify-content: center;
-
-            margin-left: auto;
-            margin-right: auto;
         }
 
-          .featured-grid > *{
-            width:100%;
-        }
-        
-          .feat-card {
-            width:100%;
-            height:100%;
-
-            min-height:430px;
-
+        .feat-card {
             background: var(--bg-alt);
             border: 1px solid var(--border);
             border-radius: 6px;
             overflow: hidden;
-
-            display:flex;
-            flex-direction:column;
-
-            transition:0.3s;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
-        
+
         .feat-card:hover {
             transform: translateY(-5px);
             border-color: var(--accent);
             box-shadow: 0 14px 36px rgba(230,0,0,0.12);
         }
-        
+
+        /* Square image area using aspect-ratio */
         .feat-img {
-            width: 100%; height: 170px;
-            background: #111; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: #0d0d0d;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
         }
-        
+
         .feat-img img {
-            width: 100%; height: 100%;
-            object-fit: contain; padding: 10px;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 16px;
             transition: transform 0.4s ease;
+            display: block;
         }
-        
+
         .feat-card:hover .feat-img img { transform: scale(1.08); }
         .feat-img img.grayscale { filter: grayscale(1); opacity: 0.45; }
 
@@ -336,7 +295,7 @@
             padding: 4px 8px; border-radius: 2px;
             text-transform: uppercase; z-index: 2;
         }
-        
+
         .feat-low-badge {
             position: absolute; top: 8px; left: 8px;
             background: rgba(255,107,0,0.9); color: #fff;
@@ -345,78 +304,43 @@
             padding: 3px 8px; border-radius: 2px;
             text-transform: uppercase; z-index: 2;
         }
-        
-        .feat-body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; }
+
+        .feat-body {
+            padding: 14px 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
         .feat-series {
             font-family: 'Share Tech Mono', monospace;
             font-size: 0.56rem; letter-spacing: 1.8px;
-            color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;
+            color: var(--text-muted); text-transform: uppercase;
         }
-        
+
         .feat-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             letter-spacing: 1.2px;
             color: var(--text);
-            line-height: 1.15;
-
-            min-height: 70px;
-
-            display:flex;
-            align-items:flex-start;
-
-            margin-bottom: 8px;
+            line-height: 1.2;
+            flex: 1;
         }
-        
+
         .feat-price {
             font-family: 'Share Tech Mono', monospace;
             font-size: 0.95rem;
             color: var(--accent);
-
-            margin-top:auto;
+            margin-top: 8px;
+            font-weight: bold;
         }
-        
+
         .feat-empty {
             grid-column: 1 / -1; text-align: center; padding: 40px;
             font-family: 'Share Tech Mono', monospace;
             font-size: 0.68rem; letter-spacing: 2px;
             color: var(--text-muted); opacity: 0.5;
-        }
-
-             /* FIX CARD ALIGNMENT */
-
-        .feat-body{
-            display:flex;
-            flex-direction:column;
-            justify-content:space-between;
-            flex:1;
-        }
-
-        .feat-name{
-            min-height:150px;
-        }
-
-        .feat-price{
-            margin-top:auto;
-        }
-
-        /* MOBILE */
-
-        @media (max-width: 900px){
-            .featured-grid{
-                grid-template-columns:repeat(2,1fr);
-            }
-        }
-
-        @media (max-width: 600px){
-            .featured-grid{
-                grid-template-columns:1fr;
-            }
-
-            .feat-card{
-                height:auto;
-                min-height:unset;
-            }
         }
 
         /* ══════════════════════════════════════════
@@ -494,7 +418,6 @@
             letter-spacing: 1px;
         }
 
-        /* Cards side */
         .info-cards-side {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -533,7 +456,6 @@
             color: var(--accent); text-transform: uppercase;
         }
 
-        /* Tall card that spans 2 rows */
         .brand-card.tall { grid-row: span 2; }
 
         /* ══════════════════════════════════════════
@@ -542,8 +464,12 @@
         .page-end { padding-bottom: 80px; }
 
         /* ══════════════════════════════════════════
-           MOBILE
+           RESPONSIVE
         ══════════════════════════════════════════ */
+        @media (max-width: 1100px) {
+            .featured-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
         @media (max-width: 900px) {
             .drops-bar { top: 60px; flex-wrap: wrap; padding: 8px 40px 8px 12px; gap: 6px; }
             .hero.with-banner { padding-top: 200px; }
@@ -556,13 +482,18 @@
 
         @media (max-width: 600px) {
             .news-grid { grid-template-columns: 1fr; }
-            .featured-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .feat-img { height: 130px; }
-            .section-title { font-size: 1.5rem; }
+            .featured-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .section-title { font-size: 1.8rem; }
             .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
             .info-facts { grid-template-columns: 1fr 1fr; }
             .drops-text { font-size: 0.75rem; }
             .home-section { padding: 50px 16px 0; }
+            .feat-body { padding: 10px 10px 12px; }
+            .feat-name { font-size: 0.95rem; }
+        }
+
+        @media (max-width: 400px) {
+            .featured-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -570,9 +501,6 @@
 
     <!-- ══════════════════════════════════════════
          NEW DROPS BANNER
-         · Edit .drops-text for the message
-         · Edit .drops-link href for destination
-         · Add style="display:none" to turn off
     ══════════════════════════════════════════ -->
     <div class="drops-bar" id="dropsBar">
         <span class="drops-label">NEW DROPS</span>
@@ -671,8 +599,6 @@
 
     <!-- ══════════════════════════════════════════
          NEWS & ANNOUNCEMENTS BOARD
-         To add/edit posts: update the NEWS array
-         in the <script> below.
     ══════════════════════════════════════════ -->
     <div class="home-section">
         <div class="section-header">
@@ -735,7 +661,6 @@
     ══════════════════════════════════════════ -->
     <div class="info-section">
         <div class="info-inner">
-            <!-- Left: text -->
             <div class="info-text-side">
                 <p class="info-eyebrow">About the Hobby</p>
                 <h2 class="info-title">WHAT IS<br><span>DIECAST</span>?</h2>
@@ -765,7 +690,6 @@
                 </div>
             </div>
 
-            <!-- Right: brand cards -->
             <div class="info-cards-side">
                 <a href="hotwheels.html" class="brand-card tall">
                     <span class="brand-card-icon">🔥</span>
@@ -816,15 +740,6 @@
     <script>
         // ══════════════════════════════════════════════════════
         //  NEWS POSTS — Edit this array to update the board.
-        //  Fields:
-        //    cat:   'new-release' | 'announcement' | 'facebook' | 'restock'
-        //    catLabel: text shown on the badge
-        //    date:  display date string
-        //    img:   image URL (use your GitHub raw image links)
-        //    title: headline
-        //    desc:  short description (2–3 sentences max)
-        //    link:  where "Read More / View" points (FB post, preorder page, etc.)
-        //    linkLabel: button text
         // ══════════════════════════════════════════════════════
         const NEWS = [
             {
@@ -838,7 +753,6 @@
                 linkLabel: 'Pre-Order Now →'
             },
         ];
-        // ══════════════════════════════════════════════════════
 
         function renderNews() {
             const grid = document.getElementById('newsGrid');
@@ -934,7 +848,7 @@
         }
 
         // ─── Featured Products ────────────────────────────────
-        const FEATURED_LIMIT = 4; // change to show more cards per row
+        const FEATURED_LIMIT = 4;
 
         function buildFeatCard(p) {
             const qty = parseInt(p.quantity);
