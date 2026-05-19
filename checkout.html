@@ -229,6 +229,46 @@
             display: none;
         }
 
+        /* ── COUPON ── */
+        .coupon-row {
+            display: flex; gap: 8px; margin-bottom: 14px;
+        }
+        .coupon-input {
+            flex: 1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 11px 14px;
+            border-radius: 5px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.78rem; letter-spacing: 1px;
+            outline: none;
+            text-transform: uppercase;
+            transition: border-color 0.2s;
+        }
+        .coupon-input:focus { border-color: var(--accent); }
+        .coupon-input::placeholder { color: var(--text-muted); opacity: 0.5; text-transform: none; }
+        .coupon-apply {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.85rem; letter-spacing: 2px;
+            padding: 0 18px; border-radius: 5px;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+            white-space: nowrap;
+        }
+        .coupon-apply:hover { border-color: var(--accent); color: var(--accent); background: rgba(230,0,0,0.05); }
+        .coupon-msg {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.62rem; letter-spacing: 1.5px;
+            margin-bottom: 14px; padding: 0 2px;
+            min-height: 16px;
+        }
+        .coupon-msg.ok { color: #22c55e; }
+        .coupon-msg.err { color: var(--accent); }
+
         /* ── CONFIRM CHECKBOXES ── */
         .confirm-wrapper {
             display: flex;
@@ -514,7 +554,17 @@
             <input type="text" id="ref-code" maxlength="4" placeholder="e.g. 5678" inputmode="numeric" pattern="[0-9]{4}">
         </div>
 
+        <p class="section-title">4 — Coupon Code</p>
+        <div class="coupon-row">
+            <input type="text" class="coupon-input" id="couponInput" placeholder="Enter coupon code">
+            <button class="coupon-apply" onclick="applyCoupon()">Apply</button>
+        </div>
+        <p class="coupon-msg" id="couponMsg"></p>
+
         <div class="total-box">
+            <div id="discount-line" style="display:none; font-family:'Rajdhani',sans-serif; font-size:0.9rem; color:#22c55e; margin-bottom:6px;">
+                Discount: −₱<span id="discount-amt">0</span>
+            </div>
             <h3>Total: ₱<span id="final-price">0</span></h3>
             <small id="fee-note">(Includes ₱60 Rizal COD Fee)</small>
         </div>
@@ -776,15 +826,87 @@
             calculateTotal();
         }
 
+        /* ════ COUPON CODES ════ */
+        const COUPONS = {
+            'WEBSITEISNOWLIVE': { type: 'percent', value: 20, minOrder: 1500, label: '20% off applied! (orders ₱1,500+)' },
+            'PITSTOP10':        { type: 'percent', value: 10, minOrder: 0,    label: '10% off applied!' },
+            'PREMIUM2026':      { type: 'premiumFlat', value: 50,             label: '₱50 off applied on premium items!' },
+        };
+
+        let activeCoupon = null;
+
+        function applyCoupon() {
+            const code = document.getElementById('couponInput').value.trim().toUpperCase();
+            const msg  = document.getElementById('couponMsg');
+            if (!code) { msg.className = 'coupon-msg err'; msg.textContent = 'Enter a code first.'; return; }
+
+            const coupon = COUPONS[code];
+            if (!coupon) {
+                activeCoupon = null;
+                msg.className = 'coupon-msg err';
+                msg.textContent = '✕ Invalid or expired code.';
+                calculateTotal();
+                return;
+            }
+
+            // Check WEBSITEISNOWLIVE minimum order requirement
+            if (coupon.minOrder && baseTotal < coupon.minOrder) {
+                activeCoupon = null;
+                msg.className = 'coupon-msg err';
+                msg.textContent = `✕ This code requires a minimum order of ₱${coupon.minOrder.toLocaleString()}.`;
+                calculateTotal();
+                return;
+            }
+
+            // Check PREMIUM2026 — cart must contain at least one premium item
+            if (coupon.type === 'premiumFlat') {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const hasPremium = cart.some(item => item.category === 'premium');
+                if (!hasPremium) {
+                    activeCoupon = null;
+                    msg.className = 'coupon-msg err';
+                    msg.textContent = '✕ This code is only valid for Premium item orders.';
+                    calculateTotal();
+                    return;
+                }
+            }
+
+            activeCoupon = { code, ...coupon };
+            msg.className = 'coupon-msg ok';
+            msg.textContent = '✓ ' + coupon.label;
+            calculateTotal();
+        }
+
         let baseTotal = 0;
         const codFee  = 60;
 
         function calculateTotal() {
             const method  = document.getElementById('payment-method').value;
             const feeNote = document.getElementById('fee-note');
-            let total     = baseTotal;
+
+            // Work out discount
+            let discount = 0;
+            if (activeCoupon) {
+                if (activeCoupon.type === 'percent') {
+                    discount = Math.round(baseTotal * activeCoupon.value / 100);
+                } else if (activeCoupon.type === 'premiumFlat') {
+                    discount = Math.min(activeCoupon.value, baseTotal);
+                }
+            }
+
+            const discLine = document.getElementById('discount-line');
+            const discAmt  = document.getElementById('discount-amt');
+            if (discount > 0) {
+                discLine.style.display = 'block';
+                discAmt.textContent = discount.toLocaleString();
+            } else {
+                discLine.style.display = 'none';
+            }
+
+            let total = Math.max(0, baseTotal - discount);
             if (method === 'cod') { total += codFee; feeNote.style.display = 'block'; }
             else { feeNote.style.display = 'none'; }
+
             document.getElementById('final-price').textContent = total.toLocaleString();
         }
 
@@ -809,7 +931,7 @@
 
         /* ════ CHECKBOX HANDLING ════ */
         function toggleCheckbox(event, checkboxId) {
-            if (event.target.tagName === 'A') return; // let links open normally
+            if (event.target.tagName === 'A') return;
             if (event.target.id === checkboxId || event.target.getAttribute('for') === checkboxId) return;
             const checkbox = document.getElementById(checkboxId);
             checkbox.checked = !checkbox.checked;
@@ -916,10 +1038,26 @@
             const storageUser = localStorage.getItem('user') || localStorage.getItem('currentUser');
             if (!storageUser) { window.location.href = 'login.html'; return; }
 
+            // ══════════════════════════════════════════════════
+            // ── CHECKOUT TOTAL FIX ─────────────────────────────
+            // Was: baseTotal += price  (ignored qty — WRONG)
+            // Now: baseTotal += price * qty  (correct)
+            //
+            // Also respects checkoutIndices from cart.html if
+            // the user only selected specific items to check out.
+            // ══════════════════════════════════════════════════
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            baseTotal  = 0;
-            cart.forEach(item => {
-                baseTotal += parseInt(String(item.price).replace(/[^0-9]/g, '') || 0);
+            const checkoutIndices = JSON.parse(sessionStorage.getItem('checkoutIndices') || 'null');
+
+            const itemsToBuy = (checkoutIndices && checkoutIndices.length > 0)
+                ? checkoutIndices.map(i => cart[i]).filter(Boolean)
+                : cart;
+
+            baseTotal = 0;
+            itemsToBuy.forEach(item => {
+                const price = parseInt(String(item.price).replace(/[^0-9]/g, '') || '0');
+                const qty   = parseInt(item.qty) || 1;   // ← THE FIX: multiply by qty
+                baseTotal  += price * qty;
             });
             calculateTotal();
 

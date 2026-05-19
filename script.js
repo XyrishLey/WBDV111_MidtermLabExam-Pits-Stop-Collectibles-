@@ -182,6 +182,23 @@ const NEWS = [
         link: 'preorder.html',
         linkLabel: 'Pre-Order Now →'
     },
+
+    {
+        cat: 'voucher-code',
+        catLabel: 'VOUCHER CODES!!!',
+        date: 'May 2026',
+        img: 'https://i.ytimg.com/vi/OW9pIOmXgSQ/hqdefault.jpg',
+        title: '🚨 Pits Stop Collectibles is now officially LIVE! 🚨',
+        desc: `
+                To celebrate the launch, we’re dropping exclusive promo codes for everyone:
+
+                 WEBSITEISNOWLIVE — 50% OFF (minimum order of ₱1,500 required)
+                 PITSTOP10 — 10% OFF with no restrictions
+                 PREMIUM2026 — ₱50 OFF on orders with Premium category items
+            `,
+        link: 'hotwheels.html',
+        linkLabel: 'Shop Now →'
+    },
 ];
 
 function renderNews() {

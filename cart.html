@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <style>
 
-        /* ─── PAGE HERO / HEADER AREA ─────────────── */
+        /* ─── PAGE HERO ───────────────────────────── */
         .page-hero {
             position: relative;
             text-align: center;
@@ -54,7 +54,7 @@
         }
         .page-title span { color: transparent; -webkit-text-stroke: 2px var(--accent); }
 
-        /* ─── CART LAYOUT ─────────────────────────── */
+        /* ─── LAYOUT ──────────────────────────────── */
         .cart-wrapper {
             display: grid;
             grid-template-columns: 1fr 340px;
@@ -63,13 +63,77 @@
             gap: 24px;
             padding: 0 24px;
         }
+        .cart-main { display: flex; flex-direction: column; gap: 0; }
 
-        /* ─── CART MAIN ───────────────────────────── */
-        .cart-main {
+        /* ─── BULK ACTION TOOLBAR ─────────────────── */
+        .cart-toolbar {
             display: flex;
-            flex-direction: column;
-            gap: 0;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
         }
+        .toolbar-left { display: flex; align-items: center; gap: 10px; flex: 1; }
+        .toolbar-right { display: flex; align-items: center; gap: 8px; }
+
+        /* Custom checkbox */
+        .custom-check {
+            width: 18px; height: 18px;
+            border: 2px solid var(--border);
+            border-radius: 3px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: border-color 0.2s, background 0.2s;
+            background: transparent;
+        }
+        .custom-check.checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        .custom-check.checked::after {
+            content: '✓';
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .custom-check.indeterminate {
+            border-color: var(--accent);
+        }
+        .custom-check.indeterminate::after {
+            content: '—';
+            color: var(--accent);
+            font-size: 0.6rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .toolbar-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.88rem; font-weight: 700;
+            color: var(--text-muted);
+        }
+        .toolbar-label span { color: var(--accent); }
+
+        .toolbar-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem; font-weight: 700;
+            padding: 6px 14px; border-radius: 3px;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s, background 0.2s;
+            white-space: nowrap;
+        }
+        .toolbar-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(230,0,0,0.05); }
+        .toolbar-btn.danger:hover { border-color: var(--accent); color: #fff; background: var(--accent); }
+        .toolbar-btn:disabled { opacity: 0.35; pointer-events: none; }
 
         .cart-section-label {
             font-family: 'Share Tech Mono', monospace;
@@ -78,36 +142,27 @@
             margin-bottom: 16px;
             display: flex; align-items: center; gap: 10px;
         }
-        .cart-section-label::after {
-            content: ''; flex: 1; height: 1px; background: var(--border);
-        }
+        .cart-section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
         /* ─── CART ITEM ───────────────────────────── */
         .cart-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 16px;
+            gap: 14px;
+            padding: 14px 16px;
             background: var(--bg-alt);
             border: 1px solid var(--border);
             border-radius: 6px;
-            margin-bottom: 12px;
-            transition: border-color 0.2s, transform 0.2s;
+            margin-bottom: 10px;
+            transition: border-color 0.2s, transform 0.2s, background 0.2s;
         }
-        .cart-item:hover {
-            border-color: var(--accent);
-            transform: translateX(3px);
-        }
+        .cart-item:hover { border-color: rgba(230,0,0,0.4); transform: translateX(2px); }
+        .cart-item.selected { border-color: var(--accent); background: rgba(230,0,0,0.03); }
 
-        .item-details {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex: 1;
-        }
+        .item-check { flex-shrink: 0; }
 
         .cart-item-img {
-            width: 90px; height: 70px;
+            width: 84px; height: 66px;
             object-fit: contain;
             background: #111;
             border-radius: 4px;
@@ -115,47 +170,142 @@
             flex-shrink: 0;
         }
 
-        .item-info { flex: 1; }
-
+        .item-info { flex: 1; min-width: 0; }
         .item-series {
             font-family: 'Share Tech Mono', monospace;
-            font-size: 0.58rem; letter-spacing: 2px;
+            font-size: 0.56rem; letter-spacing: 2px;
             color: var(--text-muted); text-transform: uppercase;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
-
         .item-name {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.1rem; letter-spacing: 1.5px;
+            font-size: 1.05rem; letter-spacing: 1.5px;
             color: var(--text); line-height: 1.2;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-
-        .item-price {
+        .item-unit-price {
             font-family: 'Share Tech Mono', monospace;
-            font-size: 1rem; color: var(--accent);
+            font-size: 0.92rem; color: var(--accent);
         }
 
-        .item-actions { display: flex; gap: 8px; flex-shrink: 0; }
-
-        .icon-btn {
+        /* Quantity stepper */
+        .item-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .qty-stepper {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .qty-btn {
             background: var(--surface);
+            border: none;
+            color: var(--text-muted);
+            width: 30px; height: 30px;
+            cursor: pointer;
+            font-size: 1rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s, color 0.15s;
+            flex-shrink: 0;
+        }
+        .qty-btn:hover { background: var(--accent); color: #fff; }
+        /* ── FIX: visually disabled + button when at stock max ── */
+        .qty-btn.at-max { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+        .qty-display {
+            min-width: 32px; height: 30px;
+            background: var(--bg-alt);
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem; color: var(--text);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .item-subtotal {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem; letter-spacing: 1px;
+            color: var(--text);
+        }
+        .item-actions-row {
+            display: flex; gap: 6px;
+        }
+        .icon-btn {
+            background: transparent;
             border: 1px solid var(--border);
             color: var(--text-muted);
-            width: 36px; height: 36px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.9rem;
+            width: 30px; height: 30px;
+            border-radius: 3px; cursor: pointer;
+            font-size: 0.78rem;
             display: flex; align-items: center; justify-content: center;
-            transition: background 0.2s, color 0.2s, border-color 0.2s;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
         }
-        .icon-btn.wish:hover { background: rgba(255,20,147,0.1); color: #ff4d6d; border-color: #ff4d6d; }
+        .icon-btn.wish:hover  { background: rgba(255,77,109,0.1); color: #ff4d6d; border-color: #ff4d6d; }
         .icon-btn.remove:hover { background: rgba(230,0,0,0.1); color: var(--accent); border-color: var(--accent); }
 
-        /* ─── EMPTY STATE ─────────────────────────── */
+        /* ─── SAVE FOR LATER ──────────────────────── */
+        .saved-section { margin-top: 20px; }
+        .saved-item {
+            display: flex; align-items: center; gap: 14px;
+            padding: 12px 16px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            opacity: 0.75;
+            transition: opacity 0.2s, border-color 0.2s;
+        }
+        .saved-item:hover { opacity: 1; border-color: rgba(230,0,0,0.3); }
+        .saved-item-img {
+            width: 60px; height: 48px;
+            object-fit: contain;
+            background: #111;
+            border-radius: 4px; padding: 4px;
+            flex-shrink: 0;
+        }
+        .saved-item-info { flex: 1; min-width: 0; }
+        .saved-item-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.95rem; letter-spacing: 1px;
+            color: var(--text); margin-bottom: 2px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .saved-item-price {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem; color: var(--accent);
+        }
+        .saved-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        .saved-move-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.75rem; font-weight: 700;
+            padding: 5px 10px; border-radius: 3px;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .saved-move-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .saved-remove-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            width: 30px; height: 30px;
+            border-radius: 3px; cursor: pointer; font-size: 0.75rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+        .saved-remove-btn:hover { background: rgba(230,0,0,0.1); color: var(--accent); border-color: var(--accent); }
+
+        /* ─── EMPTY STATES ────────────────────────── */
         .cart-empty {
-            text-align: center;
-            padding: 60px 20px;
+            text-align: center; padding: 60px 20px;
             background: var(--bg-alt);
             border: 1px solid var(--border);
             border-radius: 6px;
@@ -185,101 +335,78 @@
 
         /* ─── SIDEBAR ─────────────────────────────── */
         .cart-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
+            display: flex; flex-direction: column;
             height: fit-content;
-            position: sticky;
-            top: 90px;
+            position: sticky; top: 90px;
+            gap: 16px;
         }
-
         .sidebar-box {
             background: var(--bg-alt);
             border: 1px solid var(--border);
             border-radius: 6px;
-            padding: 24px;
-            margin-bottom: 16px;
+            padding: 22px;
         }
-
         .sidebar-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.4rem; letter-spacing: 3px;
-            color: var(--text); margin-bottom: 20px;
+            font-size: 1.3rem; letter-spacing: 3px;
+            color: var(--text); margin-bottom: 18px;
             padding-bottom: 12px;
             border-bottom: 1px solid var(--border);
         }
-
         .summary-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 10px;
             font-family: 'Rajdhani', sans-serif;
-            font-size: 0.9rem; font-weight: 600;
+            font-size: 0.88rem; font-weight: 600;
             color: var(--text-muted);
         }
-
         .summary-row span:last-child { color: var(--text); }
-
-        .summary-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
+        .summary-row.selected-note span { color: var(--accent); font-size: 0.8rem; }
+        .summary-divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+        .total-row { display: flex; justify-content: space-between; align-items: baseline; }
         .total-label {
             font-family: 'Share Tech Mono', monospace;
-            font-size: 0.65rem; letter-spacing: 2px;
+            font-size: 0.62rem; letter-spacing: 2px;
             color: var(--text-muted); text-transform: uppercase;
         }
         .total-amount {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem; letter-spacing: 2px;
-            color: var(--text);
+            font-size: 2rem; letter-spacing: 2px; color: var(--text);
         }
 
-        /* Checkout button */
+        /* Coupon moved to checkout.html */
+
+        /* Checkout btn */
         .checkout-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--accent);
-            border: none;
-            border-radius: 3px;
-            color: white;
+            width: 100%; padding: 15px;
+            background: var(--accent); border: none; border-radius: 3px;
+            color: #fff;
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1rem; letter-spacing: 3px;
             cursor: pointer;
             box-shadow: 0 4px 20px var(--accent-glow);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
             margin-top: 16px;
         }
-        .checkout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px var(--accent-glow);
-        }
+        .checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px var(--accent-glow); }
+        .checkout-btn:disabled { opacity: 0.4; pointer-events: none; }
 
-        /* Continue shopping link */
         .continue-link {
-            display: flex; justify-content: center;
-            margin-top: 12px;
+            display: flex; justify-content: center; margin-top: 10px;
         }
         .continue-link a {
             font-family: 'Rajdhani', sans-serif;
             font-size: 0.82rem; font-weight: 600;
             color: var(--text-muted); text-decoration: none;
-            letter-spacing: 0.5px;
             transition: color 0.2s;
         }
         .continue-link a:hover { color: var(--accent); }
 
-        /* SSL note */
         .ssl-note {
             text-align: center;
             font-family: 'Share Tech Mono', monospace;
-            font-size: 0.58rem; letter-spacing: 1.5px;
-            color: var(--text-muted); opacity: 0.5;
-            margin-top: 12px;
+            font-size: 0.56rem; letter-spacing: 1.5px;
+            color: var(--text-muted); opacity: 0.45; margin-top: 10px;
         }
 
         /* Item count badge */
@@ -287,10 +414,26 @@
             display: inline-flex; align-items: center; justify-content: center;
             background: var(--accent); color: #fff;
             font-family: 'Share Tech Mono', monospace;
-            font-size: 0.6rem; letter-spacing: 1px;
-            width: 20px; height: 20px; border-radius: 50%;
+            font-size: 0.58rem; letter-spacing: 1px;
+            min-width: 20px; height: 20px; border-radius: 50%;
+            padding: 0 4px;
             margin-left: 6px; vertical-align: middle;
         }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+            background: var(--bg-alt); border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            border-radius: 4px; padding: 12px 20px;
+            font-family: 'Rajdhani', sans-serif; font-weight: 700;
+            font-size: 0.88rem; color: var(--text);
+            z-index: 9999; white-space: nowrap;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* ─── MOBILE ──────────────────────────────── */
         @media (max-width: 900px) {
@@ -301,9 +444,11 @@
         }
         @media (max-width: 600px) {
             .cart-wrapper { padding: 0 12px; }
-            .item-details { gap: 10px; }
-            .cart-item-img { width: 70px; height: 55px; }
+            .cart-item { gap: 10px; padding: 12px; }
+            .cart-item-img { width: 64px; height: 52px; }
+            .item-right { gap: 6px; }
             .page-title { font-size: clamp(2.5rem, 12vw, 4rem); }
+            .toolbar-right { width: 100%; justify-content: flex-end; }
         }
     </style>
 </head>
@@ -329,7 +474,11 @@
                 </li>
                 <li><a href="aboutUs.html" class="nav-button">About Us</a></li>
                 <li><a href="wishlist.html" class="nav-button">❤️ Wishlist</a></li>
-                <li><a href="cart.html" class="nav-button">🛒 Cart</a></li>
+                <li>
+                    <a href="cart.html" class="nav-button">
+                        🛒 Cart <span id="cart-count" style="display:none; background:var(--accent); color:#fff; border-radius:50%; padding:1px 6px; font-size:0.7rem; margin-left:4px;">0</span>
+                    </a>
+                </li>
             </ul>
             <div class="nav-right">
                 <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
@@ -349,6 +498,8 @@
             <a href="aboutUs.html" class="drawer-link">About Us</a>
             <a href="wishlist.html" class="drawer-link">❤️ Wishlist</a>
             <a href="cart.html" class="drawer-link">🛒 Cart</a>
+            <a href="contactUs.html" class="drawer-link">✉️ Contact Us</a>
+            <a href="track.html" class="drawer-link" id="trackLinkDrawer" style="display:none;">📦 Track Order</a>
         </div>
     </header>
 
@@ -370,8 +521,28 @@
 
         <!-- Left: Items -->
         <main class="cart-main">
+
+            <!-- Toolbar (hidden when empty) -->
+            <div class="cart-toolbar" id="cartToolbar" style="display:none;">
+                <div class="toolbar-left">
+                    <div class="custom-check" id="selectAllCheck" onclick="toggleSelectAll()"></div>
+                    <span class="toolbar-label" id="selectionLabel">Select All</span>
+                </div>
+                <div class="toolbar-right">
+                    <button class="toolbar-btn" id="saveSelectedBtn" onclick="saveSelectedForLater()" disabled>Save Selected</button>
+                    <button class="toolbar-btn danger" id="removeSelectedBtn" onclick="removeSelected()" disabled>Remove Selected</button>
+                </div>
+            </div>
+
             <p class="cart-section-label" id="cartItemLabel">Cart Items</p>
             <div id="cart-items-list"></div>
+
+            <!-- Save for Later section -->
+            <div class="saved-section" id="savedSection" style="display:none;">
+                <p class="cart-section-label">Saved for Later</p>
+                <div id="saved-items-list"></div>
+            </div>
+
         </main>
 
         <!-- Right: Summary -->
@@ -379,9 +550,17 @@
             <div class="sidebar-box">
                 <h2 class="sidebar-title">Order Summary</h2>
 
+                <div class="summary-row selected-note" id="selectionNote" style="display:none;">
+                    <span>Selected items</span>
+                    <span id="selectedCount">0 of 0</span>
+                </div>
                 <div class="summary-row">
                     <span>Subtotal</span>
                     <span>₱<span id="cart-subtotal">0</span></span>
+                </div>
+                <div class="summary-row" id="discountRow" style="display:none;">
+                    <span>Discount</span>
+                    <span style="color:#22c55e;">−₱<span id="discountAmt">0</span></span>
                 </div>
                 <div class="summary-row">
                     <span>Shipping</span>
@@ -395,7 +574,7 @@
                     <span class="total-amount">₱<span id="cart-total">0</span></span>
                 </div>
 
-                <button class="checkout-btn" onclick="checkAuthAndCheckout()">
+                <button class="checkout-btn" id="checkoutBtn" onclick="checkAuthAndCheckout()">
                     PROCEED TO CHECKOUT →
                 </button>
 
@@ -408,6 +587,9 @@
         </aside>
 
     </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
 
     <!-- ═══ FOOTER ═══════════════════════════════════════════ -->
     <footer class="footer">
@@ -472,6 +654,10 @@
                     <a href="login.html" class="drawer-link drawer-link--accent">Login</a>
                     <a href="signup.html" class="drawer-link">Sign Up</a>`;
             }
+            if (loggedIn === 'true') {
+                const tl = document.getElementById('trackLinkDrawer');
+                if (tl) tl.style.display = 'block';
+            }
         }
         function logout() {
             if (confirm("Are you sure you want to log out?")) {
@@ -482,15 +668,66 @@
             }
         }
 
-        // ─── Cart ────────────────────────────────────────────
+        // ─── Toast ───────────────────────────────────────────
+        let toastTimer;
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+        }
+
+        // ─── State ───────────────────────────────────────────
+        let selectedIndices    = new Set();
+        let checkboxesUsed     = false;
+
+        // ─── Cart Badge ──────────────────────────────────────
+        function updateCartBadge() {
+            const cart  = JSON.parse(localStorage.getItem('cart')) || [];
+            const badge = document.getElementById('cart-count');
+            if (!badge) return;
+            badge.style.display = cart.length > 0 ? 'inline' : 'none';
+            badge.textContent   = cart.length;
+        }
+
+        // ══════════════════════════════════════════════════════
+        // ── STOCK LOOKUP HELPER ────────────────────────────────
+        // Matches by id first, then falls back to name match.
+        // Returns the max allowed quantity for a cart item.
+        // ══════════════════════════════════════════════════════
+        function getMaxStock(cartItem) {
+            const allProducts = JSON.parse(localStorage.getItem('allProducts')) || [];
+            // Primary: match by numeric id
+            let product = allProducts.find(p => p.id !== undefined && p.id == cartItem.id);
+            // Fallback: match by name (case-insensitive) if id lookup failed
+            if (!product && cartItem.name) {
+                product = allProducts.find(p =>
+                    p.name && p.name.toLowerCase() === cartItem.name.toLowerCase()
+                );
+            }
+            if (product) {
+                const stock = parseInt(product.quantity);
+                return isNaN(stock) ? 99 : stock;
+            }
+            // If product isn't found at all, allow up to current qty (no restriction)
+            return cartItem.qty || 1;
+        }
+
+        // ─── Render ──────────────────────────────────────────
         function displayCart() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const list = document.getElementById('cart-items-list');
-            const label = document.getElementById('cartItemLabel');
-            let total = 0;
+            const cart    = JSON.parse(localStorage.getItem('cart'))    || [];
+            const saved   = JSON.parse(localStorage.getItem('savedForLater')) || [];
+            const list    = document.getElementById('cart-items-list');
+            const label   = document.getElementById('cartItemLabel');
+            const toolbar = document.getElementById('cartToolbar');
+
+            // Clamp selectedIndices to valid range
+            selectedIndices = new Set([...selectedIndices].filter(i => i < cart.length));
 
             if (cart.length === 0) {
-                label.style.display = 'none';
+                toolbar.style.display = 'none';
+                label.style.display   = 'none';
                 list.innerHTML = `
                     <div class="cart-empty">
                         <div class="cart-empty-icon">🛒</div>
@@ -498,73 +735,269 @@
                         <p class="cart-empty-sub">Add some diecast to get started</p>
                         <a href="hotwheels.html">Browse the Shop →</a>
                     </div>`;
-                document.getElementById('cart-total').innerText = '0';
-                document.getElementById('cart-subtotal').innerText = '0';
+            } else {
+                toolbar.style.display = 'flex';
+                label.innerHTML = `Cart Items <span class="item-count-badge">${cart.length}</span>`;
+
+                list.innerHTML = '';
+                cart.forEach((item, i) => {
+                    const qty      = item.qty || 1;
+                    const price    = parseInt(item.price) || 0;
+                    const subtotal = price * qty;
+                    const imgSrc   = item.img || item.image || '';
+                    const isSel    = selectedIndices.has(i);
+
+                    // ── FIX: compute max stock for this item ──
+                    const maxStock  = getMaxStock(item);
+                    const atMax     = qty >= maxStock;
+
+                    const el = document.createElement('div');
+                    el.className = 'cart-item' + (isSel ? ' selected' : '');
+                    el.innerHTML = `
+                        <div class="item-check">
+                            <div class="custom-check ${isSel ? 'checked' : ''}" onclick="toggleItem(${i})"></div>
+                        </div>
+                        <img class="cart-item-img" src="${imgSrc}" alt="${item.name}" onerror="this.style.opacity='0.3'">
+                        <div class="item-info">
+                            <p class="item-series">${item.series || item.category || ''}</p>
+                            <h4 class="item-name">${item.name}</h4>
+                            <p class="item-unit-price">₱${price.toLocaleString()} each</p>
+                        </div>
+                        <div class="item-right">
+                            <div class="qty-stepper">
+                                <button class="qty-btn" onclick="changeQty(${i}, -1)">−</button>
+                                <span class="qty-display">${qty}</span>
+                                <button class="qty-btn${atMax ? ' at-max' : ''}" onclick="changeQty(${i}, 1)" title="${atMax ? 'Max stock reached' : ''}">+</button>
+                            </div>
+                            <span class="item-subtotal">₱${subtotal.toLocaleString()}</span>
+                            <div class="item-actions-row">
+                                <button class="icon-btn wish"   title="Save for Later"  onclick="saveOneForLater(${i})">🔖</button>
+                                <button class="icon-btn wish"   title="Move to Wishlist" onclick="moveToWishlist(${i})">❤</button>
+                                <button class="icon-btn remove" title="Remove"           onclick="removeItem(${i})">✕</button>
+                            </div>
+                        </div>`;
+                    list.appendChild(el);
+                });
+            }
+
+            // Saved for later section
+            const savedSection = document.getElementById('savedSection');
+            const savedList    = document.getElementById('saved-items-list');
+            if (saved.length > 0) {
+                savedSection.style.display = 'block';
+                savedList.innerHTML = '';
+                saved.forEach((item, i) => {
+                    const imgSrc = item.img || item.image || '';
+                    const el = document.createElement('div');
+                    el.className = 'saved-item';
+                    el.innerHTML = `
+                        <img class="saved-item-img" src="${imgSrc}" alt="${item.name}" onerror="this.style.opacity='0.3'">
+                        <div class="saved-item-info">
+                            <p class="saved-item-name">${item.name}</p>
+                            <p class="saved-item-price">₱${parseInt(item.price).toLocaleString()}</p>
+                        </div>
+                        <div class="saved-item-actions">
+                            <button class="saved-move-btn" onclick="moveToCart(${i})">Move to Cart</button>
+                            <button class="saved-remove-btn" onclick="removeSaved(${i})" title="Remove">✕</button>
+                        </div>`;
+                    savedList.appendChild(el);
+                });
+            } else {
+                savedSection.style.display = 'none';
+            }
+
+            updateSelectAllState();
+            updateSummary();
+            updateCartBadge();
+        }
+
+        // ─── Selection ───────────────────────────────────────
+        function toggleItem(i) {
+            checkboxesUsed = true;
+            if (selectedIndices.has(i)) selectedIndices.delete(i);
+            else selectedIndices.add(i);
+            displayCart();
+        }
+
+        function toggleSelectAll() {
+            checkboxesUsed = true;
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (selectedIndices.size === cart.length) {
+                selectedIndices.clear();
+            } else {
+                cart.forEach((_, i) => selectedIndices.add(i));
+            }
+            displayCart();
+        }
+
+        function updateSelectAllState() {
+            const cart    = JSON.parse(localStorage.getItem('cart')) || [];
+            const check   = document.getElementById('selectAllCheck');
+            const label   = document.getElementById('selectionLabel');
+            const saveBtn = document.getElementById('saveSelectedBtn');
+            const remBtn  = document.getElementById('removeSelectedBtn');
+            const note    = document.getElementById('selectionNote');
+            const countEl = document.getElementById('selectedCount');
+
+            const total = cart.length;
+            const sel   = selectedIndices.size;
+
+            check.className = 'custom-check';
+            if (sel === 0)          { label.innerHTML = 'Select All'; }
+            else if (sel === total) { check.classList.add('checked'); label.innerHTML = `All selected <span>(${total})</span>`; }
+            else                    { check.classList.add('indeterminate'); label.innerHTML = `${sel} selected`; }
+
+            saveBtn.disabled = sel === 0;
+            remBtn.disabled  = sel === 0;
+
+            if (sel > 0) {
+                note.style.display = 'flex';
+                countEl.textContent = `${sel} of ${total}`;
+            } else {
+                note.style.display = 'none';
+            }
+        }
+
+        // ══════════════════════════════════════════════════════
+        // ── QUANTITY CHANGE — FIXED STOCK ENFORCEMENT ─────────
+        // Uses getMaxStock() which matches by id OR name.
+        // ══════════════════════════════════════════════════════
+        function changeQty(i, delta) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const item = cart[i];
+
+            const maxStock = getMaxStock(item);
+            const newQty   = Math.max(1, (item.qty || 1) + delta);
+
+            if (delta > 0 && newQty > maxStock) {
+                showToast(`Only ${maxStock} unit${maxStock !== 1 ? 's' : ''} available in stock.`);
                 return;
             }
 
-            // Update label with count badge
-            label.innerHTML = `Cart Items <span class="item-count-badge">${cart.length}</span>`;
-
-            list.innerHTML = '';
-            cart.forEach((item, index) => {
-                const price = parseInt(item.price) || 0;
-                total += price;
-                const imgSrc = item.img || item.image || '';
-
-                list.innerHTML += `
-                    <div class="cart-item">
-                        <div class="item-details">
-                            <img class="cart-item-img" src="${imgSrc}" alt="${item.name}" onerror="this.style.opacity='0.3'">
-                            <div class="item-info">
-                                <p class="item-series">${item.series || item.category || ''}</p>
-                                <h4 class="item-name">${item.name}</h4>
-                                <p class="item-price">₱${price.toLocaleString()}</p>
-                            </div>
-                        </div>
-                        <div class="item-actions">
-                            <button class="icon-btn wish" title="Save to Wishlist" onclick="moveToWishlist(${index})">❤</button>
-                            <button class="icon-btn remove" title="Remove" onclick="removeItem(${index})">✕</button>
-                        </div>
-                    </div>`;
-            });
-
-            document.getElementById('cart-total').innerText = total.toLocaleString();
-            document.getElementById('cart-subtotal').innerText = total.toLocaleString();
-        }
-
-        function removeItem(index) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart.splice(index, 1);
+            cart[i].qty = newQty;
             localStorage.setItem('cart', JSON.stringify(cart));
             displayCart();
         }
 
-        function moveToWishlist(index) {
+        // ─── Remove / Save ───────────────────────────────────
+        function removeItem(i) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(i, 1);
+            selectedIndices.delete(i);
+            selectedIndices = new Set([...selectedIndices].map(idx => idx > i ? idx - 1 : idx));
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+            showToast('Item removed from cart.');
+        }
+
+        function removeSelected() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const sorted = [...selectedIndices].sort((a, b) => b - a);
+            sorted.forEach(i => cart.splice(i, 1));
+            selectedIndices.clear();
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+            showToast(`${sorted.length} item${sorted.length > 1 ? 's' : ''} removed.`);
+        }
+
+        function saveOneForLater(i) {
+            let cart  = JSON.parse(localStorage.getItem('cart'))         || [];
+            let saved = JSON.parse(localStorage.getItem('savedForLater')) || [];
+            saved.push(cart[i]);
+            cart.splice(i, 1);
+            selectedIndices.delete(i);
+            selectedIndices = new Set([...selectedIndices].map(idx => idx > i ? idx - 1 : idx));
+            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem('savedForLater', JSON.stringify(saved));
+            displayCart();
+            showToast('Item saved for later.');
+        }
+
+        function saveSelectedForLater() {
+            let cart  = JSON.parse(localStorage.getItem('cart'))         || [];
+            let saved = JSON.parse(localStorage.getItem('savedForLater')) || [];
+            const sorted = [...selectedIndices].sort((a, b) => b - a);
+            sorted.forEach(i => { saved.push(cart[i]); cart.splice(i, 1); });
+            selectedIndices.clear();
+            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem('savedForLater', JSON.stringify(saved));
+            displayCart();
+            showToast(`${sorted.length} item${sorted.length > 1 ? 's' : ''} saved for later.`);
+        }
+
+        function moveToWishlist(i) {
+            let cart     = JSON.parse(localStorage.getItem('cart'))    || [];
             let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-            const item = cart[index];
+            const item   = cart[i];
             if (!wishlist.find(w => w.name === item.name)) {
                 wishlist.push(item);
                 localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                showToast(`${item.name} moved to Wishlist ❤️`);
+            } else {
+                showToast('Already in your Wishlist.');
             }
-            cart.splice(index, 1);
+            cart.splice(i, 1);
+            selectedIndices.delete(i);
+            selectedIndices = new Set([...selectedIndices].map(idx => idx > i ? idx - 1 : idx));
             localStorage.setItem('cart', JSON.stringify(cart));
             displayCart();
         }
 
+        function moveToCart(i) {
+            let saved = JSON.parse(localStorage.getItem('savedForLater')) || [];
+            let cart  = JSON.parse(localStorage.getItem('cart'))          || [];
+            cart.push(saved[i]);
+            saved.splice(i, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem('savedForLater', JSON.stringify(saved));
+            displayCart();
+            showToast('Item moved back to cart.');
+        }
+
+        function removeSaved(i) {
+            let saved = JSON.parse(localStorage.getItem('savedForLater')) || [];
+            saved.splice(i, 1);
+            localStorage.setItem('savedForLater', JSON.stringify(saved));
+            displayCart();
+            showToast('Saved item removed.');
+        }
+
+        // ─── Summary ─────────────────────────────────────────
+        function updateSummary() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const items = !checkboxesUsed
+                ? cart
+                : [...selectedIndices].map(i => cart[i]).filter(Boolean);
+
+            let subtotal = items.reduce((sum, item) => {
+                return sum + ((parseInt(item.price) || 0) * (item.qty || 1));
+            }, 0);
+
+            document.getElementById('cart-subtotal').textContent = subtotal.toLocaleString();
+            document.getElementById('cart-total').textContent    = subtotal.toLocaleString();
+
+            const discRow = document.getElementById('discountRow');
+            discRow.style.display = 'none';
+
+            document.getElementById('checkoutBtn').disabled = items.length === 0;
+        }
+
+        // ─── Checkout ────────────────────────────────────────
         function checkAuthAndCheckout() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            if (cart.length === 0) {
-                alert('Your cart is empty!');
-                return;
+            if (cart.length === 0) { showToast('Your cart is empty!'); return; }
+
+            if (checkboxesUsed && selectedIndices.size > 0) {
+                sessionStorage.setItem('checkoutIndices', JSON.stringify([...selectedIndices]));
+            } else {
+                sessionStorage.removeItem('checkoutIndices');
             }
-            const loggedIn = localStorage.getItem("loggedIn");
-            if (loggedIn === "true") {
+
+            if (localStorage.getItem("loggedIn") === "true") {
                 window.location.href = 'checkout.html';
             } else {
-                alert("Please log in to proceed to checkout.");
-                window.location.href = 'login.html';
+                showToast('Please log in to proceed.');
+                setTimeout(() => window.location.href = 'login.html', 1500);
             }
         }
 
